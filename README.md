@@ -233,44 +233,85 @@ Uma API para gestão de jogos INDIES
 
 ### Objects examples:
 #### Category
--- id integerint64
--- name string[3, 255] characters
--- createdAt stringdate-time
--- updatedAt stringdate-time
--
+"category": {
+    "id": 1, (Gera automaticamente)
+    "name": "Metroidvania", (Obrigatório)
+    "createdAt": "2026-10-06T10:00:00",(Gera automaticamente)
+    "updatedAt": "2026-10-06T10:00:00"(Gera automaticamente)
+  }
 #### Platform
--- id integerint64
--- name string[3, 255] characters
--- createdAt stringdate-time
--- updatedAt stringdate-time
+"platform": {
+    "id": 1, (Gera automaticamente)
+    "name": "PC (Steam)", (Obrigatório)
+    "createdAt": "2026-10-06T10:00:00",(Gera automaticamente)
+    "updatedAt": "2026-10-06T10:00:00"(Gera automaticamente)
+  }
 #### Developer
--- id integerint64
--- name string[3, 255] characters
--- createdAt stringdate-time
--- updatedAt stringdate-time
--
+"developer": {
+    "id": 1,(Gera automaticamente)
+    "name": "Team Cherry", (Obrigatório)
+    "createdAt": "2026-10-06T10:00:00",(Gera automaticamente)
+    "updatedAt": "2026-10-06T10:00:00"(Gera automaticamente)
+  }
 #### User
--- id integerint64
--- name string[3, 255] characters
--- email string[3, 255] characters
--- userProfile UserProfile.class
--- createdAt stringdate-time
--- updatedAt stringdate-time
--
+"user": {
+    "id": 1, (Gera automaticamente)
+    "name": "Pedro Gregorio", (Obrigatório)
+    "email": "pedro@email.com", (Obrigatório)
+    "userProfile": { (Obrigatório)
+      "id": 1,(Gera automaticamente)
+      "bio": "Desenvolvedor Backend e Entusiasta de Jogos Indies", (Obrigatório pode ser vazio)
+      "createdAt": "2026-10-06T10:00:00", (Gera automaticamente)
+      "updatedAt": "2026-10-06T10:00:00" (Gera automaticamente)
+    },
+    "createdAt": "2026-10-06T10:00:00", (Gera automaticamente)
+    "updatedAt": "2026-10-06T10:00:00" (Gera automaticamente)
+  },
 #### UserProfile
--- id integerint64
--- bio string
--- user User
--- createdAt stringdate-time
--- updatedAt stringdate-time
--
+"userProfile": {
+    "id": 1,(Gera automaticamente)
+    "bio": "Desenvolvedor Backend e Entusiasta de Jogos Indies", (Obrigatório pode ser vazio)
+    "user": { (Não deve ser enviado, apenas para requisições GET)
+       "name": "Pedro Gregorio", 
+       "email": "pedro@email.com",
+       "createdAt": "2026-10-06T17:50:19.084396",
+       "updatedAt": 2026-10-06T17:50:19.084396,
+       "id": 1
+   },
+    "createdAt": "2026-10-06T10:00:00", (Gera automaticamente)
+    "updatedAt": "2026-10-06T10:00:00" (Gera automaticamente)
+  }
 #### Game
--- id integerint64
--- name string[3, 255] characters
--- status Enum ('DEVELOPMENT','EARLY_ACCESS','RELEASED')
--- developer Developer
--- category Category
--- platforms Array<Platform>
--- createdAt stringdate-time
--- updatedAt stringdate-time
--
+"game": {
+    "id": 1, (Gera automaticamente)
+    "name": "Hollow Knight",
+    "status": "RELEASED",
+    "developer": {
+      "id": 1,
+      "name": "Team Cherry",
+      "createdAt": "2026-10-06T10:00:00",
+      "updatedAt": "2026-10-06T10:00:00"
+    }, (Para requisições POST e PUT, enviar apenas o valor do ID, ex: "category" : "1")
+    "category": {
+      "id": 1,
+      "name": "Metroidvania",
+      "createdAt": "2026-10-06T10:00:00",
+      "updatedAt": "2026-10-06T10:00:00"
+    },
+    "platforms": [
+      {
+        "id": 1,
+        "name": "PC (Steam)",
+        "createdAt": "2026-10-06T10:00:00",
+        "updatedAt": "2026-10-06T10:00:00"
+      },
+    {
+        "id": 2,
+        "name": "Nintendo Switch",
+        "createdAt": "2026-10-06T10:00:00",
+        "updatedAt": "2026-10-06T10:00:00"
+      }
+    ],
+    "createdAt": "2026-10-06T10:00:00", (Gera automaticamente)
+    "updatedAt": "2026-10-06T10:00:00" (Gera automaticamente)
+  }
