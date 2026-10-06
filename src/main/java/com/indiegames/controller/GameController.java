@@ -98,6 +98,7 @@ public class GameController {
     @Operation(summary = "Atualizar(PUT)")
     @ApiResponse(responseCode = "200", description = "Game atualizado", content = @Content)
     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<Game>> update(
@@ -107,7 +108,7 @@ public class GameController {
                     required = true,
                     content = @Content(mediaType = "application/json",
                             schema= @Schema(implementation = Game.class),
-                            examples = @ExampleObject(value = "{ \"name\": \"Undertale\", \"status\" : \"\", \"developer\" : { \"id\" : \"1\" }, \"category\" : { \"id\" : \"1\" }, \"platforms\" : [{ \"id\" : \"1\"}] }"))
+                            examples = @ExampleObject(value = "{ \"name\": \"Undertale\", \"status\" : \"RELEASED\", \"developer\" : { \"id\" : \"1\" }, \"category\" : { \"id\" : \"1\" }, \"platforms\" : [{ \"id\" : \"1\"}] }"))
             )
             @RequestBody @Valid Game game){
         Game game1 = service.update(id, game);

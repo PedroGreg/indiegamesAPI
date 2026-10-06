@@ -96,6 +96,7 @@ public class UserProfileController {
     @Operation(summary = "Atualizar(PUT)")
     @ApiResponse(responseCode = "200", description = "Perfil de usuario atualizado", content = @Content)
     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<UserProfile>> update(
