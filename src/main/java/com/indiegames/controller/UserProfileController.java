@@ -32,8 +32,8 @@ public class UserProfileController {
         this.service = service;
     }
     
-    @Tag(name = "Criar")
-    @Operation(summary = "Criar(POST)")
+    //@Tag(name = "Criar")
+    //@Operation(summary = "Criar(POST)")
     @ApiResponse(responseCode = "201", description = "Perfil de usuario criado", content = @Content)
     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)

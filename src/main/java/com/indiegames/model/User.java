@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -14,11 +15,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
+    @Size(min = 3, max = 255)
     private String name;
     @NotBlank
     @Email
     private String email;
-    @NotNull
     @OneToOne(cascade = CascadeType.ALL)
     private UserProfile userProfile;
     @Column(name = "created_at", nullable = false, updatable = false)

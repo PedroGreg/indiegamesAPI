@@ -24,7 +24,7 @@ public class DeveloperService {
     }
 
     public Developer findById(Long id){
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Category not Found, ID: " + id));
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Developer not Found, ID: " + id));
     }
 
     @Transactional

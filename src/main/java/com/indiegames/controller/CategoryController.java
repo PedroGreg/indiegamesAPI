@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -57,7 +58,7 @@ public class CategoryController {
     @Operation(summary = "Buscar todas(GET)")
     @ApiResponse(responseCode = "200", description = "Categorias", content = @Content)
     @GetMapping()
-    public ResponseEntity<PagedModel<EntityModel<Category>>> findAll(@PageableDefault(size = 10)Pageable pageable){
+    public ResponseEntity<PagedModel<EntityModel<Category>>> findAll(@ParameterObject  @PageableDefault(size = 10)Pageable pageable){
         Page<Category> pageCategory = service.findAll(pageable);
         PagedModel<EntityModel<Category>> allCategory = PagedModel.of(
                 pageCategory.getContent().stream().map(assembler::toModel).toList(),
@@ -84,7 +85,7 @@ public class CategoryController {
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<Category>>> findByName(
             @RequestParam String name,
-            @PageableDefault(size = 10) Pageable pageable){
+            @ParameterObject @PageableDefault(size = 10) Pageable pageable){
         Page<Category> pageCategory = service.findByName(name, pageable);
         PagedModel<EntityModel<Category>> allNameCategory = PagedModel.of(
                 pageCategory.getContent().stream().map(assembler::toModel).toList(),

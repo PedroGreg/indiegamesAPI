@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,7 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Requisições de Categorias")
+@Tag(name = "Requisições de Games")
 @RestController
 @RequestMapping("/api/game")
 public class GameController {
@@ -34,17 +35,18 @@ public class GameController {
 
     @Tag(name = "Criar")
     @Operation(summary = "Criar(POST)")
-    @ApiResponse(responseCode = "201", description = "Usuario criada", content = @Content)
+    @ApiResponse(responseCode = "201", description = "Game criado", content = @Content)
     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
     public ResponseEntity<EntityModel<Game>> create(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Nova usuario",
+                    description = "Novo Game",
                     required = true,
                     content = @Content(mediaType = "application/json",
                             schema= @Schema(implementation = Game.class),
-                            examples = @ExampleObject(value = "{ \"name\": \"Undertale\", \"status\" : \"\", \"developer\" : \"1\", \"category\" : \"1\", \"platforms\" : \"1\" }"))
+                            examples = @ExampleObject(value = "{ \"name\": \"Undertale\", \"status\" : \"\", \"developer\" : { \"id\" : \"1\" }, \"category\" : { \"id\" : \"1\" }, \"platforms\" : [{ \"id\" : \"1\"}] }"))
             )
             @RequestBody @Valid Game game){
         Game game1 = service.create(game);
@@ -54,9 +56,9 @@ public class GameController {
 
     @Tag(name = "Buscar todos")
     @Operation(summary = "Buscar todas(GET)")
-    @ApiResponse(responseCode = "200", description = "Usuarios", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Games", content = @Content)
     @GetMapping()
-    public ResponseEntity<PagedModel<EntityModel<Game>>> findAll(@PageableDefault(size = 10)Pageable pageable){
+    public ResponseEntity<PagedModel<EntityModel<Game>>> findAll(@ParameterObject @PageableDefault(size = 10)Pageable pageable){
         Page<Game> pageGame = service.findAll(pageable);
         PagedModel<EntityModel<Game>> allGame = PagedModel.of(
                 pageGame.getContent().stream().map(assembler::toModel).toList(),
@@ -67,8 +69,8 @@ public class GameController {
 
     @Tag(name = "Buscar por ID")
     @Operation(summary = "Buscar por ID(GET)")
-    @ApiResponse(responseCode = "200", description = "Usuario", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Usuario não encontrado", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Game", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Game não encontrado", content = @Content)
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<Game>> findById(@PathVariable Long id){
         Game game1 = service.findById(id);
@@ -78,12 +80,12 @@ public class GameController {
 
     @Tag(name = "Buscar por nome")
     @Operation(summary = "Buscar por nome(GET)")
-    @ApiResponse(responseCode = "200", description = "Usuarios", content = @Content)
-    @ApiResponse(responseCode = "204", description = "Usuarios", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Games", content = @Content)
+    @ApiResponse(responseCode = "204", description = "Blank", content = @Content)
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<Game>>> findByName(
             @RequestParam String name,
-            @PageableDefault(size = 10) Pageable pageable){
+            @ParameterObject @PageableDefault(size = 10) Pageable pageable){
         Page<Game> pageGame = service.findByName(name, pageable);
         PagedModel<EntityModel<Game>> allNameGame = PagedModel.of(
                 pageGame.getContent().stream().map(assembler::toModel).toList(),
@@ -94,18 +96,18 @@ public class GameController {
 
     @Tag(name = "Atualizar")
     @Operation(summary = "Atualizar(PUT)")
-    @ApiResponse(responseCode = "200", description = "Usuario atualizado", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Game atualizado", content = @Content)
     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<Game>> update(
             @PathVariable Long id,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Novo usuario",
+                    description = "Novo Game",
                     required = true,
                     content = @Content(mediaType = "application/json",
                             schema= @Schema(implementation = Game.class),
-                            examples = @ExampleObject(value = "{ \"name\": \"Deltarune\", \"status\" : \"\", \"developer\" : \"1\", \"category\" : \"1\", \"platforms\" : \"1\" }"))
+                            examples = @ExampleObject(value = "{ \"name\": \"Undertale\", \"status\" : \"\", \"developer\" : { \"id\" : \"1\" }, \"category\" : { \"id\" : \"1\" }, \"platforms\" : [{ \"id\" : \"1\"}] }"))
             )
             @RequestBody @Valid Game game){
         Game game1 = service.update(id, game);
@@ -115,7 +117,7 @@ public class GameController {
 
     @Tag(name = "Deletar")
     @Operation(summary = "Deletar(DELETE)")
-    @ApiResponse(responseCode = "204", description = "Usuario deletado", content = @Content)
+    @ApiResponse(responseCode = "204", description = "Game deletado", content = @Content)
     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Valid Long id) {

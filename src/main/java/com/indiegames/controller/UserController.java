@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -62,7 +63,7 @@ public class UserController {
     @Operation(summary = "Buscar todas(GET)")
     @ApiResponse(responseCode = "200", description = "Usuarios", content = @Content)
     @GetMapping()
-    public ResponseEntity<PagedModel<EntityModel<User>>> findAll(@PageableDefault(size = 10)Pageable pageable){
+    public ResponseEntity<PagedModel<EntityModel<User>>> findAll(@ParameterObject  @PageableDefault(size = 10)Pageable pageable){
         Page<User> pageUser = service.findAll(pageable);
         PagedModel<EntityModel<User>> allUser = PagedModel.of(
                 pageUser.getContent().stream().map(assembler::toModel).toList(),
@@ -85,11 +86,11 @@ public class UserController {
     @Tag(name = "Buscar por nome")
     @Operation(summary = "Buscar por nome(GET)")
     @ApiResponse(responseCode = "200", description = "Usuarios", content = @Content)
-    @ApiResponse(responseCode = "204", description = "Usuarios", content = @Content)
+    @ApiResponse(responseCode = "204", description = "Blank", content = @Content)
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<User>>> findByName(
             @RequestParam String name,
-            @PageableDefault(size = 10) Pageable pageable){
+            @ParameterObject @PageableDefault(size = 10) Pageable pageable){
         Page<User> pageUser = service.findByName(name, pageable);
         PagedModel<EntityModel<User>> allNameUser = PagedModel.of(
                 pageUser.getContent().stream().map(assembler::toModel).toList(),

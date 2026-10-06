@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -34,7 +35,7 @@ public class DeveloperController {
 
     @Tag(name = "Criar")
     @Operation(summary = "Criar(POST)")
-    @ApiResponse(responseCode = "201", description = "Desenvolvedor criad", content = @Content)
+    @ApiResponse(responseCode = "201", description = "Desenvolvedor criado", content = @Content)
     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
@@ -56,7 +57,7 @@ public class DeveloperController {
     @Operation(summary = "Buscar todos(GET)")
     @ApiResponse(responseCode = "200", description = "Desenvolvedores", content = @Content)
     @GetMapping()
-    public ResponseEntity<PagedModel<EntityModel<Developer>>> findAll(@PageableDefault(size = 10)Pageable pageable){
+    public ResponseEntity<PagedModel<EntityModel<Developer>>> findAll(@ParameterObject @PageableDefault(size = 10)Pageable pageable){
         Page<Developer> pageDeveloper = service.findAll(pageable);
         PagedModel<EntityModel<Developer>> allDeveloper = PagedModel.of(
                 pageDeveloper.getContent().stream().map(assembler::toModel).toList(),
@@ -83,7 +84,7 @@ public class DeveloperController {
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<Developer>>> findByName(
             @RequestParam String name,
-            @PageableDefault(size = 10) Pageable pageable){
+            @ParameterObject @PageableDefault(size = 10) Pageable pageable){
         Page<Developer> pageDeveloper = service.findByName(name, pageable);
         PagedModel<EntityModel<Developer>> allNameDeveloper = PagedModel.of(
                 pageDeveloper.getContent().stream().map(assembler::toModel).toList(),

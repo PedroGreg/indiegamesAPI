@@ -13,7 +13,7 @@ public class OpenAPI {
     public io.swagger.v3.oas.models.OpenAPI customOpenAPI(@Value("$(springdoc.version)") String appVersion){
         return new io.swagger.v3.oas.models.OpenAPI()
                 .info(new Info()
-                        .title("API of game Indies")
+                        .title("API de Games Indies")
                         .version(appVersion)
                         .description("API to manage game indies")
                         .termsOfService("https://swagger.io/terms/")
