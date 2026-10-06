@@ -243,7 +243,6 @@ Uma API para gestão de jogos INDIES
 -- name string[3, 255] characters
 -- createdAt stringdate-time
 -- updatedAt stringdate-time
--
 #### Developer
 -- id integerint64
 -- name string[3, 255] characters
