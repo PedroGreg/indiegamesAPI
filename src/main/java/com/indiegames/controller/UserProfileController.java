@@ -19,7 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Requisições de Perfil do Usuário")
+@Tag(name = "Perfil do Usuário")
 @RestController
 @RequestMapping("/api/userprofile")
 public class UserProfileController {
@@ -33,9 +33,9 @@ public class UserProfileController {
     }
     
     //@Tag(name = "Criar")
-    //@Operation(summary = "Criar(POST)")
+    @Operation(summary = "Criar um novo perfil de usuário")
     @ApiResponse(responseCode = "201", description = "Perfil de usuario criado", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
     public ResponseEntity<EntityModel<UserProfile>> create(
@@ -52,9 +52,9 @@ public class UserProfileController {
         return new ResponseEntity<>(createUserProfile, HttpStatus.CREATED);
     }
 
-    @Tag(name = "Buscar todos")
-    @Operation(summary = "Buscar todos(GET)")
-    @ApiResponse(responseCode = "200", description = "Perfil de usuarios", content = @Content)
+//    @Tag(name = "Buscar todos")
+    @Operation(summary = "Buscar todos os perfis de usuário")
+    @ApiResponse(responseCode = "200", description = "Lista com todos os perfis de usuário", content = @Content)
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<UserProfile>>> findAll(@PageableDefault(size = 10)Pageable pageable){
         Page<UserProfile> pageUserProfile = service.findAll(pageable);
@@ -65,10 +65,10 @@ public class UserProfileController {
         return new ResponseEntity<>(allUserProfile, HttpStatus.OK);
     }
 
-    @Tag(name = "Buscar por ID")
-    @Operation(summary = "Buscar por ID(GET)")
-    @ApiResponse(responseCode = "200", description = "Perfil de usuario", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Perfil de usuario não encontrado", content = @Content)
+//    @Tag(name = "Buscar por ID")
+    @Operation(summary = "Buscar perfil de usuário por ID")
+    @ApiResponse(responseCode = "200", description = "Perfil de usuário encontrado por ID", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Perfil de usuario não encontrado com esse ID", content = @Content)
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<UserProfile>> findById(@PathVariable Long id){
         UserProfile userProfile1 = service.findById(id);
@@ -92,11 +92,11 @@ public class UserProfileController {
 //        return new ResponseEntity<>(allNameUserProfile, HttpStatus.OK);
 //    }
 
-    @Tag(name = "Atualizar")
-    @Operation(summary = "Atualizar(PUT)")
+//    @Tag(name = "Atualizar")
+    @Operation(summary = "Atualizar perfil de usuário")
     @ApiResponse(responseCode = "200", description = "Perfil de usuario atualizado", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Perfil de usuário não encontrado com esse ID", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<UserProfile>> update(
@@ -114,10 +114,10 @@ public class UserProfileController {
         return new ResponseEntity<>(updateUserProfile, HttpStatus.OK);
     }
 
-    @Tag(name = "Deletar")
-    @Operation(summary = "Deletar(DELETE)")
-    @ApiResponse(responseCode = "204", description = "Perfil de usuario deletado", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+//    @Tag(name = "Deletar")
+    @Operation(summary = "Deletar perfil de usuário(Não é permitido DELETE CASCADE)")
+    @ApiResponse(responseCode = "204", description = "Perfil de usuário deletado", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Perfil de usuário não encontrado com esse ID", content = @Content)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Valid Long id) {
         service.delete(id);

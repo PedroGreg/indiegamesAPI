@@ -20,7 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Requisições de Desenvolvedores")
+@Tag(name = "Desenvolvedores")
 @RestController
 @RequestMapping("/api/developer")
 public class DeveloperController {
@@ -33,15 +33,15 @@ public class DeveloperController {
         this.service = service;
     }
 
-    @Tag(name = "Criar")
-    @Operation(summary = "Criar(POST)")
+//    @Tag(name = "Criar")
+    @Operation(summary = "Criar um novo desenvolvedor")
     @ApiResponse(responseCode = "201", description = "Desenvolvedor criado", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
     public ResponseEntity<EntityModel<Developer>> create(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Nova desenvolvedor",
+                    description = "Novo desenvolvedor",
                     required = true,
                     content = @Content(mediaType = "application/json",
                             schema= @Schema(implementation = Developer.class),
@@ -53,9 +53,9 @@ public class DeveloperController {
         return new ResponseEntity<>(createDeveloper, HttpStatus.CREATED);
     }
 
-    @Tag(name = "Buscar todos")
-    @Operation(summary = "Buscar todos(GET)")
-    @ApiResponse(responseCode = "200", description = "Desenvolvedores", content = @Content)
+//    @Tag(name = "Buscar todos")
+    @Operation(summary = "Buscar todos os desenvolvedores")
+    @ApiResponse(responseCode = "200", description = "Lista com todos os desenvolvedores", content = @Content)
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<Developer>>> findAll(@ParameterObject @PageableDefault(size = 10)Pageable pageable){
         Page<Developer> pageDeveloper = service.findAll(pageable);
@@ -66,10 +66,10 @@ public class DeveloperController {
         return new ResponseEntity<>(allDeveloper, HttpStatus.OK);
     }
 
-    @Tag(name = "Buscar por ID")
-    @Operation(summary = "Buscar por ID(GET)")
-    @ApiResponse(responseCode = "200", description = "Desenvolvedor", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Desenvolvedor não encontrado", content = @Content)
+//    @Tag(name = "Buscar por ID")
+    @Operation(summary = "Buscar desenvolvedor por ID")
+    @ApiResponse(responseCode = "200", description = "Desenvolvedor encontrado por ID", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Desenvolvedor não encontrado com esse ID", content = @Content)
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<Developer>> findById(@PathVariable Long id){
         Developer developer1 = service.findById(id);
@@ -77,10 +77,9 @@ public class DeveloperController {
         return new ResponseEntity<>(findIdDeveloper, HttpStatus.OK);
     }
 
-    @Tag(name = "Buscar por nome")
-    @Operation(summary = "Buscar por nome(GET)")
-    @ApiResponse(responseCode = "200", description = "Desenvolvedores", content = @Content)
-    @ApiResponse(responseCode = "204", description = "Desenvolvedor não encontrado", content = @Content)
+//    @Tag(name = "Buscar por nome")
+    @Operation(summary = "Buscar desenvolvedor por nome")
+    @ApiResponse(responseCode = "200", description = "Lista com todos os desenvolvedores pelo nome enviado", content = @Content)
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<Developer>>> findByName(
             @RequestParam String name,
@@ -93,11 +92,11 @@ public class DeveloperController {
         return new ResponseEntity<>(allNameDeveloper, HttpStatus.OK);
     }
 
-    @Tag(name = "Atualizar")
-    @Operation(summary = "Atualizar(PUT)")
+//    @Tag(name = "Atualizar")
+    @Operation(summary = "Atualizar desenvolvedor")
     @ApiResponse(responseCode = "200", description = "Desenvolvedor atualizado", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Desenvolvedor não encontrado com esse ID", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<Developer>> update(@PathVariable Long id,
@@ -114,10 +113,10 @@ public class DeveloperController {
         return new ResponseEntity<>(updateDeveloper, HttpStatus.OK);
     }
 
-    @Tag(name = "Deletar")
-    @Operation(summary = "Deletar(DELETE)")
+//    @Tag(name = "Deletar")
+    @Operation(summary = "Deletar desenvolvedor(Não é permitido DELETE CASCADE)")
     @ApiResponse(responseCode = "204", description = "Desenvolvedor deletado", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Desenvolvedor não encontrado com esse ID", content = @Content)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Valid Long id) {
         service.delete(id);

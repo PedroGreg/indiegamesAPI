@@ -20,7 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Requisições de Games")
+@Tag(name = "Games")
 @RestController
 @RequestMapping("/api/game")
 public class GameController {
@@ -33,11 +33,11 @@ public class GameController {
         this.service = service;
     }
 
-    @Tag(name = "Criar")
-    @Operation(summary = "Criar(POST)")
+//    @Tag(name = "Criar")
+    @Operation(summary = "Criar um novo game")
     @ApiResponse(responseCode = "201", description = "Game criado", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Um ou mais ID enviado(s) não foi(ram) encontrado(s)(Categoria, Desenvolvedor ou Plataforma)", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
     public ResponseEntity<EntityModel<Game>> create(
@@ -54,9 +54,9 @@ public class GameController {
         return new ResponseEntity<>(createGame, HttpStatus.CREATED);
     }
 
-    @Tag(name = "Buscar todos")
-    @Operation(summary = "Buscar todas(GET)")
-    @ApiResponse(responseCode = "200", description = "Games", content = @Content)
+//    @Tag(name = "Buscar todos")
+    @Operation(summary = "Buscar todos os games")
+    @ApiResponse(responseCode = "200", description = "Lista com todos os games", content = @Content)
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<Game>>> findAll(@ParameterObject @PageableDefault(size = 10)Pageable pageable){
         Page<Game> pageGame = service.findAll(pageable);
@@ -67,10 +67,10 @@ public class GameController {
         return new ResponseEntity<>(allGame, HttpStatus.OK);
     }
 
-    @Tag(name = "Buscar por ID")
+//    @Tag(name = "Buscar por ID")
     @Operation(summary = "Buscar por ID(GET)")
-    @ApiResponse(responseCode = "200", description = "Game", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Game não encontrado", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Game encontrado por ID", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Game não encontrado com esse ID", content = @Content)
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<Game>> findById(@PathVariable Long id){
         Game game1 = service.findById(id);
@@ -78,10 +78,9 @@ public class GameController {
         return new ResponseEntity<>(findIdGame, HttpStatus.OK);
     }
 
-    @Tag(name = "Buscar por nome")
-    @Operation(summary = "Buscar por nome(GET)")
-    @ApiResponse(responseCode = "200", description = "Games", content = @Content)
-    @ApiResponse(responseCode = "204", description = "Blank", content = @Content)
+//    @Tag(name = "Buscar por nome")
+    @Operation(summary = "Buscar game por nome")
+    @ApiResponse(responseCode = "200", description = "Lista com todos os games pelo nome enviado", content = @Content)
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<Game>>> findByName(
             @RequestParam String name,
@@ -94,11 +93,11 @@ public class GameController {
         return new ResponseEntity<>(allNameGame, HttpStatus.OK);
     }
 
-    @Tag(name = "Atualizar")
-    @Operation(summary = "Atualizar(PUT)")
+//    @Tag(name = "Atualizar")
+    @Operation(summary = "Atualizar game")
     @ApiResponse(responseCode = "200", description = "Game atualizado", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Game não encontrado com esse ID", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<Game>> update(
@@ -116,10 +115,10 @@ public class GameController {
         return new ResponseEntity<>(updateGame, HttpStatus.OK);
     }
 
-    @Tag(name = "Deletar")
-    @Operation(summary = "Deletar(DELETE)")
+//    @Tag(name = "Deletar")
+    @Operation(summary = "Deletar um game")
     @ApiResponse(responseCode = "204", description = "Game deletado", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Game não encontrado com esse ID", content = @Content)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Valid Long id) {
         service.delete(id);

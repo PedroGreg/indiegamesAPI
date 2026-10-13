@@ -21,7 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Requisições de Categorias")
+@Tag(name = "Categorias")
 @RestController
 @RequestMapping("/api/category")
 public class CategoryController {
@@ -34,10 +34,10 @@ public class CategoryController {
         this.service = service;
     }
 
-    @Tag(name = "Criar", description = "Criar um novo")
-    @Operation(summary = "Criar(POST)")
+//    @Tag(name = "Criar", description = "Criar um novo")
+    @Operation(summary = "Criar uma nova categoria")
     @ApiResponse(responseCode = "201", description = "Categoria criada", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
     public ResponseEntity<EntityModel<Category>> create(
@@ -54,9 +54,9 @@ public class CategoryController {
         return new ResponseEntity<>(createCategory, HttpStatus.CREATED);
     }
 
-    @Tag(name = "Buscar todos", description = "Buscar todos")
-    @Operation(summary = "Buscar todas(GET)")
-    @ApiResponse(responseCode = "200", description = "Categorias", content = @Content)
+//    @Tag(name = "Buscar todos", description = "Buscar todos")
+    @Operation(summary = "Buscar todas as categorias")
+    @ApiResponse(responseCode = "200", description = "Lista com todas as categorias")
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<Category>>> findAll(@ParameterObject  @PageableDefault(size = 10)Pageable pageable){
         Page<Category> pageCategory = service.findAll(pageable);
@@ -67,10 +67,10 @@ public class CategoryController {
         return new ResponseEntity<>(allCategory, HttpStatus.OK);
     }
 
-    @Tag(name = "Buscar por ID", description = "Buscar por ID")
-    @Operation(summary = "Buscar por ID(GET)")
-    @ApiResponse(responseCode = "200", description = "Categoria", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Categoria não encontrada", content = @Content)
+//    @Tag(name = "Buscar por ID", description = "Buscar por ID")
+    @Operation(summary = "Buscar categoria por ID")
+    @ApiResponse(responseCode = "200", description = "Categoria encontrada por ID", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content)
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<Category>> findById(@PathVariable Long id){
         Category category1 = service.findById(id);
@@ -78,10 +78,9 @@ public class CategoryController {
         return new ResponseEntity<>(findIdCategory, HttpStatus.OK);
     }
 
-    @Tag(name = "Buscar por nome", description = "Buscar por nome")
-    @Operation(summary = "Buscar por nome(GET)")
-    @ApiResponse(responseCode = "200", description = "Categorias", content = @Content)
-    @ApiResponse(responseCode = "204", description = "Categorias", content = @Content)
+//    @Tag(name = "Buscar por nome", description = "Buscar por nome")
+    @Operation(summary = "Buscar categoria por nome")
+    @ApiResponse(responseCode = "200", description = "Lista com todas as categorias pelo nome enviado")
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<Category>>> findByName(
             @RequestParam String name,
@@ -94,11 +93,11 @@ public class CategoryController {
         return new ResponseEntity<>(allNameCategory, HttpStatus.OK);
     }
 
-    @Tag(name = "Atualizar", description = "Atualizar")
-    @Operation(summary = "Atualizar(PUT)")
+//    @Tag(name = "Atualizar", description = "Atualizar")
+    @Operation(summary = "Atualizar categoria")
     @ApiResponse(responseCode = "200", description = "Categoria atualizada", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<Category>> update(@PathVariable Long id,
@@ -115,10 +114,10 @@ public class CategoryController {
         return new ResponseEntity<>(updateCategory, HttpStatus.OK);
     }
 
-    @Tag(name = "Deletar", description = "Deletar por ID")
-    @Operation(summary = "Deletar(DELETE)")
+//    @Tag(name = "Deletar", description = "Deletar por ID")
+    @Operation(summary = "Deletar categoria(Não é permitido DELETE CASCADE)")
     @ApiResponse(responseCode = "204", description = "Categoria deletada", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Valid Long id) {
         service.delete(id);

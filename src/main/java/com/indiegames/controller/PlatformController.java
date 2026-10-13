@@ -20,7 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Requisições de plataformas")
+@Tag(name = "Plataformas")
 @RestController
 @RequestMapping("/api/platform")
 public class PlatformController {
@@ -33,10 +33,10 @@ public class PlatformController {
         this.service = service;
     }
 
-    @Tag(name = "Criar")
-    @Operation(summary = "Criar(POST)")
+//    @Tag(name = "Criar")
+    @Operation(summary = "Criar uma nova plataforma")
     @ApiResponse(responseCode = "201", description = "Plataforma criada", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
     public ResponseEntity<EntityModel<Platform>> create(
@@ -53,9 +53,9 @@ public class PlatformController {
         return new ResponseEntity<>(createPlatform, HttpStatus.CREATED);
     }
 
-    @Tag(name = "Buscar todos")
-    @Operation(summary = "Buscar todos(GET)")
-    @ApiResponse(responseCode = "200", description = "Plataformas", content = @Content)
+//    @Tag(name = "Buscar todos")
+    @Operation(summary = "Buscar todas as plataformas)")
+    @ApiResponse(responseCode = "200", description = "Lista com todas as plataformas", content = @Content)
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<Platform>>> findAll(@ParameterObject @PageableDefault(size = 10)Pageable pageable){
         Page<Platform> pagePlatform = service.findAll(pageable);
@@ -66,10 +66,10 @@ public class PlatformController {
         return new ResponseEntity<>(allPlatform, HttpStatus.OK);
     }
 
-    @Tag(name = "Buscar por ID")
-    @Operation(summary = "Buscar por ID(GET)")
-    @ApiResponse(responseCode = "200", description = "Plataforma", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Plataforma não encontrada", content = @Content)
+//    @Tag(name = "Buscar por ID")
+    @Operation(summary = "Buscar plataforma por ID")
+    @ApiResponse(responseCode = "200", description = "Plataforma encontrada por ID", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Plataforma não encontrada com esse ID", content = @Content)
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<Platform>> findById(@PathVariable Long id){
         Platform platform1 = service.findById(id);
@@ -77,10 +77,9 @@ public class PlatformController {
         return new ResponseEntity<>(findIdPlatform, HttpStatus.OK);
     }
 
-    @Tag(name = "Buscar por nome")
-    @Operation(summary = "Buscar por nome(GET)")
-    @ApiResponse(responseCode = "200", description = "Plataformas", content = @Content)
-    @ApiResponse(responseCode = "204", description = "Blank", content = @Content)
+//    @Tag(name = "Buscar por nome")
+    @Operation(summary = "Buscar plataforma por nome")
+    @ApiResponse(responseCode = "200", description = "Lista com todos os desenvolvedores pelo nome enviado", content = @Content)
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<Platform>>> findByName(
             @RequestParam String name,
@@ -93,11 +92,11 @@ public class PlatformController {
         return new ResponseEntity<>(allNamePlatform, HttpStatus.OK);
     }
 
-    @Tag(name = "Atualizar")
-    @Operation(summary = "Atualizar(PUT)")
+//    @Tag(name = "Atualizar")
+    @Operation(summary = "Atualizar plataforma")
     @ApiResponse(responseCode = "200", description = "Plataforma atualizada", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Desenvolvedor não encontrado com esse ID", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<Platform>> update(@PathVariable Long id,
@@ -114,10 +113,10 @@ public class PlatformController {
         return new ResponseEntity<>(updatePlatform, HttpStatus.OK);
     }
 
-    @Tag(name = "Deletar")
-    @Operation(summary = "Deletar(DELETE)")
+//    @Tag(name = "Deletar")
+    @Operation(summary = "Deletar plataforma(Não é permitido DELETE CASCADE)")
     @ApiResponse(responseCode = "204", description = "Plataforma deletada", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Desenvolvedor não encontrado com esse ID", content = @Content)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Valid Long id) {
         service.delete(id);
