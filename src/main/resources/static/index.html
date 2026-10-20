@@ -145,7 +145,7 @@
                 </span>
             </div>
             <div class="text-xs font-code text-gray-300 truncate bg-black/40 p-2 rounded-lg border border-white/5">
-                http://localhost:8080/api
+                https://indiegamesapi.onrender.com/api
             </div>
             <button onclick="toggleApiMode()" id="mode-toggle-btn" class="w-full text-xs py-2 px-3 rounded-xl bg-cyber-purple/20 hover:bg-cyber-purple/30 text-cyber-purple border border-cyber-purple/40 font-semibold transition-all">
                 Switch to Live API
@@ -166,7 +166,7 @@
 
             <!-- Quick Action Links -->
             <div class="flex items-center gap-3">
-                <a href="http://localhost:8080/swagger-ui/index.html" target="_blank" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300 hover:text-white hover:bg-cyber-purple/20 border border-transparent hover:border-cyber-purple/40 transition-all">
+                <a href="https://indiegamesapi.onrender.com/swagger-ui/index.html" target="_blank" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300 hover:text-white hover:bg-cyber-purple/20 border border-transparent hover:border-cyber-purple/40 transition-all">
                     <i class="fa-solid fa-book text-cyber-cyan"></i> Swagger Docs
                 </a>
                 <button onclick="openModal('game-modal')" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-black bg-gradient-to-r from-cyber-cyan to-cyber-green hover:opacity-90 transition-all shadow-lg shadow-cyber-cyan/20">
@@ -665,7 +665,7 @@
                 statusText.innerText = "LIVE ATTEMPT";
                 statusText.parentElement.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyber-cyan/10 text-cyber-cyan border border-cyber-cyan/30";
                 toggleBtn.innerText = "Switch to Mock Mode";
-                showToast("Connected to live endpoint: http://localhost:8080/api");
+                showToast("Connected to live endpoint: https://indiegamesapi.onrender.com/api");
             } else {
                 statusText.innerText = "MOCK ACTIVE";
                 statusText.parentElement.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyber-green/10 text-cyber-green border border-cyber-green/30";
@@ -970,15 +970,15 @@
                     if ((method === 'POST' || method === 'PUT') && body) {
                         options.body = body;
                     }
-                    const res = await fetch(`http://localhost:8080${url}`, options);
+                    const res = await fetch(`https://indiegamesapi.onrender.com${url}`, options);
                     const data = await res.json();
                     
                     document.getElementById('tester-status').innerText = `${res.status} ${res.statusText}`;
                     document.getElementById('tester-response').innerText = JSON.stringify(data, null, 2);
-                    showToast(`HTTP ${res.status} received from http://localhost:8080`);
+                    showToast(`HTTP ${res.status} received from https://indiegamesapi.onrender.com`);
                 } catch (err) {
                     document.getElementById('tester-status').innerText = "ERROR";
-                    document.getElementById('tester-response').innerText = `Failed to connect to http://localhost:8080\nEnsure your Spring Boot app is running.\n\nDetails: ${err.message}`;
+                    document.getElementById('tester-response').innerText = `Failed to connect to https://indiegamesapi.onrender.com\nEnsure your Spring Boot app is running.\n\nDetails: ${err.message}`;
                     showToast("API connection error");
                 }
             } else {
