@@ -10,15 +10,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenAPI {
     @Bean
-    public io.swagger.v3.oas.models.OpenAPI customOpenAPI(@Value("$(springdoc.version)") String appVersion){
+    public io.swagger.v3.oas.models.OpenAPI customOpenAPI(@Value("${springdoc.version:1.0.0}") String appVersion) {
         return new io.swagger.v3.oas.models.OpenAPI()
                 .info(new Info()
-                        .title("API ")
+                        .title("🎮 Indie Games Management API")
                         .version(appVersion)
                         .description("|| API para gerenciar games indies, pode-se cadastrar desenvolvedor, categorias, plataformas, usuários e jogos || URI base para consumo da API: http://localhost:8080/api/ ||")
                         .termsOfService("https://swagger.io/terms/")
                         .license(new License().name("MIT").url("https://mit-license.org/"))
-                        .contact(new Contact().name("TSI - SENAC")
+                        .contact(new Contact()
+                                .name("TSI - SENAC")
                                 .url("https://www.senac.com.br")
                                 .email("pedro.jcgregorio@senacsp.edu.br"))
                 );

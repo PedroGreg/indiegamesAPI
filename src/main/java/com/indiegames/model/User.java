@@ -20,7 +20,7 @@ public class User {
     @NotBlank
     @Email
     private String email;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserProfile userProfile;
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

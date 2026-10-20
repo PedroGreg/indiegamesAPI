@@ -21,13 +21,13 @@ public class Game {
     @NotNull
     @Enumerated(EnumType.STRING)
     private GameStatus status;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     private Developer developer;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     private Category category;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @NotEmpty
     private List<Platform> platforms;
     @Column(name = "created_at", nullable = false, updatable = false)

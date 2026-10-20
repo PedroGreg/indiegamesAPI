@@ -1,0 +1,21 @@
+/* Modifica a cor do cabeçalho superior */
+.swagger-ui .topbar {
+    background-color: #1b1b2f;
+    border-bottom: 3px solid #e94560;
+}
+
+/* Esconde o logo padrão do Swagger e aplica estilo ao texto */
+.swagger-ui .topbar-wrapper img {
+    content: url('https://img.icons8.com/color/48/game-controller.png');
+}
+
+/* Altera a cor de fundo da página */
+body {
+    background-color: #f8f9fa;
+}
+
+/* Destaca os títulos principais */
+.swagger-ui .info .title {
+    color: #1b1b2f;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
