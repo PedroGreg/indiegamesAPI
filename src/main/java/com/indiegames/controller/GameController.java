@@ -1,8 +1,10 @@
 package com.indiegames.controller;
 
 import com.indiegames.assembler.GameModelAssembler;
+import com.indiegames.config.RateLimitFilter;
 import com.indiegames.model.Game;
 import com.indiegames.service.GameService;
+import io.github.bucket4j.Bucket;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -38,6 +40,7 @@ public class GameController {
     @ApiResponse(responseCode = "201", description = "Game criado", content = @Content)
     @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
     @ApiResponse(responseCode = "404", description = "Um ou mais ID enviado(s) não foi(ram) encontrado(s)(Categoria, Desenvolvedor ou Plataforma)", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
     public ResponseEntity<EntityModel<Game>> create(
@@ -57,6 +60,7 @@ public class GameController {
 //    @Tag(name = "Buscar todos")
     @Operation(summary = "Buscar todos os games")
     @ApiResponse(responseCode = "200", description = "Lista com todos os games", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<Game>>> findAll(@ParameterObject @PageableDefault(size = 10)Pageable pageable){
         Page<Game> pageGame = service.findAll(pageable);
@@ -71,6 +75,7 @@ public class GameController {
     @Operation(summary = "Buscar por ID(GET)")
     @ApiResponse(responseCode = "200", description = "Game encontrado por ID", content = @Content)
     @ApiResponse(responseCode = "404", description = "Game não encontrado com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<Game>> findById(@PathVariable Long id){
         Game game1 = service.findById(id);
@@ -81,6 +86,7 @@ public class GameController {
 //    @Tag(name = "Buscar por nome")
     @Operation(summary = "Buscar game por nome")
     @ApiResponse(responseCode = "200", description = "Lista com todos os games pelo nome enviado", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<Game>>> findByName(
             @RequestParam String name,
@@ -98,6 +104,7 @@ public class GameController {
     @ApiResponse(responseCode = "200", description = "Game atualizado", content = @Content)
     @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
     @ApiResponse(responseCode = "404", description = "Game não encontrado com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<Game>> update(
@@ -119,6 +126,7 @@ public class GameController {
     @Operation(summary = "Deletar um game")
     @ApiResponse(responseCode = "204", description = "Game deletado", content = @Content)
     @ApiResponse(responseCode = "404", description = "Game não encontrado com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Valid Long id) {
         service.delete(id);

@@ -36,6 +36,7 @@ public class UserProfileController {
     @Operation(summary = "Criar um novo perfil de usuário")
     @ApiResponse(responseCode = "201", description = "Perfil de usuario criado", content = @Content)
     @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
     public ResponseEntity<EntityModel<UserProfile>> create(
@@ -55,6 +56,7 @@ public class UserProfileController {
 //    @Tag(name = "Buscar todos")
     @Operation(summary = "Buscar todos os perfis de usuário")
     @ApiResponse(responseCode = "200", description = "Lista com todos os perfis de usuário", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<UserProfile>>> findAll(@PageableDefault(size = 10)Pageable pageable){
         Page<UserProfile> pageUserProfile = service.findAll(pageable);
@@ -69,6 +71,7 @@ public class UserProfileController {
     @Operation(summary = "Buscar perfil de usuário por ID")
     @ApiResponse(responseCode = "200", description = "Perfil de usuário encontrado por ID", content = @Content)
     @ApiResponse(responseCode = "404", description = "Perfil de usuario não encontrado com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<UserProfile>> findById(@PathVariable Long id){
         UserProfile userProfile1 = service.findById(id);
@@ -97,6 +100,7 @@ public class UserProfileController {
     @ApiResponse(responseCode = "200", description = "Perfil de usuario atualizado", content = @Content)
     @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
     @ApiResponse(responseCode = "404", description = "Perfil de usuário não encontrado com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<UserProfile>> update(
@@ -118,6 +122,7 @@ public class UserProfileController {
     @Operation(summary = "Deletar perfil de usuário(Não é permitido DELETE CASCADE)")
     @ApiResponse(responseCode = "204", description = "Perfil de usuário deletado", content = @Content)
     @ApiResponse(responseCode = "404", description = "Perfil de usuário não encontrado com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Valid Long id) {
         service.delete(id);

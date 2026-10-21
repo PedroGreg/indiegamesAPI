@@ -37,6 +37,7 @@ public class UserController {
     @Operation(summary = "Criar um novo usuário")
     @ApiResponse(responseCode = "201", description = "Usuario criado", content = @Content)
     @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
     public ResponseEntity<EntityModel<User>> create(
@@ -62,6 +63,7 @@ public class UserController {
 //    @Tag(name = "Buscar todos")
     @Operation(summary = "Buscar todos os usuários")
     @ApiResponse(responseCode = "200", description = "Lista com todos os usuários", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<User>>> findAll(@ParameterObject  @PageableDefault(size = 10)Pageable pageable){
         Page<User> pageUser = service.findAll(pageable);
@@ -76,6 +78,7 @@ public class UserController {
     @Operation(summary = "Buscar usuário por ID")
     @ApiResponse(responseCode = "200", description = "Usuário encontrado por ID", content = @Content)
     @ApiResponse(responseCode = "404", description = "Usuario não encontrado com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<User>> findById(@PathVariable Long id){
         User user1 = service.findById(id);
@@ -86,6 +89,7 @@ public class UserController {
 //    @Tag(name = "Buscar por nome")
     @Operation(summary = "Buscar usuário por nome")
     @ApiResponse(responseCode = "200", description = "Lista com todos os desenvolvedores pelo nome enviado", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<User>>> findByName(
             @RequestParam String name,
@@ -103,6 +107,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Usuario atualizado", content = @Content)
     @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
     @ApiResponse(responseCode = "404", description = "Usuário não encontrado com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<User>> update(
@@ -123,6 +128,7 @@ public class UserController {
 //    @Tag(name = "Deletar")
     @ApiResponse(responseCode = "204", description = "Usuario deletado", content = @Content)
     @ApiResponse(responseCode = "404", description = "Usuário não encontrado com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Valid Long id) {
         service.delete(id);

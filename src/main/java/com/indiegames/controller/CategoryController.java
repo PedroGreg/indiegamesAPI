@@ -38,6 +38,7 @@ public class CategoryController {
     @Operation(summary = "Criar uma nova categoria")
     @ApiResponse(responseCode = "201", description = "Categoria criada", content = @Content)
     @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
     public ResponseEntity<EntityModel<Category>> create(
@@ -57,6 +58,7 @@ public class CategoryController {
 //    @Tag(name = "Buscar todos", description = "Buscar todos")
     @Operation(summary = "Buscar todas as categorias")
     @ApiResponse(responseCode = "200", description = "Lista com todas as categorias")
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<Category>>> findAll(@ParameterObject  @PageableDefault(size = 10)Pageable pageable){
         Page<Category> pageCategory = service.findAll(pageable);
@@ -71,6 +73,7 @@ public class CategoryController {
     @Operation(summary = "Buscar categoria por ID")
     @ApiResponse(responseCode = "200", description = "Categoria encontrada por ID", content = @Content)
     @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<Category>> findById(@PathVariable Long id){
         Category category1 = service.findById(id);
@@ -81,6 +84,7 @@ public class CategoryController {
 //    @Tag(name = "Buscar por nome", description = "Buscar por nome")
     @Operation(summary = "Buscar categoria por nome")
     @ApiResponse(responseCode = "200", description = "Lista com todas as categorias pelo nome enviado")
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<Category>>> findByName(
             @RequestParam String name,
@@ -98,6 +102,7 @@ public class CategoryController {
     @ApiResponse(responseCode = "200", description = "Categoria atualizada", content = @Content)
     @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
     @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<Category>> update(@PathVariable Long id,
@@ -118,6 +123,7 @@ public class CategoryController {
     @Operation(summary = "Deletar categoria(Não é permitido DELETE CASCADE)")
     @ApiResponse(responseCode = "204", description = "Categoria deletada", content = @Content)
     @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Valid Long id) {
         service.delete(id);

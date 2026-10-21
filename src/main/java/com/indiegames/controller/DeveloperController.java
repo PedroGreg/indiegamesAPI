@@ -37,6 +37,7 @@ public class DeveloperController {
     @Operation(summary = "Criar um novo desenvolvedor")
     @ApiResponse(responseCode = "201", description = "Desenvolvedor criado", content = @Content)
     @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
     public ResponseEntity<EntityModel<Developer>> create(
@@ -56,6 +57,7 @@ public class DeveloperController {
 //    @Tag(name = "Buscar todos")
     @Operation(summary = "Buscar todos os desenvolvedores")
     @ApiResponse(responseCode = "200", description = "Lista com todos os desenvolvedores", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<Developer>>> findAll(@ParameterObject @PageableDefault(size = 10)Pageable pageable){
         Page<Developer> pageDeveloper = service.findAll(pageable);
@@ -70,6 +72,7 @@ public class DeveloperController {
     @Operation(summary = "Buscar desenvolvedor por ID")
     @ApiResponse(responseCode = "200", description = "Desenvolvedor encontrado por ID", content = @Content)
     @ApiResponse(responseCode = "404", description = "Desenvolvedor não encontrado com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<Developer>> findById(@PathVariable Long id){
         Developer developer1 = service.findById(id);
@@ -80,6 +83,7 @@ public class DeveloperController {
 //    @Tag(name = "Buscar por nome")
     @Operation(summary = "Buscar desenvolvedor por nome")
     @ApiResponse(responseCode = "200", description = "Lista com todos os desenvolvedores pelo nome enviado", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<Developer>>> findByName(
             @RequestParam String name,
@@ -97,6 +101,7 @@ public class DeveloperController {
     @ApiResponse(responseCode = "200", description = "Desenvolvedor atualizado", content = @Content)
     @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
     @ApiResponse(responseCode = "404", description = "Desenvolvedor não encontrado com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<Developer>> update(@PathVariable Long id,
@@ -117,6 +122,7 @@ public class DeveloperController {
     @Operation(summary = "Deletar desenvolvedor(Não é permitido DELETE CASCADE)")
     @ApiResponse(responseCode = "204", description = "Desenvolvedor deletado", content = @Content)
     @ApiResponse(responseCode = "404", description = "Desenvolvedor não encontrado com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Valid Long id) {
         service.delete(id);
