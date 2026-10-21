@@ -1,5 +1,6 @@
 package com.indiegames.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -7,6 +8,8 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
+// Evita erro 500 ao serializar proxies LAZY do Hibernate (ex.: game.developer / game.category)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "platforms")
 public class Platform {
     @Id

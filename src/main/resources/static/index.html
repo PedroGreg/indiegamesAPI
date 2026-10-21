@@ -1,1018 +1,939 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indie Games API Hub</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        cyber: {
-                            bg: '#0a0a12',
-                            card: '#121225',
-                            border: '#1f1f3a',
-                            purple: '#8a2be2',
-                            magenta: '#ff007f',
-                            cyan: '#00f3ff',
-                            green: '#00ff88',
-                            amber: '#ffb700'
-                        }
-                    },
-                    fontFamily: {
-                        orbitron: ['Orbitron', 'sans-serif'],
-                        sans: ['Inter', 'sans-serif'],
-                        code: ['Fira Code', 'monospace']
-                    }
-                }
-            }
-        }
-    </script>
-    
+    <title>Indie Games API - Dashboard Cyberpunk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-deep: #050508;
+            --bg-card: #0d0e15;
+            --bg-card-hover: #131522;
+            --panel-bg: rgba(13, 14, 21, 0.85);
+            --neon-cyan: #00f3ff;
+            --neon-magenta: #ff0055;
+            --neon-purple: #9d4edd;
+            --neon-green: #00ff66;
+            --neon-yellow: #ffcc00;
+            --text-main: #e2e8f0;
+            --text-muted: #64748b;
+            --border-glow: rgba(0, 243, 255, 0.25);
+            --border-magenta: rgba(255, 0, 85, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
         body {
-            background-color: #0a0a12;
-            color: #e2e8f0;
-            font-family: 'Inter', sans-serif;
-            background-image: 
-                radial-gradient(circle at 15% 15%, rgba(138, 43, 226, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, rgba(0, 243, 255, 0.06) 0%, transparent 40%);
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image:
+                    radial-gradient(circle at 15% 15%, rgba(0, 243, 255, 0.05) 0%, transparent 40%),
+                    radial-gradient(circle at 85% 85%, rgba(255, 0, 85, 0.05) 0%, transparent 40%),
+                    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+            padding: 24px;
         }
 
-        .neon-border-purple {
-            box-shadow: 0 0 12px rgba(138, 43, 226, 0.35);
-            border: 1px solid rgba(138, 43, 226, 0.5);
-        }
-        
-        .neon-border-cyan {
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.35);
-            border: 1px solid rgba(0, 243, 255, 0.5);
-        }
-
-        .neon-text-purple {
-            text-shadow: 0 0 8px rgba(138, 43, 226, 0.6);
-        }
-
-        .neon-text-cyan {
-            text-shadow: 0 0 8px rgba(0, 243, 255, 0.6);
+        /* --- Scanline Effect --- */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: 999;
+            pointer-events: none;
+            opacity: 0.6;
         }
 
-        .glass-card {
-            background: rgba(18, 18, 37, 0.75);
+        .container {
+            max-width: 1350px;
+            margin: 0 auto;
+        }
+
+        /* --- Header --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: var(--panel-bg);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-        }
-
-        .glass-card:hover {
-            border-color: rgba(0, 243, 255, 0.3);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 243, 255, 0.15);
-        }
-
-        /* Custom Scrollbars */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0a0a12;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1f1f3a;
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 20px var(--border-glow), inset 0 0 15px rgba(0, 243, 255, 0.1);
             border-radius: 4px;
+            margin-bottom: 30px;
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #8a2be2;
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand-logo {
+            font-size: 2rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .brand-title h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 0 8px var(--neon-cyan);
+        }
+
+        .brand-title p {
+            font-size: 0.85rem;
+            color: var(--neon-cyan);
+            letter-spacing: 1px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 255, 102, 0.1);
+            border: 1px solid var(--neon-green);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--neon-green);
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--neon-green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--neon-green);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        /* --- Toolbar --- */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            color: #fff;
+            border-color: var(--neon-cyan);
+            background: rgba(0, 243, 255, 0.1);
+            box-shadow: 0 0 12px var(--border-glow);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--neon-purple);
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            border-color: var(--neon-magenta);
+            background: rgba(255, 0, 85, 0.15);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--neon-magenta);
+            box-shadow: 0 0 15px var(--neon-magenta);
+        }
+
+        .btn:hover {
+            border-color: var(--neon-cyan);
+            background: rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        /* --- Cards Grid --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            padding: 22px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            background: var(--bg-card-hover);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 8px 25px rgba(0, 243, 255, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .status-tag {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-RELEASED {
+            background: rgba(0, 255, 102, 0.15);
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+        }
+
+        .status-EARLY_ACCESS {
+            background: rgba(255, 204, 0, 0.15);
+            color: var(--neon-yellow);
+            border: 1px solid var(--neon-yellow);
+        }
+
+        .status-DEVELOPMENT {
+            background: rgba(255, 0, 85, 0.15);
+            color: var(--neon-magenta);
+            border: 1px solid var(--neon-magenta);
+        }
+
+        .card-body p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .card-body strong {
+            color: var(--text-main);
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--neon-cyan);
+            padding: 3px 8px;
+            font-size: 0.75rem;
+            font-family: 'Fira Code', monospace;
+            border-radius: 2px;
+        }
+
+        /* --- Modal Cyberpunk --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 5, 8, 0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 30px var(--border-glow);
+            padding: 30px;
+            width: 100%;
+            max-width: 520px;
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+        }
+
+        .modal h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-cyan);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+            text-transform: uppercase;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-deep);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-size: 1rem;
+            border-radius: 2px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group select[multiple] {
+            height: 100px;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--border-glow);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        /* --- Console / JSON Drawer --- */
+        .console-panel {
+            margin-top: 35px;
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 15px 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+
+        .console-header {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 6px;
+        }
+
+        .console-log {
+            color: var(--neon-green);
+            max-height: 120px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .nav-tabs { flex-wrap: wrap; }
+        .tab-count {
+            margin-left: 6px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--neon-cyan);
+        }
+        .status-badge.offline {
+            background: rgba(255, 0, 85, 0.1);
+            border-color: var(--neon-magenta);
+            color: var(--neon-magenta);
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.2);
+        }
+        .status-badge.offline .status-dot {
+            background-color: var(--neon-magenta);
+            box-shadow: 0 0 8px var(--neon-magenta);
+        }
+        .search-box {
+            flex: 1;
+            min-width: 220px;
+            max-width: 360px;
+            padding: 10px 14px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-size: 1rem;
+            border-radius: 2px;
+        }
+        .search-box:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--border-glow);
+        }
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .btn-delete {
+            background: transparent;
+            border: 1px solid rgba(255, 0, 85, 0.4);
+            color: var(--neon-magenta);
+            padding: 4px 10px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+        }
+        .btn-delete:hover {
+            background: var(--neon-magenta);
+            color: #fff;
+            box-shadow: 0 0 10px var(--neon-magenta);
+        }
+        .state-msg {
+            grid-column: 1 / -1;
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+            padding: 30px 0;
+        }
+        .state-msg.error { color: var(--neon-magenta); }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-top: 25px;
+            font-family: 'Fira Code', monospace;
+            color: var(--text-muted);
+        }
+        .pagination .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .form-error {
+            color: var(--neon-magenta);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            min-height: 1em;
+        }
+        @media (max-width: 640px) {
+            body { padding: 16px; }
+            header { flex-direction: column; gap: 14px; align-items: flex-start; }
+            .grid { grid-template-columns: 1fr; }
+            .action-btns { flex-wrap: wrap; }
+            .btn { padding: 8px 14px; font-size: 0.85rem; }
+            .search-box { max-width: none; }
+            .console-header { flex-direction: column; gap: 4px; word-break: break-all; }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+<body>
 
-    <!-- SIDEBAR NAVIGATION -->
-    <aside class="w-full md:w-64 bg-cyber-card border-r border-cyber-border flex-shrink-0 flex flex-col justify-between z-20">
-        <div>
-            <!-- Brand Logo -->
-            <div class="p-5 border-b border-cyber-border flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyber-purple to-cyber-cyan flex items-center justify-center text-white shadow-lg shadow-purple-900/40">
-                        <i class="fa-solid font-bold text-xl fa-gamepad"></i>
-                    </div>
-                    <div>
-                        <h1 class="font-orbitron font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan to-cyber-purple text-lg leading-tight tracking-wider">INDIE HUB</h1>
-                        <span class="text-[10px] text-gray-400 tracking-widest uppercase">REST API Dashboard</span>
-                    </div>
-                </div>
+<div class="container">
+    <!-- Header -->
+    <header>
+        <div class="brand">
+            <div class="brand-logo">🎮</div>
+            <div class="brand-title">
+                <h1>INDIE GAMES API</h1>
+                <p>// CYBERPUNK MANAGEMENT DASHBOARD v1.0</p>
             </div>
-
-            <!-- Navigation Links -->
-            <nav class="p-3 space-y-1">
-                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 text-cyber-cyan bg-cyber-cyan/10 border border-cyber-cyan/30">
-                    <i class="fa-solid fa-chart-pie w-5 text-center"></i> Dashboard
-                </button>
-                <button onclick="switchTab('games')" id="nav-games" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-all duration-200">
-                    <i class="fa-solid fa-gamepad w-5 text-center"></i> Games Catalog
-                </button>
-                <button onclick="switchTab('developers')" id="nav-developers" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-all duration-200">
-                    <i class="fa-solid fa-code w-5 text-center"></i> Developers
-                </button>
-                <button onclick="switchTab('categories')" id="nav-categories" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-all duration-200">
-                    <i class="fa-solid fa-tags w-5 text-center"></i> Categories & Platforms
-                </button>
-                <button onclick="switchTab('users')" id="nav-users" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-all duration-200">
-                    <i class="fa-solid fa-users w-5 text-center"></i> Users & Profiles
-                </button>
-                <button onclick="switchTab('tester')" id="nav-tester" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-all duration-200">
-                    <i class="fa-solid fa-terminal w-5 text-center text-cyber-green"></i> Live API Console
-                </button>
-            </nav>
         </div>
-
-        <!-- API Connection Box -->
-        <div class="p-4 m-3 rounded-2xl bg-cyber-bg/80 border border-cyber-border space-y-3">
-            <div class="flex items-center justify-between text-xs">
-                <span class="text-gray-400">Target Endpoint</span>
-                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyber-green/10 text-cyber-green border border-cyber-green/30">
-                    <span class="w-1.5 h-1.5 rounded-full bg-cyber-green animate-pulse"></span>
-                    <span id="api-status-text">MOCK ACTIVE</span>
-                </span>
-            </div>
-            <div class="text-xs font-code text-gray-300 truncate bg-black/40 p-2 rounded-lg border border-white/5">
-                https://indiegamesapi.onrender.com/api
-            </div>
-            <button onclick="toggleApiMode()" id="mode-toggle-btn" class="w-full text-xs py-2 px-3 rounded-xl bg-cyber-purple/20 hover:bg-cyber-purple/30 text-cyber-purple border border-cyber-purple/40 font-semibold transition-all">
-                Switch to Live API
-            </button>
+        <div class="status-badge" id="apiStatus">
+            <div class="status-dot"></div>
+            <span id="apiStatusText">CONECTANDO...</span>
         </div>
-    </aside>
+    </header>
 
-    <!-- MAIN CONTENT AREA -->
-    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
-
-        <!-- TOP NAVBAR -->
-        <header class="h-16 border-b border-cyber-border bg-cyber-card/60 backdrop-blur-md sticky top-0 z-10 px-6 flex items-center justify-between gap-4">
-            <!-- Search bar -->
-            <div class="relative flex-1 max-w-md">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                <input type="text" id="global-search" oninput="handleSearch(this.value)" placeholder="Search games, devs, categories..." class="w-full bg-cyber-bg/90 border border-cyber-border rounded-xl pl-10 pr-4 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-cyber-cyan focus:ring-1 focus:ring-cyber-cyan transition-all">
-            </div>
-
-            <!-- Quick Action Links -->
-            <div class="flex items-center gap-3">
-                <a href="https://indiegamesapi.onrender.com/swagger-ui/index.html" target="_blank" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300 hover:text-white hover:bg-cyber-purple/20 border border-transparent hover:border-cyber-purple/40 transition-all">
-                    <i class="fa-solid fa-book text-cyber-cyan"></i> Swagger Docs
-                </a>
-                <button onclick="openModal('game-modal')" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-black bg-gradient-to-r from-cyber-cyan to-cyber-green hover:opacity-90 transition-all shadow-lg shadow-cyber-cyan/20">
-                    <i class="fa-solid fa-plus"></i> <span class="hidden sm:inline">Add Game</span>
-                </button>
-            </div>
-        </header>
-
-        <!-- CONTENT PANELS -->
-        <main class="p-6 space-y-6 flex-1">
-
-            <!-- 1. DASHBOARD OVERVIEW -->
-            <section id="panel-dashboard" class="space-y-6">
-                <!-- Welcome Banner -->
-                <div class="relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-cyber-purple/30 via-cyber-card to-cyber-bg border border-cyber-purple/30 neon-border-purple">
-                    <div class="relative z-10 space-y-2 max-w-2xl">
-                        <span class="px-3 py-1 rounded-full text-xs font-orbitron tracking-wider bg-cyber-purple/20 text-cyber-purple border border-cyber-purple/40">SPRING BOOT 3 + HATEOAS</span>
-                        <h2 class="text-2xl sm:text-3xl font-orbitron font-extrabold text-white">Indie Games API Control Panel</h2>
-                        <p class="text-sm text-gray-300">Manage developers, game releases, lifecycle statuses, and player profiles through clean RESTful interfaces.</p>
-                    </div>
-                    <i class="fa-solid fa-gamepad absolute -right-6 -bottom-6 text-9xl text-white/5 transform -rotate-12 pointer-events-none"></i>
-                </div>
-
-                <!-- Stats Grid -->
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="glass-card rounded-2xl p-5 border border-cyber-border flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-gray-400 font-medium">Total Games</p>
-                            <h3 class="text-2xl font-orbitron font-bold text-white mt-1" id="stat-games">3</h3>
-                        </div>
-                        <div class="w-12 h-12 rounded-xl bg-cyber-cyan/10 border border-cyber-cyan/30 flex items-center justify-center text-cyber-cyan text-xl">
-                            <i class="fa-solid fa-ghost"></i>
-                        </div>
-                    </div>
-
-                    <div class="glass-card rounded-2xl p-5 border border-cyber-border flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-gray-400 font-medium">Developers</p>
-                            <h3 class="text-2xl font-orbitron font-bold text-white mt-1" id="stat-devs">2</h3>
-                        </div>
-                        <div class="w-12 h-12 rounded-xl bg-cyber-purple/10 border border-cyber-purple/30 flex items-center justify-center text-cyber-purple text-xl">
-                            <i class="fa-solid fa-code"></i>
-                        </div>
-                    </div>
-
-                    <div class="glass-card rounded-2xl p-5 border border-cyber-border flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-gray-400 font-medium">Categories</p>
-                            <h3 class="text-2xl font-orbitron font-bold text-white mt-1" id="stat-categories">2</h3>
-                        </div>
-                        <div class="w-12 h-12 rounded-xl bg-cyber-magenta/10 border border-cyber-magenta/30 flex items-center justify-center text-cyber-magenta text-xl">
-                            <i class="fa-solid fa-layer-group"></i>
-                        </div>
-                    </div>
-
-                    <div class="glass-card rounded-2xl p-5 border border-cyber-border flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-gray-400 font-medium">Active Users</p>
-                            <h3 class="text-2xl font-orbitron font-bold text-white mt-1" id="stat-users">2</h3>
-                        </div>
-                        <div class="w-12 h-12 rounded-xl bg-cyber-green/10 border border-cyber-green/30 flex items-center justify-center text-cyber-green text-xl">
-                            <i class="fa-solid fa-users"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Featured Section & Activity -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Featured Game Spotlight -->
-                    <div class="lg:col-span-2 glass-card rounded-2xl p-6 border border-cyber-border space-y-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-star text-cyber-amber"></i>
-                                <h3 class="font-orbitron font-bold text-white text-base">Spotlight Title</h3>
-                            </div>
-                            <span class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-cyber-green/20 text-cyber-green border border-cyber-green/40">RELEASED</span>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row gap-5 items-start">
-                            <div class="w-full sm:w-48 h-32 rounded-xl bg-gradient-to-br from-purple-900 to-black flex items-center justify-center border border-cyber-purple/40 shrink-0">
-                                <i class="fa-solid fa-heart text-5xl text-cyber-magenta animate-pulse"></i>
-                            </div>
-                            <div class="space-y-2">
-                                <h4 class="text-xl font-bold text-white font-orbitron">Undertale</h4>
-                                <p class="text-xs text-gray-300 leading-relaxed">The beloved indie RPG created by Toby Fox where nobody has to die. Features legendary soundtrack, memorable characters, and innovative bullet-hell combat mechanics.</p>
-                                <div class="flex flex-wrap gap-2 pt-2">
-                                    <span class="px-2 py-0.5 rounded text-[11px] bg-cyber-card border border-cyber-border text-cyber-cyan">Developer: Toby Fox</span>
-                                    <span class="px-2 py-0.5 rounded text-[11px] bg-cyber-card border border-cyber-border text-cyber-magenta">Category: RPG</span>
-                                    <span class="px-2 py-0.5 rounded text-[11px] bg-cyber-card border border-cyber-border text-gray-300">PC, Switch</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- API Activity Log -->
-                    <div class="glass-card rounded-2xl p-6 border border-cyber-border flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="font-orbitron font-bold text-white text-sm">System Events</h3>
-                                <span class="text-[10px] text-gray-500 font-code">HATEOAS LIVE</span>
-                            </div>
-                            <div class="space-y-3 font-code text-xs" id="activity-log">
-                                <div class="p-2.5 rounded-lg bg-cyber-bg border border-cyber-border flex items-start gap-2.5">
-                                    <span class="text-cyber-green font-bold">200 OK</span>
-                                    <span class="text-gray-300">Loaded 3 games with self-referential HATEOAS links.</span>
-                                </div>
-                                <div class="p-2.5 rounded-lg bg-cyber-bg border border-cyber-border flex items-start gap-2.5">
-                                    <span class="text-cyber-cyan font-bold">POST</span>
-                                    <span class="text-gray-300">Database seeded via LoadDatabase runner.</span>
-                                </div>
-                                <div class="p-2.5 rounded-lg bg-cyber-bg border border-cyber-border flex items-start gap-2.5">
-                                    <span class="text-cyber-purple font-bold">INIT</span>
-                                    <span class="text-gray-300">OpenAPI v3 Swagger docs initialized.</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button onclick="switchTab('tester')" class="w-full mt-4 py-2 rounded-xl text-xs font-semibold bg-cyber-border hover:bg-cyber-purple/20 text-gray-300 hover:text-white transition-all text-center">
-                            Open API Console
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 2. GAMES CATALOG -->
-            <section id="panel-games" class="space-y-6 hidden">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div>
-                        <h2 class="text-xl font-orbitron font-bold text-white">Indie Games Catalog</h2>
-                        <p class="text-xs text-gray-400">View and manage all registered titles and their lifecycle statuses</p>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="inline-flex rounded-xl bg-cyber-card border border-cyber-border p-1">
-                            <button onclick="setGameView('grid')" id="btn-view-grid" class="px-3 py-1 rounded-lg text-xs font-medium text-cyber-cyan bg-cyber-cyan/10">
-                                <i class="fa-solid fa-border-all"></i> Cards
-                            </button>
-                            <button onclick="setGameView('table')" id="btn-view-table" class="px-3 py-1 rounded-lg text-xs font-medium text-gray-400 hover:text-white">
-                                <i class="fa-solid fa-list"></i> Table
-                            </button>
-                        </div>
-                        <button onclick="openModal('game-modal')" class="px-3.5 py-2 rounded-xl text-xs font-bold text-black bg-cyber-cyan hover:opacity-90 transition-all">
-                            + Add Game
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Games Grid View -->
-                <div id="games-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Populated by JS -->
-                </div>
-
-                <!-- Games Table View -->
-                <div id="games-table-container" class="glass-card rounded-2xl border border-cyber-border overflow-hidden hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs">
-                            <thead class="bg-cyber-card border-b border-cyber-border text-gray-400 font-orbitron">
-                                <tr>
-                                    <th class="p-4">ID</th>
-                                    <th class="p-4">Title</th>
-                                    <th class="p-4">Status</th>
-                                    <th class="p-4">Developer</th>
-                                    <th class="p-4">Category</th>
-                                    <th class="p-4">Platforms</th>
-                                    <th class="p-4 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="games-table-body" class="divide-y divide-cyber-border text-gray-300">
-                                <!-- Populated by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 3. DEVELOPERS SECTION -->
-            <section id="panel-developers" class="space-y-6 hidden">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h2 class="text-xl font-orbitron font-bold text-white">Indie Developers</h2>
-                        <p class="text-xs text-gray-400">Creators behind the featured indie game experiences</p>
-                    </div>
-                    <button onclick="openModal('dev-modal')" class="px-3.5 py-2 rounded-xl text-xs font-bold text-black bg-cyber-purple hover:opacity-90 text-white transition-all">
-                        + Add Developer
-                    </button>
-                </div>
-
-                <div id="devs-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Populated by JS -->
-                </div>
-            </section>
-
-            <!-- 4. CATEGORIES & PLATFORMS -->
-            <section id="panel-categories" class="space-y-6 hidden">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Categories Box -->
-                    <div class="glass-card rounded-2xl p-6 border border-cyber-border space-y-4">
-                        <div class="flex items-center justify-between">
-                            <h3 class="font-orbitron font-bold text-white text-base"><i class="fa-solid fa-tags text-cyber-magenta mr-2"></i> Categories</h3>
-                            <button onclick="showToast('Category creation modal ready')" class="text-xs text-cyber-magenta hover:underline">+ New Category</button>
-                        </div>
-                        <div id="categories-list" class="space-y-2">
-                            <!-- Populated by JS -->
-                        </div>
-                    </div>
-
-                    <!-- Platforms Box -->
-                    <div class="glass-card rounded-2xl p-6 border border-cyber-border space-y-4">
-                        <div class="flex items-center justify-between">
-                            <h3 class="font-orbitron font-bold text-white text-base"><i class="fa-solid fa-desktop text-cyber-cyan mr-2"></i> Platforms</h3>
-                            <button onclick="showToast('Platform creation modal ready')" class="text-xs text-cyber-cyan hover:underline">+ New Platform</button>
-                        </div>
-                        <div id="platforms-list" class="space-y-2">
-                            <!-- Populated by JS -->
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 5. USERS & PROFILES -->
-            <section id="panel-users" class="space-y-6 hidden">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h2 class="text-xl font-orbitron font-bold text-white">Users & Biographies</h2>
-                        <p class="text-xs text-gray-400">One-To-One Bidirectional UserProfile entities</p>
-                    </div>
-                </div>
-
-                <div id="users-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Populated by JS -->
-                </div>
-            </section>
-
-            <!-- 6. LIVE API TESTER CONSOLE -->
-            <section id="panel-tester" class="space-y-6 hidden">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h2 class="text-xl font-orbitron font-bold text-white">Live REST API Tester</h2>
-                        <p class="text-xs text-gray-400">Execute endpoints and view formatted JSON responses</p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <!-- Request Builder -->
-                    <div class="lg:col-span-5 glass-card rounded-2xl p-5 border border-cyber-border space-y-4">
-                        <h3 class="font-orbitron text-sm font-bold text-white border-b border-cyber-border pb-3">Endpoint Builder</h3>
-                        
-                        <div class="space-y-3">
-                            <div>
-                                <label class="text-xs text-gray-400 block mb-1">HTTP Method & Path</label>
-                                <div class="flex gap-2">
-                                    <select id="tester-method" class="bg-cyber-bg border border-cyber-border text-cyber-cyan rounded-xl text-xs font-bold px-3 py-2 focus:outline-none">
-                                        <option value="GET">GET</option>
-                                        <option value="POST">POST</option>
-                                        <option value="PUT">PUT</option>
-                                        <option value="DELETE">DELETE</option>
-                                    </select>
-                                    <input type="text" id="tester-url" value="/api/game" class="flex-1 bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs font-code text-gray-200 focus:outline-none focus:border-cyber-cyan">
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="text-xs text-gray-400 block mb-1">Presets</label>
-                                <div class="flex flex-wrap gap-1.5">
-                                    <button onclick="setTesterPreset('GET', '/api/game')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">GET /game</button>
-                                    <button onclick="setTesterPreset('GET', '/api/developer')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">GET /developer</button>
-                                    <button onclick="setTesterPreset('POST', '/api/user')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">POST /user</button>
-                                    <button onclick="setTesterPreset('GET', '/api/user')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">GET /user</button>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="text-xs text-gray-400 block mb-1">JSON Request Body (For POST/PUT)</label>
-                                <textarea id="tester-body" rows="8" class="w-full bg-cyber-bg border border-cyber-border rounded-xl p-3 text-xs font-code text-cyber-green focus:outline-none focus:border-cyber-cyan" placeholder="{}"></textarea>
-                            </div>
-
-                            <button onclick="executeApiTest()" class="w-full py-2.5 rounded-xl text-xs font-bold text-black bg-gradient-to-r from-cyber-green to-cyber-cyan hover:opacity-90 shadow-lg shadow-cyber-green/20 transition-all flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-paper-plane"></i> Send Request
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Response Console -->
-                    <div class="lg:col-span-7 glass-card rounded-2xl p-5 border border-cyber-border space-y-3 flex flex-col">
-                        <div class="flex items-center justify-between border-b border-cyber-border pb-3">
-                            <h3 class="font-orbitron text-sm font-bold text-white">Response Payload</h3>
-                            <div class="flex items-center gap-2">
-                                <span id="tester-status" class="px-2 py-0.5 rounded text-[11px] font-code bg-cyber-green/20 text-cyber-green border border-cyber-green/40">200 OK</span>
-                                <span id="tester-time" class="text-[11px] text-gray-400 font-code">24 ms</span>
-                            </div>
-                        </div>
-
-                        <div class="relative flex-1 min-h-[320px]">
-                            <pre id="tester-response" class="absolute inset-0 bg-cyber-bg border border-cyber-border rounded-xl p-4 text-xs font-code text-cyber-cyan overflow-auto leading-relaxed">
-{
-  "_embedded": {
-    "gameList": [
-      {
-        "id": 1,
-        "name": "Undertale",
-        "status": "RELEASED",
-        "developer": { "id": 1, "name": "Toby Fox" }
-      }
-    ]
-  }
-}</pre>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-        </main>
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <div class="nav-tabs" id="navTabs">
+            <button class="tab-btn active" data-tab="game">JOGOS<span class="tab-count" id="count-game"></span></button>
+            <button class="tab-btn" data-tab="developer">DESENVOLVEDORES<span class="tab-count" id="count-developer"></span></button>
+            <button class="tab-btn" data-tab="category">CATEGORIAS<span class="tab-count" id="count-category"></span></button>
+            <button class="tab-btn" data-tab="platform">PLATAFORMAS<span class="tab-count" id="count-platform"></span></button>
+        </div>
+        <input type="search" id="searchInput" class="search-box" placeholder="Buscar por nome...">
+        <div class="action-btns">
+            <button class="btn btn-primary" onclick="openModal()">+ CADASTRAR</button>
+            <button class="btn" onclick="loadCurrentTab()">🔄 ATUALIZAR</button>
+            <a href="/swagger-ui/index.html" target="_blank" class="btn">📖 SWAGGER</a>
+        </div>
     </div>
 
-    <!-- MODAL: ADD / EDIT GAME -->
-    <div id="game-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-cyber-card border border-cyber-border rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl relative">
-            <div class="flex items-center justify-between border-b border-cyber-border pb-3">
-                <h3 class="font-orbitron font-bold text-lg text-white" id="game-modal-title">Register New Game</h3>
-                <button onclick="closeModal('game-modal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+    <!-- Cards Grid -->
+    <div id="cardsGrid" class="grid"></div>
+
+    <!-- Paginação (usa o metadata "page" do PagedModel) -->
+    <div id="pagination" class="pagination" style="display:none">
+        <button class="btn" id="prevPage">◀ ANTERIOR</button>
+        <span id="pageInfo"></span>
+        <button class="btn" id="nextPage">PRÓXIMA ▶</button>
+    </div>
+
+    <!-- Terminal Console Log -->
+    <div class="console-panel">
+        <div class="console-header">
+            <span>> TERMINAL_LOG :: SPRING_BOOT_RESPONSE</span>
+            <span id="httpStatus">--</span>
+        </div>
+        <div id="consoleOutput" class="console-log">Aguardando requisição HTTP...</div>
+    </div>
+</div>
+
+<!-- Modal de cadastro (POST) -->
+<div id="modalOverlay" class="modal-overlay">
+    <div class="modal">
+        <h2 id="modalTitle">Cadastrar</h2>
+        <form id="postForm">
+            <div id="dynamicFormFields"></div>
+            <div id="formError" class="form-error"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn" onclick="closeModal()">CANCELAR</button>
+                <button type="submit" class="btn btn-primary" id="submitBtn">ENVIAR (POST)</button>
             </div>
+        </form>
+    </div>
+</div>
 
-            <form id="game-form" onsubmit="handleSaveGame(event)" class="space-y-3">
-                <input type="hidden" id="game-id">
+<script>
+    // Servido pelo próprio Spring Boot -> mesma origem ("/api").
+    // Se abrir o arquivo direto do disco (file://), aponta para o localhost:8080.
+    const API_BASE_URL = window.location.protocol === 'file:' ? 'http://localhost:8080/api' : '/api';
+    const PAGE_SIZE = 9;
+
+    const TABS = {
+        game:      { label: 'JOGO',          render: renderGameCard },
+        developer: { label: 'DESENVOLVEDOR', render: renderSimpleCard },
+        category:  { label: 'CATEGORIA',     render: renderSimpleCard },
+        platform:  { label: 'PLATAFORMA',    render: renderSimpleCard }
+    };
+
+    let currentTab = 'game';
+    let currentPage = 0;
+    let searchTerm = '';
+
+    // ---------- Helpers ----------
+
+    // Evita injeção de HTML com nomes vindos do banco
+    function esc(value) {
+        return String(value ?? '').replace(/[&<>"']/g, ch => (
+            { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
+        ));
+    }
+
+    function formatDate(iso) {
+        if (!iso) return '--';
+        const d = new Date(iso);
+        return isNaN(d) ? iso : d.toLocaleDateString('pt-BR');
+    }
+
+    // Extrai a lista do PagedModel HAL. Quando a página está vazia,
+    // o Spring HATEOAS omite "_embedded", por isso o fallback para [].
+    function extractItems(data) {
+        if (data && data._embedded) {
+            const lists = Object.values(data._embedded);
+            return Array.isArray(lists[0]) ? lists[0] : [];
+        }
+        if (Array.isArray(data)) return data;
+        return (data && data.content) || [];
+    }
+
+    function logResponse(method, url, status, body) {
+        const ok = status >= 200 && status < 300;
+        const httpEl = document.getElementById('httpStatus');
+        httpEl.innerText = `${method} ${url} → HTTP ${status}`;
+        httpEl.style.color = ok ? 'var(--neon-green)' : 'var(--neon-magenta)';
+        const out = document.getElementById('consoleOutput');
+        out.style.color = ok ? 'var(--neon-green)' : 'var(--neon-magenta)';
+        out.innerText = body === undefined ? '(sem corpo)' : JSON.stringify(body, null, 2);
+    }
+
+    // fetch + parse JSON + log no terminal. Lança erro com a mensagem da API.
+    async function api(path, options = {}) {
+        const method = options.method || 'GET';
+        const res = await fetch(`${API_BASE_URL}${path}`, {
+            ...options,
+            headers: { 'Accept': 'application/hal+json, application/json', ...(options.body ? { 'Content-Type': 'application/json' } : {}) }
+        });
+        let body;
+        const text = await res.text();
+        if (text) {
+            try { body = JSON.parse(text); } catch { body = text; }
+        }
+        logResponse(method, `/api${path}`, res.status, body);
+        if (!res.ok) {
+            // NotFound/BadRequest -> {message}; validação do Spring -> ProblemDetail {detail}
+            const msg = (body && (body.message || body.detail || body.title)) || `HTTP ${res.status}`;
+            const err = new Error(msg);
+            err.status = res.status;
+            throw err;
+        }
+        return body;
+    }
+
+    function setApiStatus(online) {
+        const badge = document.getElementById('apiStatus');
+        badge.classList.toggle('offline', !online);
+        document.getElementById('apiStatusText').innerText = online
+            ? `ONLINE :: ${window.location.host || 'localhost:8080'}`
+            : 'OFFLINE :: SEM RESPOSTA DA API';
+    }
+
+    // ---------- Navegação ----------
+
+    document.getElementById('navTabs').addEventListener('click', (e) => {
+        const btn = e.target.closest('.tab-btn');
+        if (!btn) return;
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTab = btn.dataset.tab;
+        currentPage = 0;
+        searchTerm = '';
+        document.getElementById('searchInput').value = '';
+        loadCurrentTab();
+    });
+
+    let searchTimer;
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+            searchTerm = e.target.value.trim();
+            currentPage = 0;
+            loadCurrentTab();
+        }, 300);
+    });
+
+    document.getElementById('prevPage').addEventListener('click', () => { currentPage--; loadCurrentTab(); });
+    document.getElementById('nextPage').addEventListener('click', () => { currentPage++; loadCurrentTab(); });
+
+    // ---------- Listagem ----------
+
+    async function loadCurrentTab() {
+        const grid = document.getElementById('cardsGrid');
+        grid.innerHTML = '<p class="state-msg">Carregando dados do H2...</p>';
+
+        const params = new URLSearchParams({ page: currentPage, size: PAGE_SIZE, sort: 'id,asc' });
+        let path = `/${currentTab}`;
+        if (searchTerm) {
+            path += '/search';
+            params.set('name', searchTerm);
+        }
+
+        try {
+            const data = await api(`${path}?${params}`);
+            setApiStatus(true);
+            const items = extractItems(data);
+            const page = data.page || { number: 0, totalPages: 1, totalElements: items.length };
+
+            if (!searchTerm) {
+                document.getElementById(`count-${currentTab}`).innerText = `[${page.totalElements}]`;
+            }
+
+            renderPagination(page);
+
+            if (items.length === 0) {
+                grid.innerHTML = `<p class="state-msg">${searchTerm
+                    ? `Nenhum resultado para "${esc(searchTerm)}".`
+                    : 'Nenhum registro cadastrado ainda. Use + CADASTRAR.'}</p>`;
+                return;
+            }
+
+            grid.innerHTML = items.map(item => TABS[currentTab].render(item)).join('');
+        } catch (error) {
+            console.error(error);
+            if (!error.status) setApiStatus(false);
+            document.getElementById('pagination').style.display = 'none';
+            grid.innerHTML = `<p class="state-msg error">Erro ao carregar dados: ${esc(error.message)}</p>`;
+        }
+    }
+
+    function renderPagination(page) {
+        const pag = document.getElementById('pagination');
+        if (!page || page.totalPages <= 1) {
+            pag.style.display = 'none';
+            return;
+        }
+        pag.style.display = 'flex';
+        document.getElementById('pageInfo').innerText = `PÁGINA ${page.number + 1} / ${page.totalPages}`;
+        document.getElementById('prevPage').disabled = page.number <= 0;
+        document.getElementById('nextPage').disabled = page.number >= page.totalPages - 1;
+    }
+
+    function cardFooter(item) {
+        return `
+            <div class="card-footer">
+                <span>ID ${esc(item.id)} · criado em ${formatDate(item.createdAt)}</span>
+                <button class="btn-delete" data-id="${Number(item.id)}" data-name="${esc(item.name)}">DELETAR</button>
+            </div>`;
+    }
+
+    function renderGameCard(game) {
+        const devName = game.developer ? game.developer.name : 'N/A';
+        const catName = game.category ? game.category.name : 'N/A';
+        const platforms = (game.platforms || []).map(p => `<span class="chip">${esc(p.name)}</span>`).join('');
+        return `
+            <div class="card">
                 <div>
-                    <label class="text-xs text-gray-400 block mb-1">Game Title</label>
-                    <input type="text" id="game-title" required class="w-full bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyber-cyan">
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-xs text-gray-400 block mb-1">Status</label>
-                        <select id="game-status" class="w-full bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyber-cyan">
-                            <option value="RELEASED">RELEASED</option>
-                            <option value="EARLY_ACCESS">EARLY_ACCESS</option>
-                            <option value="DEVELOPMENT">DEVELOPMENT</option>
-                        </select>
+                    <div class="card-header">
+                        <div class="card-title">${esc(game.name)}</div>
+                        <span class="status-tag status-${esc(game.status)}">${esc(game.status)}</span>
                     </div>
-                    <div>
-                        <label class="text-xs text-gray-400 block mb-1">Developer</label>
-                        <select id="game-dev" class="w-full bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyber-cyan">
-                            <!-- Populated dynamically -->
-                        </select>
+                    <div class="card-body">
+                        <p><strong>Desenvolvedor:</strong> ${esc(devName)}</p>
+                        <p><strong>Categoria:</strong> ${esc(catName)}</p>
+                        <div class="tag-list">${platforms}</div>
                     </div>
                 </div>
+                ${cardFooter(game)}
+            </div>`;
+    }
 
-                <div>
-                    <label class="text-xs text-gray-400 block mb-1">Category</label>
-                    <select id="game-category" class="w-full bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyber-cyan">
-                        <!-- Populated dynamically -->
+    function renderSimpleCard(item) {
+        return `
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">${esc(item.name)}</div>
+                </div>
+                ${cardFooter(item)}
+            </div>`;
+    }
+
+    // ---------- Exclusão ----------
+
+    document.getElementById('cardsGrid').addEventListener('click', (e) => {
+        const btn = e.target.closest('.btn-delete');
+        if (btn) deleteItem(Number(btn.dataset.id), btn.dataset.name);
+    });
+
+    async function deleteItem(id, name) {
+        if (!confirm(`Deletar "${name}" (ID ${id})?`)) return;
+        try {
+            await api(`/${currentTab}/${id}`, { method: 'DELETE' });
+            loadCurrentTab();
+        } catch (err) {
+            // Ex.: deletar um desenvolvedor que ainda tem jogos (sem DELETE CASCADE)
+            const grid = document.getElementById('cardsGrid');
+            grid.insertAdjacentHTML('afterbegin',
+                `<p class="state-msg error">Não foi possível deletar: ${esc(err.message)}. Verifique se há jogos vinculados.</p>`);
+        }
+    }
+
+    // ---------- Cadastro ----------
+
+    // Busca todos os registros de uma entidade (para popular os selects do formulário)
+    async function fetchAll(entity) {
+        const data = await api(`/${entity}?size=1000&sort=name,asc`);
+        return extractItems(data);
+    }
+
+    async function openModal() {
+        const fields = document.getElementById('dynamicFormFields');
+        document.getElementById('formError').innerText = '';
+        document.getElementById('modalTitle').innerText = `CADASTRAR ${TABS[currentTab].label}`;
+        document.getElementById('modalOverlay').style.display = 'flex';
+
+        if (currentTab !== 'game') {
+            fields.innerHTML = `
+                <div class="form-group">
+                    <label>Nome</label>
+                    <input type="text" id="simpleName" required minlength="3" maxlength="255" placeholder="Digite o nome...">
+                </div>`;
+            document.getElementById('simpleName').focus();
+            return;
+        }
+
+        fields.innerHTML = '<p class="state-msg">Carregando desenvolvedores, categorias e plataformas...</p>';
+        try {
+            const [devs, cats, plats] = await Promise.all([
+                fetchAll('developer'), fetchAll('category'), fetchAll('platform')
+            ]);
+
+            const missing = [
+                !devs.length && 'desenvolvedor',
+                !cats.length && 'categoria',
+                !plats.length && 'plataforma'
+            ].filter(Boolean);
+            if (missing.length) {
+                fields.innerHTML = `<p class="state-msg error">Cadastre antes pelo menos um(a): ${missing.join(', ')}.</p>`;
+                return;
+            }
+
+            const options = list => list.map(i => `<option value="${Number(i.id)}">${esc(i.name)}</option>`).join('');
+            fields.innerHTML = `
+                <div class="form-group">
+                    <label>Nome do Jogo</label>
+                    <input type="text" id="gameName" required minlength="3" maxlength="255" placeholder="Ex: Hollow Knight">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="gameStatus" required>
+                        <option value="RELEASED">RELEASED</option>
+                        <option value="EARLY_ACCESS">EARLY_ACCESS</option>
+                        <option value="DEVELOPMENT">DEVELOPMENT</option>
                     </select>
                 </div>
-
-                <div class="flex justify-end gap-3 pt-3 border-t border-cyber-border">
-                    <button type="button" onclick="closeModal('game-modal')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300">Cancel</button>
-                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold text-black bg-cyber-cyan hover:opacity-90">Save Game</button>
+                <div class="form-group">
+                    <label>Desenvolvedor</label>
+                    <select id="gameDev" required>${options(devs)}</select>
                 </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL: ADD DEVELOPER -->
-    <div id="dev-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-cyber-card border border-cyber-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-            <div class="flex items-center justify-between border-b border-cyber-border pb-3">
-                <h3 class="font-orbitron font-bold text-lg text-white">Add Developer</h3>
-                <button onclick="closeModal('dev-modal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-
-            <form onsubmit="handleSaveDev(event)" class="space-y-3">
-                <div>
-                    <label class="text-xs text-gray-400 block mb-1">Developer Name</label>
-                    <input type="text" id="dev-name" required class="w-full bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyber-purple">
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <select id="gameCategory" required>${options(cats)}</select>
                 </div>
-                <div class="flex justify-end gap-3 pt-3 border-t border-cyber-border">
-                    <button type="button" onclick="closeModal('dev-modal')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300">Cancel</button>
-                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-cyber-purple hover:opacity-90">Save Developer</button>
-                </div>
-            </form>
-        </div>
-    </div>
+                <div class="form-group">
+                    <label>Plataformas (segure Ctrl/Cmd)</label>
+                    <select id="gamePlatforms" multiple required>${options(plats)}</select>
+                </div>`;
+        } catch (err) {
+            fields.innerHTML = `<p class="state-msg error">Erro ao carregar dependências: ${esc(err.message)}</p>`;
+        }
+    }
 
-    <!-- JSON VIEWER MODAL -->
-    <div id="json-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-cyber-card border border-cyber-border rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
-            <div class="flex items-center justify-between border-b border-cyber-border pb-3">
-                <h3 class="font-orbitron font-bold text-sm text-white" id="json-modal-title">Raw JSON Payload</h3>
-                <button onclick="closeModal('json-modal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <pre id="json-modal-content" class="bg-cyber-bg border border-cyber-border rounded-xl p-4 text-xs font-code text-cyber-cyan max-h-96 overflow-auto leading-relaxed"></pre>
-        </div>
-    </div>
+    function closeModal() {
+        document.getElementById('modalOverlay').style.display = 'none';
+    }
 
-    <!-- TOAST NOTIFICATION CONTAINER -->
-    <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+    document.getElementById('modalOverlay').addEventListener('click', (e) => {
+        if (e.target.id === 'modalOverlay') closeModal();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        // INITIAL MOCK DATA (Reflecting Spring Boot LoadDatabase)
-        let isLiveMode = false;
-        let categories = [
-            { id: 1, name: "RPG", createdAt: "2026-10-06T10:00:00" },
-            { id: 2, name: "Survival Horror", createdAt: "2026-10-06T10:00:00" }
-        ];
+    document.getElementById('postForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const errorEl = document.getElementById('formError');
+        errorEl.innerText = '';
 
-        let platforms = [
-            { id: 1, name: "PC (Steam)", createdAt: "2026-10-06T10:00:00" },
-            { id: 2, name: "Nintendo Switch", createdAt: "2026-10-06T10:00:00" }
-        ];
-
-        let developers = [
-            { id: 1, name: "Toby Fox", createdAt: "2026-10-06T10:00:00" },
-            { id: 2, name: "Scott Cawthon", createdAt: "2026-10-06T10:00:00" }
-        ];
-
-        let games = [
-            {
-                id: 1,
-                name: "Undertale",
-                status: "RELEASED",
-                developer: { id: 1, name: "Toby Fox" },
-                category: { id: 1, name: "RPG" },
-                platforms: [{ id: 1, name: "PC (Steam)" }, { id: 2, name: "Nintendo Switch" }],
-                createdAt: "2026-10-06T10:00:00"
-            },
-            {
-                id: 2,
-                name: "Deltarune",
-                status: "EARLY_ACCESS",
-                developer: { id: 1, name: "Toby Fox" },
-                category: { id: 1, name: "RPG" },
-                platforms: [{ id: 1, name: "PC (Steam)" }, { id: 2, name: "Nintendo Switch" }],
-                createdAt: "2026-10-06T10:00:00"
-            },
-            {
-                id: 3,
-                name: "Five Nights at Freddy's",
-                status: "RELEASED",
-                developer: { id: 2, name: "Scott Cawthon" },
-                category: { id: 2, name: "Survival Horror" },
-                platforms: [{ id: 1, name: "PC (Steam)" }],
-                createdAt: "2026-10-06T10:00:00"
-            }
-        ];
-
-        let users = [
-            {
-                id: 1,
-                name: "Pedro Gregorio",
-                email: "pedro@email.com",
-                userProfile: {
-                    id: 1,
-                    bio: "Desenvolvedor Backend e Entusiasta de Jogos Indies"
-                }
-            },
-            {
-                id: 2,
-                name: "Joy",
-                email: "joy@email.com",
-                userProfile: {
-                    id: 2,
-                    bio: "Gamer e colecionador de RPGs indies"
-                }
-            }
-        ];
-
-        // INITIALIZATION
-        document.addEventListener("DOMContentLoaded", () => {
-            renderDashboard();
-            renderGames();
-            renderDevelopers();
-            renderCategoriesAndPlatforms();
-            renderUsers();
-            populateModalDropdowns();
-        });
-
-        // TAB NAVIGATION LOGIC
-        function switchTab(tabId) {
-            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active', 'text-cyber-cyan', 'bg-cyber-cyan/10', 'border', 'border-cyber-cyan/30');
-                btn.classList.add('text-gray-400');
-            });
-
-            document.getElementById(`panel-${tabId}`).classList.remove('hidden');
-            const activeNav = document.getElementById(`nav-${tabId}`);
-            activeNav.classList.add('active', 'text-cyber-cyan', 'bg-cyber-cyan/10', 'border', 'border-cyber-cyan/30');
-            activeNav.classList.remove('text-gray-400');
+        let payload;
+        if (currentTab === 'game') {
+            if (!document.getElementById('gameName')) return; // formulário ainda não carregou
+            payload = {
+                name: document.getElementById('gameName').value.trim(),
+                status: document.getElementById('gameStatus').value,
+                developer: { id: Number(document.getElementById('gameDev').value) },
+                category: { id: Number(document.getElementById('gameCategory').value) },
+                platforms: Array.from(document.getElementById('gamePlatforms').selectedOptions)
+                    .map(opt => ({ id: Number(opt.value) }))
+            };
+        } else {
+            payload = { name: document.getElementById('simpleName').value.trim() };
         }
 
-        // TOGGLE LIVE/MOCK API MODE
-        function toggleApiMode() {
-            isLiveMode = !isLiveMode;
-            const statusText = document.getElementById('api-status-text');
-            const toggleBtn = document.getElementById('mode-toggle-btn');
-            
-            if (isLiveMode) {
-                statusText.innerText = "LIVE ATTEMPT";
-                statusText.parentElement.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyber-cyan/10 text-cyber-cyan border border-cyber-cyan/30";
-                toggleBtn.innerText = "Switch to Mock Mode";
-                showToast("Connected to live endpoint: https://indiegamesapi.onrender.com/api");
-            } else {
-                statusText.innerText = "MOCK ACTIVE";
-                statusText.parentElement.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyber-green/10 text-cyber-green border border-cyber-green/30";
-                toggleBtn.innerText = "Switch to Live API";
-                showToast("Switched back to local in-memory Mock Data");
-            }
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        try {
+            await api(`/${currentTab}`, { method: 'POST', body: JSON.stringify(payload) });
+            closeModal();
+            currentPage = 0;
+            loadCurrentTab();
+        } catch (err) {
+            errorEl.innerText = `Erro: ${err.message}`;
+        } finally {
+            submitBtn.disabled = false;
         }
+    });
 
-        // RENDER METHODS
-        function renderDashboard() {
-            document.getElementById('stat-games').innerText = games.length;
-            document.getElementById('stat-devs').innerText = developers.length;
-            document.getElementById('stat-categories').innerText = categories.length;
-            document.getElementById('stat-users').innerText = users.length;
-        }
+    // ---------- Inicialização ----------
 
-        function renderGames(filterText = "") {
-            const grid = document.getElementById('games-grid');
-            const tableBody = document.getElementById('games-table-body');
-            grid.innerHTML = "";
-            tableBody.innerHTML = "";
+    // Carrega os totais de todas as abas e depois a aba atual
+    async function loadCounts() {
+        await Promise.all(Object.keys(TABS).map(async (tab) => {
+            try {
+                const res = await fetch(`${API_BASE_URL}/${tab}?size=1`);
+                const data = await res.json();
+                if (data.page) document.getElementById(`count-${tab}`).innerText = `[${data.page.totalElements}]`;
+            } catch { /* o erro aparece no loadCurrentTab */ }
+        }));
+    }
 
-            const filtered = games.filter(g => 
-                g.name.toLowerCase().includes(filterText.toLowerCase()) ||
-                g.developer.name.toLowerCase().includes(filterText.toLowerCase())
-            );
-
-            filtered.forEach(game => {
-                const statusBadgeClass = game.status === 'RELEASED' 
-                    ? 'bg-cyber-green/10 text-cyber-green border-cyber-green/30' 
-                    : 'bg-cyber-amber/10 text-cyber-amber border-cyber-amber/30';
-
-                // Grid Card
-                const card = document.createElement('div');
-                card.className = "glass-card rounded-2xl p-5 border border-cyber-border space-y-4 flex flex-col justify-between";
-                card.innerHTML = `
-                    <div class="space-y-3">
-                        <div class="flex items-start justify-between gap-2">
-                            <h3 class="font-orbitron font-bold text-white text-base">${game.name}</h3>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${statusBadgeClass}">${game.status}</span>
-                        </div>
-                        <div class="space-y-1.5 text-xs text-gray-300">
-                            <p><i class="fa-solid fa-code w-4 text-cyber-purple"></i> ${game.developer.name}</p>
-                            <p><i class="fa-solid fa-tag w-4 text-cyber-magenta"></i> ${game.category.name}</p>
-                            <div class="flex flex-wrap gap-1 pt-1">
-                                ${game.platforms.map(p => `<span class="px-2 py-0.5 rounded text-[10px] bg-cyber-bg border border-cyber-border">${p.name}</span>`).join('')}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between pt-3 border-t border-cyber-border">
-                        <button onclick='viewRawJson(${JSON.stringify(game)})' class="text-xs text-cyber-cyan hover:underline"><i class="fa-solid fa-code mr-1"></i> JSON</button>
-                        <div class="flex gap-2">
-                            <button onclick="editGame(${game.id})" class="text-xs p-1.5 text-gray-400 hover:text-white"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteGame(${game.id})" class="text-xs p-1.5 text-gray-400 hover:text-red-400"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-
-                // Table Row
-                const row = document.createElement('tr');
-                row.className = "hover:bg-white/5";
-                row.innerHTML = `
-                    <td class="p-4 font-code text-gray-500">${game.id}</td>
-                    <td class="p-4 font-bold text-white">${game.name}</td>
-                    <td class="p-4"><span class="px-2 py-0.5 rounded text-[10px] font-bold border ${statusBadgeClass}">${game.status}</span></td>
-                    <td class="p-4 text-gray-300">${game.developer.name}</td>
-                    <td class="p-4 text-gray-300">${game.category.name}</td>
-                    <td class="p-4 text-gray-400">${game.platforms.map(p => p.name).join(', ')}</td>
-                    <td class="p-4 text-right space-x-2">
-                        <button onclick='viewRawJson(${JSON.stringify(game)})' class="text-cyber-cyan hover:underline">JSON</button>
-                        <button onclick="deleteGame(${game.id})" class="text-red-400 hover:underline">Delete</button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-
-        function renderDevelopers() {
-            const container = document.getElementById('devs-grid');
-            container.innerHTML = "";
-
-            developers.forEach(dev => {
-                const devGames = games.filter(g => g.developer.id === dev.id);
-                const card = document.createElement('div');
-                card.className = "glass-card rounded-2xl p-5 border border-cyber-border space-y-4";
-                card.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 rounded-xl bg-cyber-purple/20 border border-cyber-purple/40 flex items-center justify-center text-cyber-purple text-xl font-bold font-orbitron">
-                            ${dev.name.charAt(0)}
-                        </div>
-                        <div>
-                            <h3 class="font-orbitron font-bold text-white text-base">${dev.name}</h3>
-                            <span class="text-xs text-gray-400">ID: #${dev.id}</span>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-400 mb-2">Associated Titles:</p>
-                        <div class="flex flex-wrap gap-2">
-                            ${devGames.map(g => `<span class="px-2.5 py-1 rounded-lg text-xs bg-cyber-bg border border-cyber-border text-cyber-cyan font-medium">${g.name}</span>`).join('')}
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function renderCategoriesAndPlatforms() {
-            const catList = document.getElementById('categories-list');
-            const platList = document.getElementById('platforms-list');
-
-            catList.innerHTML = categories.map(c => `
-                <div class="flex items-center justify-between p-3 rounded-xl bg-cyber-bg border border-cyber-border">
-                    <span class="text-xs font-semibold text-white">${c.name}</span>
-                    <span class="text-[10px] font-code text-gray-500">ID: ${c.id}</span>
-                </div>
-            `).join('');
-
-            platList.innerHTML = platforms.map(p => `
-                <div class="flex items-center justify-between p-3 rounded-xl bg-cyber-bg border border-cyber-border">
-                    <span class="text-xs font-semibold text-white">${p.name}</span>
-                    <span class="text-[10px] font-code text-gray-500">ID: ${p.id}</span>
-                </div>
-            `).join('');
-        }
-
-        function renderUsers() {
-            const grid = document.getElementById('users-grid');
-            grid.innerHTML = "";
-
-            users.forEach(u => {
-                const card = document.createElement('div');
-                card.className = "glass-card rounded-2xl p-5 border border-cyber-border space-y-3";
-                card.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-cyber-green/20 border border-cyber-green/40 flex items-center justify-center text-cyber-green font-bold">
-                                ${u.name.charAt(0)}
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-white text-sm">${u.name}</h4>
-                                <span class="text-xs text-gray-400">${u.email}</span>
-                            </div>
-                        </div>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-code bg-cyber-border text-gray-300">OneToOne</span>
-                    </div>
-                    <div class="p-3 rounded-xl bg-cyber-bg border border-cyber-border text-xs text-gray-300 italic">
-                        "${u.userProfile.bio}"
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        // VIEW TOGGLE
-        function setGameView(view) {
-            const grid = document.getElementById('games-grid');
-            const table = document.getElementById('games-table-container');
-            const btnGrid = document.getElementById('btn-view-grid');
-            const btnTable = document.getElementById('btn-view-table');
-
-            if (view === 'grid') {
-                grid.classList.remove('hidden');
-                table.classList.add('hidden');
-                btnGrid.className = "px-3 py-1 rounded-lg text-xs font-medium text-cyber-cyan bg-cyber-cyan/10";
-                btnTable.className = "px-3 py-1 rounded-lg text-xs font-medium text-gray-400 hover:text-white";
-            } else {
-                grid.classList.add('hidden');
-                table.classList.remove('hidden');
-                btnTable.className = "px-3 py-1 rounded-lg text-xs font-medium text-cyber-cyan bg-cyber-cyan/10";
-                btnGrid.className = "px-3 py-1 rounded-lg text-xs font-medium text-gray-400 hover:text-white";
-            }
-        }
-
-        // SEARCH FILTER
-        function handleSearch(query) {
-            renderGames(query);
-        }
-
-        // MODAL HELPERS
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-        }
-
-        function populateModalDropdowns() {
-            const devSelect = document.getElementById('game-dev');
-            const catSelect = document.getElementById('game-category');
-
-            devSelect.innerHTML = developers.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
-            catSelect.innerHTML = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-        }
-
-        // SAVE GAME HANDLER
-        function handleSaveGame(event) {
-            event.preventDefault();
-            const id = document.getElementById('game-id').value;
-            const title = document.getElementById('game-title').value;
-            const status = document.getElementById('game-status').value;
-            const devId = parseInt(document.getElementById('game-dev').value);
-            const catId = parseInt(document.getElementById('game-category').value);
-
-            const dev = developers.find(d => d.id === devId);
-            const cat = categories.find(c => c.id === catId);
-
-            if (id) {
-                // Edit
-                const index = games.findIndex(g => g.id == id);
-                if (index !== -1) {
-                    games[index] = { ...games[index], name: title, status, developer: dev, category: cat };
-                    showToast(`Updated "${title}" successfully`);
-                }
-            } else {
-                // Create
-                const newGame = {
-                    id: games.length + 1,
-                    name: title,
-                    status,
-                    developer: dev,
-                    category: cat,
-                    platforms: [platforms[0]],
-                    createdAt: new Date().toISOString()
-                };
-                games.push(newGame);
-                showToast(`Created new game "${title}"`);
-            }
-
-            renderGames();
-            renderDashboard();
-            closeModal('game-modal');
-            document.getElementById('game-form').reset();
-        }
-
-        function editGame(id) {
-            const game = games.find(g => g.id === id);
-            if (!game) return;
-
-            document.getElementById('game-id').value = game.id;
-            document.getElementById('game-title').value = game.name;
-            document.getElementById('game-status').value = game.status;
-            document.getElementById('game-dev').value = game.developer.id;
-            document.getElementById('game-category').value = game.category.id;
-
-            document.getElementById('game-modal-title').innerText = "Edit Game";
-            openModal('game-modal');
-        }
-
-        function deleteGame(id) {
-            games = games.filter(g => g.id !== id);
-            renderGames();
-            renderDashboard();
-            showToast("Game removed from database");
-        }
-
-        function handleSaveDev(event) {
-            event.preventDefault();
-            const name = document.getElementById('dev-name').value;
-            const newDev = { id: developers.length + 1, name, createdAt: new Date().toISOString() };
-            developers.push(newDev);
-            renderDevelopers();
-            renderDashboard();
-            populateModalDropdowns();
-            closeModal('dev-modal');
-            showToast(`Registered developer ${name}`);
-        }
-
-        // RAW JSON MODAL
-        function viewRawJson(data) {
-            document.getElementById('json-modal-content').innerText = JSON.stringify(data, null, 2);
-            openModal('json-modal');
-        }
-
-        // API TESTER LOGIC
-        function setTesterPreset(method, url) {
-            document.getElementById('tester-method').value = method;
-            document.getElementById('tester-url').value = url;
-            
-            if (method === 'POST' && url === '/api/user') {
-                document.getElementById('tester-body').value = JSON.stringify({
-                    name: "Pedro Gregorio",
-                    email: "pedro@email.com",
-                    userProfile: {
-                        bio: "Desenvolvedor Backend e Entusiasta de Jogos"
-                    }
-                }, null, 2);
-            } else {
-                document.getElementById('tester-body').value = "";
-            }
-        }
-
-        async function executeApiTest() {
-            const method = document.getElementById('tester-method').value;
-            const url = document.getElementById('tester-url').value;
-            const body = document.getElementById('tester-body').value;
-
-            if (isLiveMode) {
-                try {
-                    const options = { method, headers: { 'Content-Type': 'application/json' } };
-                    if ((method === 'POST' || method === 'PUT') && body) {
-                        options.body = body;
-                    }
-                    const res = await fetch(`https://indiegamesapi.onrender.com${url}`, options);
-                    const data = await res.json();
-                    
-                    document.getElementById('tester-status').innerText = `${res.status} ${res.statusText}`;
-                    document.getElementById('tester-response').innerText = JSON.stringify(data, null, 2);
-                    showToast(`HTTP ${res.status} received from https://indiegamesapi.onrender.com`);
-                } catch (err) {
-                    document.getElementById('tester-status').innerText = "ERROR";
-                    document.getElementById('tester-response').innerText = `Failed to connect to https://indiegamesapi.onrender.com\nEnsure your Spring Boot app is running.\n\nDetails: ${err.message}`;
-                    showToast("API connection error");
-                }
-            } else {
-                // Mock Response simulation
-                let mockResult = { status: "200 OK", data: {} };
-                if (url.includes('/game')) mockResult.data = games;
-                else if (url.includes('/developer')) mockResult.data = developers;
-                else if (url.includes('/user')) mockResult.data = users;
-                else mockResult.data = { message: "Mock endpoint processed successfully", path: url };
-
-                document.getElementById('tester-status').innerText = "200 OK (MOCK)";
-                document.getElementById('tester-response').innerText = JSON.stringify(mockResult.data, null, 2);
-                showToast(`Simulated ${method} ${url}`);
-            }
-        }
-
-        // TOAST NOTIFICATIONS
-        function showToast(message) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = "glass-card border border-cyber-cyan/40 bg-cyber-card/90 text-white px-4 py-3 rounded-xl text-xs shadow-xl flex items-center gap-2 pointer-events-auto transform translate-y-2 opacity-0 transition-all duration-300";
-            toast.innerHTML = `<i class="fa-solid fa-circle-check text-cyber-green"></i> <span>${message}</span>`;
-            
-            container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            }, 10);
-
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-    </script>
+    document.addEventListener('DOMContentLoaded', () => {
+        loadCounts();
+        loadCurrentTab();
+    });
+</script>
 </body>
 </html>
