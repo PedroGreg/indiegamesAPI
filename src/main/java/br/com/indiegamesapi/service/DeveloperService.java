@@ -1,0 +1,50 @@
+package br.com.indiegamesapi.service;
+
+import br.com.indiegamesapi.exception.NotFoundException;
+import br.com.indiegamesapi.model.Developer;
+import br.com.indiegamesapi.repository.DeveloperRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+
+@Service
+public class DeveloperService {
+
+    private final DeveloperRepository repository;
+
+    public DeveloperService(DeveloperRepository repository){
+        this.repository = repository;
+    }
+
+    public Page<Developer> findAll(Pageable pageable){
+        return repository.findAll(pageable);
+    }
+
+    public Developer findById(Long id){
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Developer not Found, ID: " + id));
+    }
+
+    public Developer create(Developer developer){
+        developer.setCreatedAt(LocalDateTime.now());
+        return repository.save(developer);
+    }
+
+    public Developer update(Long id, Developer developer){
+        Developer updateDeveloper = findById(id);
+        updateDeveloper.setName(developer.getName());
+        updateDeveloper.setUpdatedAt(LocalDateTime.now());
+        return updateDeveloper;
+    }
+
+    public Page<Developer> findByName(String name, Pageable pageable){
+        return repository.findByNameContainingIgnoreCase(name, pageable);
+    }
+
+    public void delete(Long id){
+        Developer developer = findById(id);
+        repository.delete(developer);
+    }
+}

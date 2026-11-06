@@ -1,0 +1,125 @@
+package br.com.indiegamesapi.controller;
+
+import br.com.indiegamesapi.assembler.CategoryModelAssembler;
+import br.com.indiegamesapi.dto.request.CategoryRequestDTO;
+import br.com.indiegamesapi.dto.response.CategoryResponseDTO;
+import br.com.indiegamesapi.model.Category;
+import br.com.indiegamesapi.service.CategoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
+import org.springframework.web.bind.annotation.*;
+
+@Tag(name = "Categorias")
+@RestController
+@RequestMapping("/api/category")
+public class CategoryController {
+
+    private final CategoryService service;
+    private final CategoryModelAssembler assembler;
+
+    public CategoryController(CategoryService service, CategoryModelAssembler assembler){
+        this.assembler = assembler;
+        this.service = service;
+    }
+
+    @Operation(summary = "Criar uma nova categoria")
+    @ApiResponse(responseCode = "201", description = "Categoria criada", content = @Content(schema = @Schema(implementation = CategoryResponseDTO.class)))
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
+    @PostMapping()
+    public ResponseEntity<EntityModel<Category>> create(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Nova categoria",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = CategoryRequestDTO.class))
+            )
+            @RequestBody @Valid Category category){
+        Category category1 = service.create(category);
+        EntityModel<Category> createCategory = assembler.toModel(category1);
+        return new ResponseEntity<>(createCategory, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Buscar todas as categorias")
+    @ApiResponse(responseCode = "200", description = "Lista com todas as categorias")
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @GetMapping()
+    public ResponseEntity<PagedModel<EntityModel<Category>>> findAll(@ParameterObject  @PageableDefault(size = 10)Pageable pageable){
+        Page<Category> pageCategory = service.findAll(pageable);
+        PagedModel<EntityModel<Category>> allCategory = PagedModel.of(
+                pageCategory.getContent().stream().map(assembler::toModel).toList(),
+                new PagedModel.PageMetadata(pageCategory.getSize(), pageCategory.getNumber(), pageCategory.getTotalElements(), pageCategory.getTotalPages())
+                );
+        return new ResponseEntity<>(allCategory, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Buscar categoria por ID")
+    @ApiResponse(responseCode = "200", description = "Categoria encontrada por ID", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @GetMapping("/{id}")
+    public ResponseEntity<EntityModel<Category>> findById(@PathVariable Long id){
+        Category category1 = service.findById(id);
+        EntityModel<Category> findIdCategory= assembler.toModel(category1);
+        return new ResponseEntity<>(findIdCategory, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Buscar categoria por nome")
+    @ApiResponse(responseCode = "200", description = "Lista com todas as categorias pelo nome enviado")
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @GetMapping("/search")
+    public ResponseEntity<PagedModel<EntityModel<Category>>> findByName(
+            @RequestParam String name,
+            @ParameterObject @PageableDefault(size = 10) Pageable pageable){
+        Page<Category> pageCategory = service.findByName(name, pageable);
+        PagedModel<EntityModel<Category>> allNameCategory = PagedModel.of(
+                pageCategory.getContent().stream().map(assembler::toModel).toList(),
+                new PagedModel.PageMetadata(pageCategory.getSize(), pageCategory.getNumber(), pageCategory.getTotalElements(), pageCategory.getTotalPages())
+        );
+        return new ResponseEntity<>(allNameCategory, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Atualizar categoria")
+    @ApiResponse(responseCode = "200", description = "Categoria atualizada", content = @Content)
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
+    @PutMapping("/{id}")
+    public ResponseEntity<EntityModel<Category>> update(@PathVariable Long id,
+                                                        @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                                                                description = "Nova categoria",
+                                                                required = true,
+                                                                content = @Content(mediaType = "application/json",
+                                                                        schema= @Schema(implementation = Category.class),
+                                                                        examples = @ExampleObject(value = "{ \"name\": \"RPG\" }"))
+                                                        )
+                                                        @RequestBody @Valid Category category){
+        Category category1 = service.update(id, category);
+        EntityModel<Category>  updateCategory = assembler.toModel(category1);
+        return new ResponseEntity<>(updateCategory, HttpStatus.OK);
+    }
+    @Operation(summary = "Deletar categoria(Não é permitido DELETE CASCADE)")
+    @ApiResponse(responseCode = "204", description = "Categoria deletada", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content)
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable @Valid Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+}
