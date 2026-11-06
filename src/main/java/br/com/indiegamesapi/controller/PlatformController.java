@@ -3,6 +3,15 @@ package br.com.indiegamesapi.controller;
 import br.com.indiegamesapi.assembler.PlatformModelAssembler;
 import br.com.indiegamesapi.model.Platform;
 import br.com.indiegamesapi.service.PlatformService;
+// ADICIONADO: import de ArraySchema.
+// Por quê / o que faz: usado nas respostas de listagem (findAll / findByName) para indicar uma lista do modelo.
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+// ADICIONADO: import de ExceptionResponseModel.
+// Por quê / o que faz: usado como schema das respostas 404 (e 400 no Game).
+import br.com.indiegamesapi.exception.ExceptionResponseModel;
+// ADICIONADO: import de ProblemDetail.
+// Por quê / o que faz: usado como schema das respostas 400 geradas pelo Spring.
+import org.springframework.http.ProblemDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -33,11 +42,10 @@ public class PlatformController {
         this.service = service;
     }
 
-//    @Tag(name = "Criar")
     @Operation(summary = "Criar uma nova plataforma")
-    @ApiResponse(responseCode = "201", description = "Plataforma criada", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "201", description = "Plataforma criada", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Platform.class)))
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
     public ResponseEntity<EntityModel<Platform>> create(
@@ -54,10 +62,9 @@ public class PlatformController {
         return new ResponseEntity<>(createPlatform, HttpStatus.CREATED);
     }
 
-//    @Tag(name = "Buscar todos")
     @Operation(summary = "Buscar todas as plataformas)")
-    @ApiResponse(responseCode = "200", description = "Lista com todas as plataformas", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Lista com todas as plataformas", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Platform.class))))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<Platform>>> findAll(@ParameterObject @PageableDefault(size = 10)Pageable pageable){
         Page<Platform> pagePlatform = service.findAll(pageable);
@@ -68,11 +75,10 @@ public class PlatformController {
         return new ResponseEntity<>(allPlatform, HttpStatus.OK);
     }
 
-//    @Tag(name = "Buscar por ID")
     @Operation(summary = "Buscar plataforma por ID")
-    @ApiResponse(responseCode = "200", description = "Plataforma encontrada por ID", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Plataforma não encontrada com esse ID", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Plataforma encontrada por ID", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Platform.class)))
+    @ApiResponse(responseCode = "404", description = "Plataforma não encontrada com esse ID", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponseModel.class)))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<Platform>> findById(@PathVariable Long id){
         Platform platform1 = service.findById(id);
@@ -80,10 +86,9 @@ public class PlatformController {
         return new ResponseEntity<>(findIdPlatform, HttpStatus.OK);
     }
 
-//    @Tag(name = "Buscar por nome")
     @Operation(summary = "Buscar plataforma por nome")
-    @ApiResponse(responseCode = "200", description = "Lista com todos os desenvolvedores pelo nome enviado", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Lista com todos os desenvolvedores pelo nome enviado", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Platform.class))))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<Platform>>> findByName(
             @RequestParam String name,
@@ -96,12 +101,11 @@ public class PlatformController {
         return new ResponseEntity<>(allNamePlatform, HttpStatus.OK);
     }
 
-//    @Tag(name = "Atualizar")
     @Operation(summary = "Atualizar plataforma")
-    @ApiResponse(responseCode = "200", description = "Plataforma atualizada", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Desenvolvedor não encontrado com esse ID", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Plataforma atualizada", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Platform.class)))
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "404", description = "Desenvolvedor não encontrado com esse ID", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponseModel.class)))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<Platform>> update(@PathVariable Long id,
@@ -118,11 +122,10 @@ public class PlatformController {
         return new ResponseEntity<>(updatePlatform, HttpStatus.OK);
     }
 
-//    @Tag(name = "Deletar")
     @Operation(summary = "Deletar plataforma(Não é permitido DELETE CASCADE)")
     @ApiResponse(responseCode = "204", description = "Plataforma deletada", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Desenvolvedor não encontrado com esse ID", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Desenvolvedor não encontrado com esse ID", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponseModel.class)))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Valid Long id) {
         service.delete(id);

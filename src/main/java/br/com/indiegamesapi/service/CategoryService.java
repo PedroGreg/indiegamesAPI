@@ -27,11 +27,13 @@ public class CategoryService {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Category not Found, ID: " + id));
     }
 
+    @Transactional
     public Category create(Category category){
         category.setCreatedAt(LocalDateTime.now());
         return repository.save(category);
     }
 
+    @Transactional
     public Category update(Long id, Category category){
         Category updateCategory = findById(id);
         updateCategory.setName(category.getName());
@@ -39,10 +41,11 @@ public class CategoryService {
         return updateCategory;
     }
 
-    public Page<Category> findByName(String name, Pageable pageable){
+    public Page<Category> findByName(String name, Pageable pageable) {
         return repository.findByNameContainingIgnoreCase(name, pageable);
     }
 
+    @Transactional
     public void delete(Long id){
         Category category = findById(id);
         repository.delete(category);

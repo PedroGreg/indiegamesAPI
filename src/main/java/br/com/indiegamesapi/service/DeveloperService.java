@@ -27,11 +27,13 @@ public class DeveloperService {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Developer not Found, ID: " + id));
     }
 
+    @Transactional
     public Developer create(Developer developer){
         developer.setCreatedAt(LocalDateTime.now());
         return repository.save(developer);
     }
 
+    @Transactional
     public Developer update(Long id, Developer developer){
         Developer updateDeveloper = findById(id);
         updateDeveloper.setName(developer.getName());
@@ -43,6 +45,7 @@ public class DeveloperService {
         return repository.findByNameContainingIgnoreCase(name, pageable);
     }
 
+    @Transactional
     public void delete(Long id){
         Developer developer = findById(id);
         repository.delete(developer);

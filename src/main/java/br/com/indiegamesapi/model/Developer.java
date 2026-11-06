@@ -1,12 +1,18 @@
 package br.com.indiegamesapi.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+@Schema(name = "Developer", example = "{\n" +
+        "  \"id\": 1,\n" +
+        "  \"name\": \"Toby Fox\",\n" +
+        "  \"createdAt\": \"2026-11-06T15:45:00\",\n" +
+        "  \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
+        "}")
 @Entity
-// Evita erro 500 ao serializar proxies LAZY do Hibernate (ex.: game.developer / game.category)
-// @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "developers")
 public class Developer {
     @Id

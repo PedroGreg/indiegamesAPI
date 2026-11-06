@@ -1,9 +1,33 @@
 package br.com.indiegamesapi.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+@Schema(name = "User", example = "{\n" +
+        "  \"id\": 1,\n" +
+        "  \"name\": \"Pedro Gregorio\",\n" +
+        "  \"email\": \"pedro@email.com\",\n" +
+        "  \"password\": \"senha123\",\n" +
+        "  \"userProfile\": {\n" +
+        "    \"id\": 1,\n" +
+        "    \"bio\": \"Desenvolvedor Backend e Entusiasta de Jogos\",\n" +
+        "    \"user\": {\n" +
+        "      \"id\": 1,\n" +
+        "      \"name\": \"Pedro Gregorio\",\n" +
+        "      \"email\": \"pedro@email.com\",\n" +
+        "      \"password\": \"senha123\",\n" +
+        "      \"createdAt\": \"2026-11-06T15:45:00\",\n" +
+        "      \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
+        "    },\n" +
+        "    \"createdAt\": \"2026-11-06T15:45:00\",\n" +
+        "    \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
+        "  },\n" +
+        "  \"createdAt\": \"2026-11-06T15:45:00\",\n" +
+        "  \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
+        "}")
 @Entity
 @Table(name = "users")
 public class User {

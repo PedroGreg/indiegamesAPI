@@ -56,13 +56,20 @@ public class UserService {
     @Transactional
     public User update(Long id, User user){
         User updateUser = findById(id);
-        if(user.getUserProfile() != null){
-            updateUser.setUserProfile(user.getUserProfile());
+
+        if(user.getUserProfile() != null && updateUser.getUserProfile() != null){
+
+            updateUser.getUserProfile().setBio(user.getUserProfile().getBio());
+
+            updateUser.getUserProfile().setUpdatedAt(LocalDateTime.now());
         }
-        if (!user.getPassword().equals(updateUser.getPassword())){
+
+        if (user.getPassword() != null && !user.getPassword().equals(updateUser.getPassword())){
             updateUser.setPassword(user.getPassword());
         }
         updateUser.setName(user.getName());
+
+        updateUser.setEmail(user.getEmail());
         updateUser.setUpdatedAt(LocalDateTime.now());
         return updateUser;
     }

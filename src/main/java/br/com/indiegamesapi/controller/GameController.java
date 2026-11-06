@@ -3,6 +3,15 @@ package br.com.indiegamesapi.controller;
 import br.com.indiegamesapi.assembler.GameModelAssembler;
 import br.com.indiegamesapi.model.Game;
 import br.com.indiegamesapi.service.GameService;
+// ADICIONADO: import de ArraySchema.
+// Por quê / o que faz: usado nas respostas de listagem (findAll / findByName) para indicar uma lista do modelo.
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+// ADICIONADO: import de ExceptionResponseModel.
+// Por quê / o que faz: usado como schema das respostas 404 (e 400 no Game).
+import br.com.indiegamesapi.exception.ExceptionResponseModel;
+// ADICIONADO: import de ProblemDetail.
+// Por quê / o que faz: usado como schema das respostas 400 geradas pelo Spring.
+import org.springframework.http.ProblemDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -33,12 +42,11 @@ public class GameController {
         this.service = service;
     }
 
-//    @Tag(name = "Criar")
     @Operation(summary = "Criar um novo game")
-    @ApiResponse(responseCode = "201", description = "Game criado", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Um ou mais ID enviado(s) não foi(ram) encontrado(s)(Categoria, Desenvolvedor ou Plataforma)", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "201", description = "Game criado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Game.class)))
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content(mediaType = "application/json", schema = @Schema(oneOf = {ExceptionResponseModel.class, ProblemDetail.class})))
+    @ApiResponse(responseCode = "404", description = "Um ou mais ID enviado(s) não foi(ram) encontrado(s)(Categoria, Desenvolvedor ou Plataforma)", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponseModel.class)))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
     public ResponseEntity<EntityModel<Game>> create(
@@ -47,7 +55,7 @@ public class GameController {
                     required = true,
                     content = @Content(mediaType = "application/json",
                             schema= @Schema(implementation = Game.class),
-                            examples = @ExampleObject(value = "{ \"name\": \"Undertale\", \"status\" : \"\", \"developer\" : { \"id\" : \"1\" }, \"category\" : { \"id\" : \"1\" }, \"platforms\" : [{ \"id\" : \"1\"}] }"))
+                            examples = @ExampleObject(value = "{ \"name\": \"Undertale\", \"status\" : \"DEVELOPMENT\", \"developer\" : { \"id\" : \"1\" }, \"category\" : { \"id\" : \"1\" }, \"platforms\" : [{ \"id\" : \"1\"}] }"))
             )
             @RequestBody @Valid Game game){
         Game game1 = service.create(game);
@@ -55,10 +63,9 @@ public class GameController {
         return new ResponseEntity<>(createGame, HttpStatus.CREATED);
     }
 
-//    @Tag(name = "Buscar todos")
     @Operation(summary = "Buscar todos os games")
-    @ApiResponse(responseCode = "200", description = "Lista com todos os games", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Lista com todos os games", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Game.class))))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<Game>>> findAll(@ParameterObject @PageableDefault(size = 10)Pageable pageable){
         Page<Game> pageGame = service.findAll(pageable);
@@ -69,11 +76,10 @@ public class GameController {
         return new ResponseEntity<>(allGame, HttpStatus.OK);
     }
 
-//    @Tag(name = "Buscar por ID")
     @Operation(summary = "Buscar por ID(GET)")
-    @ApiResponse(responseCode = "200", description = "Game encontrado por ID", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Game não encontrado com esse ID", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Game encontrado por ID", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Game.class)))
+    @ApiResponse(responseCode = "404", description = "Game não encontrado com esse ID", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponseModel.class)))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<Game>> findById(@PathVariable Long id){
         Game game1 = service.findById(id);
@@ -81,10 +87,9 @@ public class GameController {
         return new ResponseEntity<>(findIdGame, HttpStatus.OK);
     }
 
-//    @Tag(name = "Buscar por nome")
     @Operation(summary = "Buscar game por nome")
-    @ApiResponse(responseCode = "200", description = "Lista com todos os games pelo nome enviado", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Lista com todos os games pelo nome enviado", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Game.class))))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<Game>>> findByName(
             @RequestParam String name,
@@ -97,12 +102,11 @@ public class GameController {
         return new ResponseEntity<>(allNameGame, HttpStatus.OK);
     }
 
-//    @Tag(name = "Atualizar")
     @Operation(summary = "Atualizar game")
-    @ApiResponse(responseCode = "200", description = "Game atualizado", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Game não encontrado com esse ID", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Game atualizado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Game.class)))
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content(mediaType = "application/json", schema = @Schema(oneOf = {ExceptionResponseModel.class, ProblemDetail.class})))
+    @ApiResponse(responseCode = "404", description = "Game não encontrado com esse ID", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponseModel.class)))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<Game>> update(
@@ -120,11 +124,10 @@ public class GameController {
         return new ResponseEntity<>(updateGame, HttpStatus.OK);
     }
 
-//    @Tag(name = "Deletar")
     @Operation(summary = "Deletar um game")
     @ApiResponse(responseCode = "204", description = "Game deletado", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Game não encontrado com esse ID", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Game não encontrado com esse ID", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponseModel.class)))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Valid Long id) {
         service.delete(id);

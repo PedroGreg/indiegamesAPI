@@ -1,10 +1,39 @@
 package br.com.indiegamesapi.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Schema(name = "Game", example = "{\n" +
+        "  \"id\": 1,\n" +
+        "  \"name\": \"Undertale\",\n" +
+        "  \"status\": \"RELEASED\",\n" +
+        "  \"developer\": {\n" +
+        "    \"id\": 1,\n" +
+        "    \"name\": \"Toby Fox\",\n" +
+        "    \"createdAt\": \"2026-11-06T15:45:00\",\n" +
+        "    \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
+        "  },\n" +
+        "  \"category\": {\n" +
+        "    \"id\": 1,\n" +
+        "    \"name\": \"RPG\",\n" +
+        "    \"createdAt\": \"2026-11-06T15:45:00\",\n" +
+        "    \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
+        "  },\n" +
+        "  \"platforms\": [\n" +
+        "    {\n" +
+        "      \"id\": 1,\n" +
+        "      \"name\": \"PC (Steam)\",\n" +
+        "      \"createdAt\": \"2026-11-06T15:45:00\",\n" +
+        "      \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
+        "    }\n" +
+        "  ],\n" +
+        "  \"createdAt\": \"2026-11-06T15:45:00\",\n" +
+        "  \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
+        "}")
 @Entity
 @Table(name = "games")
 public class Game {

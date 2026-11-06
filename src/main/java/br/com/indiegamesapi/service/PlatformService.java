@@ -23,15 +23,18 @@ public class PlatformService {
         return repository.findAll(pageable);
     }
 
-    public Platform findById(Long id){
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Category not Found, ID: " + id));
+    public Platform findById(Long id) {
+
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Platform not Found, ID: " + id));
     }
 
+    @Transactional
     public Platform create(Platform platform){
         platform.setCreatedAt(LocalDateTime.now());
         return repository.save(platform);
     }
 
+    @Transactional
     public Platform update(Long id, Platform platform){
         Platform updatePlatform = findById(id);
         updatePlatform.setName(platform.getName());
@@ -43,6 +46,7 @@ public class PlatformService {
         return repository.findByNameContainingIgnoreCase(name, pageable);
     }
 
+    @Transactional
     public void delete(Long id){
         Platform platform = findById(id);
         repository.delete(platform);

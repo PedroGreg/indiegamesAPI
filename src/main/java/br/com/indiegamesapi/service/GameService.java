@@ -1,5 +1,6 @@
 package br.com.indiegamesapi.service;
 
+import br.com.indiegamesapi.exception.BadRequestException;
 import br.com.indiegamesapi.exception.NotFoundException;
 import br.com.indiegamesapi.model.*;
 import br.com.indiegamesapi.repository.CategoryRepository;
@@ -39,10 +40,15 @@ public class GameService {
 
     @Transactional
     public Game create(Game game){
+        validateRelations(game);
         Category category = categoryRepository.findById(game.getCategory().getId())
                 .orElseThrow(() -> new NotFoundException("Category not Found, ID: " + game.getCategory().getId()));
         List<Platform> platform = platformRepository.findAllById(game.getPlatforms().stream()
                 .map(platform1 -> { return platform1.getId(); }).toList());
+
+        if (platform.size() != game.getPlatforms().stream().map(Platform::getId).distinct().count()) {
+            throw new NotFoundException("One or more Platforms not Found, IDs: " + game.getPlatforms().stream().map(Platform::getId).toList());
+        }
         Developer developer = developerRepository.findById(game.getDeveloper().getId())
                 .orElseThrow(() -> new NotFoundException("Developer not Found, ID: " + game.getDeveloper().getId()));
         game.setCategory(category);
@@ -55,16 +61,24 @@ public class GameService {
     @Transactional
     public Game update(Long id, Game game){
         Game updateGame = findById(id);
+
+        validateRelations(game);
         Category category = categoryRepository.findById(game.getCategory().getId())
                 .orElseThrow(() -> new NotFoundException("Category not Found, ID: " + game.getCategory().getId()));
         List<Platform> platform = platformRepository.findAllById(game.getPlatforms().stream()
                 .map(platform1 -> { return platform1.getId(); }).toList());
+
+        if (platform.size() != game.getPlatforms().stream().map(Platform::getId).distinct().count()) {
+
+            throw new NotFoundException("One or more Platforms not Found, IDs: " + game.getPlatforms().stream().map(Platform::getId).toList());
+        }
         Developer developer = developerRepository.findById(game.getDeveloper().getId())
                 .orElseThrow(() -> new NotFoundException("Developer not Found, ID: " + game.getDeveloper().getId()));
-        if(game.getStatus().equals(GameStatus.DEVELOPMENT) || game.getStatus().equals(GameStatus.EARLY_ACCESS) || game.getStatus().equals(GameStatus.RELEASED)){
+
+        if(game.getStatus() != null && (game.getStatus().equals(GameStatus.DEVELOPMENT) || game.getStatus().equals(GameStatus.EARLY_ACCESS) || game.getStatus().equals(GameStatus.RELEASED))){
             updateGame.setStatus(game.getStatus());
         }else{
-            throw new IllegalStateException("Game status not set");
+            throw new BadRequestException("Game status not set, allowed values: DEVELOPMENT, EARLY_ACCESS, RELEASED");
         }
         updateGame.setCategory(category);
         updateGame.setPlatforms(platform);
@@ -79,8 +93,24 @@ public class GameService {
         return repository.findByNameContainingIgnoreCase(name, pageable);
     }
 
+    @Transactional
     public void delete(Long id){
         Game game = findById(id);
         repository.delete(game);
+    }
+
+    private void validateRelations(Game game){
+
+        if (game.getCategory() == null || game.getCategory().getId() == null) {
+            throw new BadRequestException("Category ID is required");
+        }
+
+        if (game.getDeveloper() == null || game.getDeveloper().getId() == null) {
+            throw new BadRequestException("Developer ID is required");
+        }
+
+        if (game.getPlatforms() == null || game.getPlatforms().stream().anyMatch(p -> p == null || p.getId() == null)) {
+            throw new BadRequestException("Platforms list is required and every Platform must have an ID");
+        }
     }
 }

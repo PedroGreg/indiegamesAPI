@@ -24,7 +24,8 @@ public class UserProfileService {
     }
 
     public UserProfile findById(Long id){
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Category not Found, ID: " + id));
+
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("UserProfile not Found, ID: " + id));
     }
 
     @Transactional
@@ -37,7 +38,7 @@ public class UserProfileService {
     public UserProfile update(Long id, UserProfile userProfile){
         UserProfile updateUserProfile = findById(id);
         updateUserProfile.setBio(userProfile.getBio());
-        updateUserProfile.setUser(userProfile.getUser());
+
         updateUserProfile.setUpdatedAt(LocalDateTime.now());
         return updateUserProfile;
     }

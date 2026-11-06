@@ -5,6 +5,15 @@ import br.com.indiegamesapi.dto.request.CategoryRequestDTO;
 import br.com.indiegamesapi.dto.response.CategoryResponseDTO;
 import br.com.indiegamesapi.model.Category;
 import br.com.indiegamesapi.service.CategoryService;
+// ADICIONADO: import de ExceptionResponseModel.
+// Por quê / o que faz: usado como schema das respostas 404 (e 400 no Game).
+import br.com.indiegamesapi.exception.ExceptionResponseModel;
+// ADICIONADO: import de ProblemDetail.
+// Por quê / o que faz: usado como schema das respostas 400 geradas pelo Spring.
+import org.springframework.http.ProblemDetail;
+// ADICIONADO: import de ArraySchema.
+// Por quê / o que faz: usado nas respostas de listagem (findAll / findByName) para indicar uma lista do modelo.
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -37,9 +46,9 @@ public class CategoryController {
     }
 
     @Operation(summary = "Criar uma nova categoria")
-    @ApiResponse(responseCode = "201", description = "Categoria criada", content = @Content(schema = @Schema(implementation = CategoryResponseDTO.class)))
-    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "201", description = "Categoria criada", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Category.class)))
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PostMapping()
     public ResponseEntity<EntityModel<Category>> create(
@@ -55,8 +64,8 @@ public class CategoryController {
     }
 
     @Operation(summary = "Buscar todas as categorias")
-    @ApiResponse(responseCode = "200", description = "Lista com todas as categorias")
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Lista com todas as categorias", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Category.class))))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<Category>>> findAll(@ParameterObject  @PageableDefault(size = 10)Pageable pageable){
         Page<Category> pageCategory = service.findAll(pageable);
@@ -68,9 +77,9 @@ public class CategoryController {
     }
 
     @Operation(summary = "Buscar categoria por ID")
-    @ApiResponse(responseCode = "200", description = "Categoria encontrada por ID", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Categoria encontrada por ID", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Category.class)))
+    @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponseModel.class)))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<Category>> findById(@PathVariable Long id){
         Category category1 = service.findById(id);
@@ -79,8 +88,8 @@ public class CategoryController {
     }
 
     @Operation(summary = "Buscar categoria por nome")
-    @ApiResponse(responseCode = "200", description = "Lista com todas as categorias pelo nome enviado")
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Lista com todas as categorias pelo nome enviado", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Category.class))))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @GetMapping("/search")
     public ResponseEntity<PagedModel<EntityModel<Category>>> findByName(
             @RequestParam String name,
@@ -94,19 +103,17 @@ public class CategoryController {
     }
 
     @Operation(summary = "Atualizar categoria")
-    @ApiResponse(responseCode = "200", description = "Categoria atualizada", content = @Content)
-    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Categoria atualizada", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Category.class)))
+    @ApiResponse(responseCode = "400", description = "Houve algum erro nos dados enviados na requisição", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponseModel.class)))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true)
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<Category>> update(@PathVariable Long id,
                                                         @io.swagger.v3.oas.annotations.parameters.RequestBody(
                                                                 description = "Nova categoria",
                                                                 required = true,
-                                                                content = @Content(mediaType = "application/json",
-                                                                        schema= @Schema(implementation = Category.class),
-                                                                        examples = @ExampleObject(value = "{ \"name\": \"RPG\" }"))
+                                                                content = @Content(schema = @Schema(implementation = CategoryRequestDTO.class))
                                                         )
                                                         @RequestBody @Valid Category category){
         Category category1 = service.update(id, category);
@@ -115,8 +122,8 @@ public class CategoryController {
     }
     @Operation(summary = "Deletar categoria(Não é permitido DELETE CASCADE)")
     @ApiResponse(responseCode = "204", description = "Categoria deletada", content = @Content)
-    @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content)
-    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Categoria não encontrada com esse ID", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponseModel.class)))
+    @ApiResponse(responseCode = "429", description = "Muitas requisições feitas num período de 1 minuto, por favor aguarde o tempo indicado e tente novamente", content = @Content(mediaType = "application/json", schema = @Schema(type = "object", example = "{\"error\":\"Too many requests, try again in 30s\"}")))
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Valid Long id) {
         service.delete(id);
