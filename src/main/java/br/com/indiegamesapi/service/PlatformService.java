@@ -1,5 +1,6 @@
 package br.com.indiegamesapi.service;
 
+import br.com.indiegamesapi.dto.request.PlatformRequestDTO;
 import br.com.indiegamesapi.exception.NotFoundException;
 import br.com.indiegamesapi.model.Platform;
 import br.com.indiegamesapi.repository.PlatformRepository;
@@ -23,21 +24,22 @@ public class PlatformService {
         return repository.findAll(pageable);
     }
 
-    public Platform findById(Long id) {
-
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Platform not Found, ID: " + id));
+    public Platform findById(Long id){
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Plataforma não encontrada, ID: " + id));
     }
 
     @Transactional
-    public Platform create(Platform platform){
+    public Platform create(PlatformRequestDTO dto){
+        Platform platform = new Platform();
+        platform.setName(dto.name());
         platform.setCreatedAt(LocalDateTime.now());
         return repository.save(platform);
     }
 
     @Transactional
-    public Platform update(Long id, Platform platform){
+    public Platform update(Long id, PlatformRequestDTO dto){
         Platform updatePlatform = findById(id);
-        updatePlatform.setName(platform.getName());
+        updatePlatform.setName(dto.name());
         updatePlatform.setUpdatedAt(LocalDateTime.now());
         return updatePlatform;
     }
@@ -50,5 +52,7 @@ public class PlatformService {
     public void delete(Long id){
         Platform platform = findById(id);
         repository.delete(platform);
+        // força o DELETE agora; se estiver em uso por um game, o erro vira 409 no ExceptionHandlerModel
+        repository.flush();
     }
 }

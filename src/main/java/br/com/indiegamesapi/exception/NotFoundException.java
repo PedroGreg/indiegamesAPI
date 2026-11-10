@@ -8,7 +8,8 @@ public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {
         super(message);
     }
+    // ALTERADO: a mensagem era vazia; agora informa o ID não encontrado
     public NotFoundException(Long id){
-        super("");
+        super("Registro não encontrado, ID: " + id);
     }
 }

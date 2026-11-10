@@ -1,33 +1,13 @@
 package br.com.indiegamesapi.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+// NOVO: anotações do Bean Validation. Na entidade elas são checadas pelo Hibernate antes de
+// INSERT/UPDATE (última barreira); os RequestDTOs validam antes, na entrada da requisição.
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
-@Schema(name = "User", example = "{\n" +
-        "  \"id\": 1,\n" +
-        "  \"name\": \"Pedro Gregorio\",\n" +
-        "  \"email\": \"pedro@email.com\",\n" +
-        "  \"password\": \"senha123\",\n" +
-        "  \"userProfile\": {\n" +
-        "    \"id\": 1,\n" +
-        "    \"bio\": \"Desenvolvedor Backend e Entusiasta de Jogos\",\n" +
-        "    \"user\": {\n" +
-        "      \"id\": 1,\n" +
-        "      \"name\": \"Pedro Gregorio\",\n" +
-        "      \"email\": \"pedro@email.com\",\n" +
-        "      \"password\": \"senha123\",\n" +
-        "      \"createdAt\": \"2026-11-06T15:45:00\",\n" +
-        "      \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
-        "    },\n" +
-        "    \"createdAt\": \"2026-11-06T15:45:00\",\n" +
-        "    \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
-        "  },\n" +
-        "  \"createdAt\": \"2026-11-06T15:45:00\",\n" +
-        "  \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
-        "}")
 @Entity
 @Table(name = "users")
 public class User {
@@ -35,8 +15,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
+    // NOVO: validação do nome também na entidade (requisito "Bean Validation em cada entidade")
+    @NotBlank(message = "O name do usuário deve ser preenchido")
+    @Size(min = 3, max = 255, message = "O name do usuário deve ter entre 3 e 255 caracteres")
     private String name;
+    // NOVO: e-mail obrigatório, com formato válido e único no banco (ele é o "login" do usuário)
+    @NotBlank(message = "O email do usuário deve ser preenchido")
+    @Email(message = "O email informado não é válido")
+    @Column(nullable = false, unique = true)
     private String email;
+    // ALTERADO (comportamento): agora guarda o HASH BCrypt da senha (ex.: "$2a$10$..."), nunca a senha pura.
+    // Sem @Size aqui porque o hash sempre tem 60 caracteres, independente do tamanho da senha digitada.
     private String password = null;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserProfile userProfile;
@@ -44,6 +33,12 @@ public class User {
     private LocalDateTime createdAt;
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    // NOVO (login): chave de API gerada no POST /api/auth/login. Fica null até o usuário logar
+    // e volta a null no logout. unique = true: dois usuários nunca têm a mesma chave.
+    // @JsonIgnore: a chave nunca aparece se alguém serializar a entidade direto.
+    @JsonIgnore
+    @Column(name = "api_key", unique = true)
+    private String apiKey;
 
     public User() {
     }
@@ -111,5 +106,14 @@ public class User {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    // NOVO: getter/setter da chave de API
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 }

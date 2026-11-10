@@ -1,39 +1,13 @@
 package br.com.indiegamesapi.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import jakarta.persistence.*;
+// NOVO: anotações do Bean Validation. Na entidade elas são checadas pelo Hibernate antes de
+// INSERT/UPDATE (última barreira); os RequestDTOs validam antes, na entrada da requisição.
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Schema(name = "Game", example = "{\n" +
-        "  \"id\": 1,\n" +
-        "  \"name\": \"Undertale\",\n" +
-        "  \"status\": \"RELEASED\",\n" +
-        "  \"developer\": {\n" +
-        "    \"id\": 1,\n" +
-        "    \"name\": \"Toby Fox\",\n" +
-        "    \"createdAt\": \"2026-11-06T15:45:00\",\n" +
-        "    \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
-        "  },\n" +
-        "  \"category\": {\n" +
-        "    \"id\": 1,\n" +
-        "    \"name\": \"RPG\",\n" +
-        "    \"createdAt\": \"2026-11-06T15:45:00\",\n" +
-        "    \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
-        "  },\n" +
-        "  \"platforms\": [\n" +
-        "    {\n" +
-        "      \"id\": 1,\n" +
-        "      \"name\": \"PC (Steam)\",\n" +
-        "      \"createdAt\": \"2026-11-06T15:45:00\",\n" +
-        "      \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
-        "    }\n" +
-        "  ],\n" +
-        "  \"createdAt\": \"2026-11-06T15:45:00\",\n" +
-        "  \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
-        "}")
 @Entity
 @Table(name = "games")
 public class Game {
@@ -41,14 +15,25 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
+    // NOVO: validação do nome também na entidade (requisito "Bean Validation em cada entidade")
+    @NotBlank(message = "O name do game deve ser preenchido")
+    @Size(min = 1, max = 255, message = "O name do game deve ter entre 1 e 255 caracteres")
     private String name;
     @Enumerated(EnumType.STRING)
+    // NOVO: o status é obrigatório (antes um game podia ser salvo sem status)
+    @NotNull(message = "O status do game deve ser informado")
     private GameStatus status;
     @ManyToOne(fetch = FetchType.LAZY)
+    // NOVO: todo game precisa de um desenvolvedor (lado "muitos" do One-to-Many com Developer)
+    @NotNull(message = "O developer do game deve ser informado")
     private Developer developer;
     @ManyToOne(fetch = FetchType.LAZY)
+    // NOVO: todo game precisa de uma categoria (lado "muitos" do One-to-Many com Category)
+    @NotNull(message = "A category do game deve ser informada")
     private Category category;
     @ManyToMany(fetch = FetchType.LAZY)
+    // NOVO: a lista pode ser vazia, mas não nula
+    @NotNull(message = "A lista de platforms não pode ser nula")
     private List<Platform> platforms;
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

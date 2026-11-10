@@ -1,16 +1,15 @@
 package br.com.indiegamesapi.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+// NOVO: anotações do Bean Validation. Na entidade elas são checadas pelo Hibernate antes de
+// INSERT/UPDATE (última barreira); os RequestDTOs validam antes, na entrada da requisição.
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Schema(name = "Category", example = "{\n" +
-        "  \"id\": 1,\n" +
-        "  \"name\": \"RPG\",\n" +
-        "  \"createdAt\": \"2026-11-06T15:45:00\",\n" +
-        "  \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
-        "}")
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -18,11 +17,21 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
+    // NOVO: validação do nome também na entidade (requisito "Bean Validation em cada entidade")
+    @NotBlank(message = "O name da categoria deve ser preenchido")
+    @Size(min = 3, max = 255, message = "O name da categoria deve ter entre 3 e 255 caracteres")
     private String name;
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    // NOVO: lado "um" do relacionamento One-to-Many (um Category tem vários games).
+    // mappedBy = "category" aponta para o campo da classe Game que é dono da chave estrangeira,
+    // então nenhuma coluna nova é criada: o JPA só usa a FK que já existe na tabela games.
+    // @JsonIgnore evita loop infinito se alguém serializar a entidade direto (game -> category -> games -> ...).
+    @OneToMany(mappedBy = "category")
+    @JsonIgnore
+    private List<Game> games = new ArrayList<>();
 
     public Category() {
     }
@@ -63,5 +72,14 @@ public class Category {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    // NOVO: getter/setter da lista de games (lado One-to-Many)
+    public List<Game> getGames() {
+        return games;
+    }
+
+    public void setGames(List<Game> games) {
+        this.games = games;
     }
 }

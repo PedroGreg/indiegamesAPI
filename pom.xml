@@ -50,16 +50,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
+        <!-- NOVO: Bean Validation (Hibernate Validator). Sem ele o @Valid e as anotações dos RequestDTOs não validavam nada -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>3.2.0</version>
         </dependency>
-        <!-- Java JWT (Auth0): Biblioteca para criação e verificação de tokens JWT -->
+        <!-- NOVO: só a parte de criptografia do Spring Security, para o BCryptPasswordEncoder (senha guardada como hash).
+             Não é o starter completo, então NÃO cria tela de login nem bloqueia a API.
+             (ALTERADO: a dependência java-jwt foi removida, o login agora usa chave de API e não JWT) -->
         <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>4.4.0</version>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
         </dependency>
         <!-- Source: https://mvnrepository.com/artifact/com.bucket4j/bucket4j-core -->
         <dependency>

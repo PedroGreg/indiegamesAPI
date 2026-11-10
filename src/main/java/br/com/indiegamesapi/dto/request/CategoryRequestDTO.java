@@ -4,10 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+// NOVO: DTO de entrada (POST/PUT); as validações ficam aqui e não na entidade
 @Schema(name = "CategoryRequestDTO", example = "{\"name\": \"RPG\"}")
-public record CategoryRequestDTO (
+public record CategoryRequestDTO(
         @NotBlank(message = "O name da categoria deve ser preenchido")
-        @Size(min = 3, max = 255)
+        @Size(min = 3, max = 255, message = "O name da categoria deve ter entre 3 e 255 caracteres")
         String name
 ) {
 }

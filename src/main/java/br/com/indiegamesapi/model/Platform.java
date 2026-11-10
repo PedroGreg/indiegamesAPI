@@ -1,26 +1,25 @@
 package br.com.indiegamesapi.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+// NOVO: anotações do Bean Validation. Na entidade elas são checadas pelo Hibernate antes de
+// INSERT/UPDATE (última barreira); os RequestDTOs validam antes, na entrada da requisição.
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Schema(name = "Platform", example = "{\n" +
-        "  \"id\": 1,\n" +
-        "  \"name\": \"PC (Steam)\",\n" +
-        "  \"createdAt\": \"2026-11-06T15:45:00\",\n" +
-        "  \"updatedAt\": \"2026-11-07T10:30:00\"\n" +
-        "}")
 @Entity
-// Evita erro 500 ao serializar proxies LAZY do Hibernate (ex.: game.developer / game.category)
-//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "platforms")
 public class Platform {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, length = 50)
+    // NOVO: validação do nome também na entidade (requisito "Bean Validation em cada entidade")
+    @NotBlank(message = "O name da plataforma deve ser preenchido")
+    @Size(min = 2, max = 50, message = "O name da plataforma deve ter entre 2 e 50 caracteres")
     private String name;
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
