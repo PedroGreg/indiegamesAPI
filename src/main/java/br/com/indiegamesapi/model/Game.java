@@ -1,8 +1,6 @@
 package br.com.indiegamesapi.model;
 
 import jakarta.persistence.*;
-// NOVO: anotações do Bean Validation. Na entidade elas são checadas pelo Hibernate antes de
-// INSERT/UPDATE (última barreira); os RequestDTOs validam antes, na entrada da requisição.
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
@@ -15,26 +13,25 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    // NOVO: validação do nome também na entidade (requisito "Bean Validation em cada entidade")
     @NotBlank(message = "O name do game deve ser preenchido")
     @Size(min = 1, max = 255, message = "O name do game deve ter entre 1 e 255 caracteres")
     private String name;
     @Enumerated(EnumType.STRING)
-    // NOVO: o status é obrigatório (antes um game podia ser salvo sem status)
     @NotNull(message = "O status do game deve ser informado")
     private GameStatus status;
     @ManyToOne(fetch = FetchType.LAZY)
-    // NOVO: todo game precisa de um desenvolvedor (lado "muitos" do One-to-Many com Developer)
     @NotNull(message = "O developer do game deve ser informado")
     private Developer developer;
     @ManyToOne(fetch = FetchType.LAZY)
-    // NOVO: todo game precisa de uma categoria (lado "muitos" do One-to-Many com Category)
     @NotNull(message = "A category do game deve ser informada")
     private Category category;
     @ManyToMany(fetch = FetchType.LAZY)
-    // NOVO: a lista pode ser vazia, mas não nula
     @NotNull(message = "A lista de platforms não pode ser nula")
     private List<Platform> platforms;
+    @NotNull(message = "O totalAchievements deve ser informado")
+    @PositiveOrZero(message = "O totalAchievements não pode ser negativo")
+    @Column(name = "total_achievements", nullable = false)
+    private Integer totalAchievements = 0;
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
     @Column(name = "updated_at")
@@ -115,5 +112,13 @@ public class Game {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Integer getTotalAchievements() {
+        return totalAchievements;
+    }
+
+    public void setTotalAchievements(Integer totalAchievements) {
+        this.totalAchievements = totalAchievements;
     }
 }

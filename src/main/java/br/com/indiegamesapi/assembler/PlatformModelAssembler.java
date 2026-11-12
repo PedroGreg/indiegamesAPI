@@ -21,22 +21,18 @@ public class PlatformModelAssembler implements RepresentationModelAssembler<Plat
         return EntityModel.of(platform, links(platform));
     }
 
-    // Mesmos links, mas com o PlatformResponseDTO no corpo (é o que os controllers usam)
     public EntityModel<PlatformResponseDTO> toDtoModel(Platform platform){
         return EntityModel.of(new PlatformResponseDTO(platform), links(platform));
     }
 
-    // Links do HATEOAS. create(null, null) e delete(id, null): os parâmetros extras são os headers
-    // (X-Idempotency-Key e X-API-Key), que não entram na URL, então passamos null.
     private List<Link> links(Platform platform){
         List<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(PlatformController.class).findAll(Pageable.unpaged())).withRel("platforms").withType("GET"));
         links.add(linkTo(methodOn(PlatformController.class).findById(platform.getId())).withSelfRel().withType("GET"));
         links.add(linkTo(methodOn(PlatformController.class).findByName(platform.getName(), Pageable.unpaged())).withRel("find-by-name").withType("GET"));
         links.add(linkTo(methodOn(PlatformController.class).create(null, null)).withRel("create").withType("POST"));
-        links.add(linkTo(methodOn(PlatformController.class).update(platform.getId(), null)).withRel("update").withType("PUT"));
+        links.add(linkTo(methodOn(PlatformController.class).update(platform.getId(), null, null)).withRel("update").withType("PUT"));
         links.add(linkTo(methodOn(PlatformController.class).delete(platform.getId(), null)).withRel("delete").withType("DELETE"));
-        // NOVO: navegação para os games desta plataforma
         links.add(linkTo(methodOn(GameController.class).findByPlatform(platform.getId(), Pageable.unpaged())).withRel("games").withType("GET"));
         return links;
     }

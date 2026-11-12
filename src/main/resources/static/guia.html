@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Indie Games API · Guia de uso</title>
+    <link rel="icon" type="image/svg+xml" href="/img/logo.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/pages.css">
+</head>
+<body>
+    <header class="ig-header">
+        <a class="ig-brand" href="/">
+            <img src="/img/logo.svg" alt="Logo Indie Games API">
+            <div>
+                <div class="ig-brand-title">INDIE GAMES API</div>
+                <div class="ig-brand-sub">&gt; guia de uso_</div>
+            </div>
+        </a>
+        <nav class="ig-nav">
+            <a href="/">Início</a>
+            <a href="/swagger.html">Swagger</a>
+            <a href="/termos.html">Termos</a>
+        </nav>
+    </header>
+
+    <main class="ig-page">
+        <h1>Guia de uso</h1>
+        <div id="guia"><p class="ig-muted">Carregando o guia...</p></div>
+    </main>
+
+    <footer class="ig-footer">
+        Projeto acadêmico · TSI SENAC · <a href="/termos.html">Termos de Serviço</a>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        fetch('/guia.md')
+            .then(response => response.text())
+            .then(markdown => { document.getElementById('guia').innerHTML = marked.parse(markdown); })
+            .catch(() => {
+                document.getElementById('guia').innerHTML =
+                    '<p>Não foi possível carregar o guia. Veja a descrição no <a href="/swagger.html">Swagger</a>.</p>';
+            });
+    </script>
+</body>
+</html>

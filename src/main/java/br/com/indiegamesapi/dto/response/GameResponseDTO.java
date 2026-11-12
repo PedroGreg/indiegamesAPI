@@ -8,8 +8,6 @@ import org.springframework.hateoas.server.core.Relation;
 import java.time.LocalDateTime;
 import java.util.List;
 
-// DTO de resposta de Game. Os _links do HATEOAS são adicionados pelo GameModelAssembler.
-// @Relation: nome da lista dentro de "_embedded" nas respostas paginadas ("games").
 @Relation(itemRelation = "game", collectionRelation = "games")
 @Schema(name = "GameResponseDTO", example = GameResponseDTO.EXAMPLE)
 public record GameResponseDTO(
@@ -22,7 +20,6 @@ public record GameResponseDTO(
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
-    // [Swagger] exemplo de um item com os links HATEOAS
     public static final String EXAMPLE = "{\n" +
             "  \"id\": 1,\n" +
             "  \"name\": \"Undertale\",\n" +
@@ -51,35 +48,35 @@ public record GameResponseDTO(
             "  \"updatedAt\": \"2026-11-07T10:30:00\",\n" +
             "  \"_links\": {\n" +
             "    \"games\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/game\",\n" +
+            "      \"href\": \"http://localhost:8080/api/game/v1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"self\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/game/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/game/v1/1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"find-by-name\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/game/search?name=Undertale\",\n" +
+            "      \"href\": \"http://localhost:8080/api/game/v1/search?name=Undertale\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"create\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/game\",\n" +
+            "      \"href\": \"http://localhost:8080/api/game/v1\",\n" +
             "      \"type\": \"POST\"\n" +
             "    },\n" +
             "    \"update\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/game/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/game/v1/1\",\n" +
             "      \"type\": \"PUT\"\n" +
             "    },\n" +
             "    \"delete\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/game/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/game/v1/1\",\n" +
             "      \"type\": \"DELETE\"\n" +
             "    },\n" +
             "    \"developer\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/developer/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/developer/v1/1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"category\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/category/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1/1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"v2\": {\n" +
@@ -89,7 +86,6 @@ public record GameResponseDTO(
             "  }\n" +
             "}";
 
-    // [Swagger] exemplo da resposta paginada, com os links de paginação (first/self/next/last)
     public static final String PAGE_EXAMPLE = "{\n" +
             "  \"_embedded\": {\n" +
             "    \"games\": [\n" +
@@ -121,35 +117,35 @@ public record GameResponseDTO(
             "        \"updatedAt\": \"2026-11-07T10:30:00\",\n" +
             "        \"_links\": {\n" +
             "          \"games\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/game\",\n" +
+            "            \"href\": \"http://localhost:8080/api/game/v1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"self\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/game/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/game/v1/1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"find-by-name\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/game/search?name=Undertale\",\n" +
+            "            \"href\": \"http://localhost:8080/api/game/v1/search?name=Undertale\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"create\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/game\",\n" +
+            "            \"href\": \"http://localhost:8080/api/game/v1\",\n" +
             "            \"type\": \"POST\"\n" +
             "          },\n" +
             "          \"update\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/game/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/game/v1/1\",\n" +
             "            \"type\": \"PUT\"\n" +
             "          },\n" +
             "          \"delete\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/game/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/game/v1/1\",\n" +
             "            \"type\": \"DELETE\"\n" +
             "          },\n" +
             "          \"developer\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/developer/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/developer/v1/1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"category\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/category/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/category/v1/1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"v2\": {\n" +
@@ -162,13 +158,13 @@ public record GameResponseDTO(
             "  },\n" +
             "  \"_links\": {\n" +
             "    \"first\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/game?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/game/v1?page=0&size=10\"\n" +
             "    },\n" +
             "    \"self\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/game?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/game/v1?page=0&size=10\"\n" +
             "    },\n" +
             "    \"last\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/game?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/game/v1?page=0&size=10\"\n" +
             "    }\n" +
             "  },\n" +
             "  \"page\": {\n" +
@@ -179,7 +175,6 @@ public record GameResponseDTO(
             "  }\n" +
             "}";
 
-    // Converte a entidade no DTO
     public GameResponseDTO(Game game) {
         this(
                 game.getId(),

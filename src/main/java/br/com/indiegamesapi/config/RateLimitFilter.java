@@ -32,6 +32,11 @@ public class RateLimitFilter extends OncePerRequestFilter {
     }
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return !request.getRequestURI().startsWith("/api/");
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if("OPTIONS".equals(request.getMethod())){
             filterChain.doFilter(request, response);
@@ -50,7 +55,8 @@ public class RateLimitFilter extends OncePerRequestFilter {
             response.setHeader("Retry-After", String.valueOf(retryAfter));
             response.setStatus(429);
             response.setContentType("application/json");
-            response.getWriter().write("{\"error\":\"Too many requests, try again in " + retryAfter + "s\"}");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"error\":\"Muitas requisições. Tente novamente em " + retryAfter + "s\"}");
         }
     }
 

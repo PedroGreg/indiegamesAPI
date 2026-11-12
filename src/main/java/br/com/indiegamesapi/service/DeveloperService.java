@@ -52,7 +52,6 @@ public class DeveloperService {
     public void delete(Long id){
         Developer developer = findById(id);
         repository.delete(developer);
-        // força o DELETE agora; se estiver em uso por um game, o erro vira 409 no ExceptionHandlerModel
         repository.flush();
     }
 }

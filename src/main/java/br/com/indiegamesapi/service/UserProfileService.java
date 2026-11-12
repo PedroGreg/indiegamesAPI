@@ -28,7 +28,6 @@ public class UserProfileService {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Perfil de usuário não encontrado, ID: " + id));
     }
 
-    // NOVO: consulta personalizada (JPQL) - perfis cuja bio contém o texto
     public Page<UserProfile> searchByBio(String text, Pageable pageable){
         return repository.searchByBio(text, pageable);
     }
@@ -53,7 +52,6 @@ public class UserProfileService {
     public void delete(Long id){
         UserProfile userProfile = findById(id);
         repository.delete(userProfile);
-        // força o DELETE agora; se o perfil pertencer a um usuário, o erro vira 409 no ExceptionHandlerModel
         repository.flush();
     }
 }

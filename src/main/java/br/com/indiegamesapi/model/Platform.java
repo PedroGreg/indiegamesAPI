@@ -2,8 +2,6 @@ package br.com.indiegamesapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-// NOVO: anotações do Bean Validation. Na entidade elas são checadas pelo Hibernate antes de
-// INSERT/UPDATE (última barreira); os RequestDTOs validam antes, na entrada da requisição.
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
@@ -17,7 +15,6 @@ public class Platform {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, length = 50)
-    // NOVO: validação do nome também na entidade (requisito "Bean Validation em cada entidade")
     @NotBlank(message = "O name da plataforma deve ser preenchido")
     @Size(min = 2, max = 50, message = "O name da plataforma deve ter entre 2 e 50 caracteres")
     private String name;

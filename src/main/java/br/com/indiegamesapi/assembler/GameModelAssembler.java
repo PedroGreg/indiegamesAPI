@@ -1,6 +1,7 @@
 package br.com.indiegamesapi.assembler;
 
 import br.com.indiegamesapi.controller.CategoryController;
+import br.com.indiegamesapi.controller.CategoryV2Controller;
 import br.com.indiegamesapi.controller.DeveloperController;
 import br.com.indiegamesapi.controller.GameController;
 import br.com.indiegamesapi.controller.GameV2Controller;
@@ -24,30 +25,32 @@ public class GameModelAssembler implements RepresentationModelAssembler<Game, En
         return EntityModel.of(game, links(game));
     }
 
-    // Mesmos links, mas com o GameResponseDTO no corpo (é o que os controllers usam)
     public EntityModel<GameResponseDTO> toDtoModel(Game game){
         return EntityModel.of(new GameResponseDTO(game), links(game));
     }
 
-    // NOVO (versionamento): representação da v2 (resumida)
     public EntityModel<GameV2ResponseDTO> toV2Model(Game game){
         return EntityModel.of(new GameV2ResponseDTO(game),
-                linkTo(methodOn(GameV2Controller.class).findById(game.getId())).withSelfRel().withType("GET"),
                 linkTo(methodOn(GameV2Controller.class).findAll(Pageable.unpaged())).withRel("games").withType("GET"),
+                linkTo(methodOn(GameV2Controller.class).findById(game.getId())).withSelfRel().withType("GET"),
+                linkTo(methodOn(GameController.class).findByName(game.getName(), Pageable.unpaged())).withRel("find-by-name").withType("GET"),
+                linkTo(methodOn(GameV2Controller.class).create(null, null)).withRel("create").withType("POST"),
+                linkTo(methodOn(GameV2Controller.class).update(game.getId(), null, null)).withRel("update").withType("PUT"),
+                linkTo(methodOn(GameController.class).delete(game.getId(), null)).withRel("delete").withType("DELETE"),
+                linkTo(methodOn(DeveloperController.class).findById(game.getDeveloper().getId())).withRel("developer").withType("GET"),
+                linkTo(methodOn(CategoryV2Controller.class).findById(game.getCategory().getId())).withRel("category").withType("GET"),
+                linkTo(methodOn(GameController.class).findByStatus(game.getStatus(), Pageable.unpaged())).withRel("same-status").withType("GET"),
                 linkTo(methodOn(GameController.class).findById(game.getId())).withRel("v1").withType("GET"));
     }
 
-    // Links do HATEOAS. create(null, null) e delete(id, null): os parâmetros extras são os headers
-    // (X-Idempotency-Key e X-API-Key), que não entram na URL, então passamos null.
     private List<Link> links(Game game){
         List<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(GameController.class).findAll(Pageable.unpaged())).withRel("games").withType("GET"));
         links.add(linkTo(methodOn(GameController.class).findById(game.getId())).withSelfRel().withType("GET"));
         links.add(linkTo(methodOn(GameController.class).findByName(game.getName(), Pageable.unpaged())).withRel("find-by-name").withType("GET"));
         links.add(linkTo(methodOn(GameController.class).create(null, null)).withRel("create").withType("POST"));
-        links.add(linkTo(methodOn(GameController.class).update(game.getId(), null)).withRel("update").withType("PUT"));
+        links.add(linkTo(methodOn(GameController.class).update(game.getId(), null, null)).withRel("update").withType("PUT"));
         links.add(linkTo(methodOn(GameController.class).delete(game.getId(), null)).withRel("delete").withType("DELETE"));
-        // NOVO: navegação para o desenvolvedor, a categoria e a versão v2 deste game
         links.add(linkTo(methodOn(DeveloperController.class).findById(game.getDeveloper().getId())).withRel("developer").withType("GET"));
         links.add(linkTo(methodOn(CategoryController.class).findById(game.getCategory().getId())).withRel("category").withType("GET"));
         links.add(linkTo(methodOn(GameV2Controller.class).findById(game.getId())).withRel("v2").withType("GET"));

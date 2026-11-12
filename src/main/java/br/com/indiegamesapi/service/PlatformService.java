@@ -52,7 +52,6 @@ public class PlatformService {
     public void delete(Long id){
         Platform platform = findById(id);
         repository.delete(platform);
-        // força o DELETE agora; se estiver em uso por um game, o erro vira 409 no ExceptionHandlerModel
         repository.flush();
     }
 }

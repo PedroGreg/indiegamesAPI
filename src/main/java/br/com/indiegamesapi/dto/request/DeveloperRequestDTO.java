@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-// NOVO: DTO de entrada (POST/PUT); as validações ficam aqui e não na entidade
 @Schema(name = "DeveloperRequestDTO", example = "{\"name\": \"Toby Fox\"}")
 public record DeveloperRequestDTO(
         @NotBlank(message = "O name do desenvolvedor deve ser preenchido")

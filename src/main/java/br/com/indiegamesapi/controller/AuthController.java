@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-// NOVO: login (gera a chave de API) e logout (apaga a chave)
-@Tag(name = "Autenticação", description = "Login por email/senha que gera a chave X-API-Key, exigida nos DELETE.")
+@Tag(name = "Autenticação")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -30,7 +29,7 @@ public class AuthController {
         this.service = service;
     }
 
-    @Operation(summary = "Login", description = "Confere email e senha e devolve uma chave de API nova. Envie-a no header X-API-Key dos DELETE.")
+    @Operation(summary = "Login", description = "Confere email e senha e devolve uma chave de API nova. Envie-a no header X-API-Key dos PUT e DELETE.")
     @ApiResponse(responseCode = "200", description = "Login realizado", content = @Content(mediaType = "application/hal+json", schema = @Schema(implementation = LoginResponseDTO.class)))
     @ApiResponse(responseCode = "400", description = "Email ou senha não enviados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponseModel.class)))
     @ApiResponse(responseCode = "401", description = "Email ou senha inválidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponseModel.class)))
@@ -40,7 +39,6 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = LoginRequestDTO.class)))
             @RequestBody @Valid LoginRequestDTO dto) {
         LoginResponseDTO login = service.login(dto.email(), dto.password());
-        // HATEOAS: depois do login, o cliente sabe onde ver o próprio usuário e onde fazer logout
         EntityModel<LoginResponseDTO> model = EntityModel.of(login,
                 linkTo(methodOn(UserController.class).findById(login.userId())).withRel("user").withType("GET"),
                 linkTo(methodOn(AuthController.class).logout(null)).withRel("logout").withType("POST"));

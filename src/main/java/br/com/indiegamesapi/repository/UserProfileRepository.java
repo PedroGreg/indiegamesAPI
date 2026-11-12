@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {
-    // NOVO: consulta personalizada (JPQL): perfis cuja bio contém o texto, sem diferenciar maiúsculas/minúsculas
     @Query("SELECT p FROM UserProfile p WHERE LOWER(p.bio) LIKE LOWER(CONCAT('%', :text, '%'))")
     Page<UserProfile> searchByBio(@Param("text") String text, Pageable pageable);
 }

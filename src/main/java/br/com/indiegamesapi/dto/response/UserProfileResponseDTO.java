@@ -6,8 +6,6 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.time.LocalDateTime;
 
-// DTO de resposta de UserProfile. Os _links do HATEOAS são adicionados pelo UserProfileModelAssembler.
-// @Relation: nome da lista dentro de "_embedded" nas respostas paginadas ("user-profiles").
 @Relation(itemRelation = "user-profile", collectionRelation = "user-profiles")
 @Schema(name = "UserProfileResponseDTO", example = UserProfileResponseDTO.EXAMPLE)
 public record UserProfileResponseDTO(
@@ -18,7 +16,6 @@ public record UserProfileResponseDTO(
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
-    // [Swagger] exemplo de um item com os links HATEOAS
     public static final String EXAMPLE = "{\n" +
             "  \"id\": 1,\n" +
             "  \"bio\": \"Desenvolvedor Backend e Entusiasta de Jogos\",\n" +
@@ -28,33 +25,32 @@ public record UserProfileResponseDTO(
             "  \"updatedAt\": \"2026-11-07T10:30:00\",\n" +
             "  \"_links\": {\n" +
             "    \"user-profiles\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/userprofile\",\n" +
+            "      \"href\": \"http://localhost:8080/api/userprofile/v1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"self\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/userprofile/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/userprofile/v1/1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"create\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/userprofile\",\n" +
+            "      \"href\": \"http://localhost:8080/api/userprofile/v1\",\n" +
             "      \"type\": \"POST\"\n" +
             "    },\n" +
             "    \"update\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/userprofile/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/userprofile/v1/1\",\n" +
             "      \"type\": \"PUT\"\n" +
             "    },\n" +
             "    \"delete\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/userprofile/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/userprofile/v1/1\",\n" +
             "      \"type\": \"DELETE\"\n" +
             "    },\n" +
             "    \"user\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/user/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/user/v1/1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    }\n" +
             "  }\n" +
             "}";
 
-    // [Swagger] exemplo da resposta paginada, com os links de paginação (first/self/next/last)
     public static final String PAGE_EXAMPLE = "{\n" +
             "  \"_embedded\": {\n" +
             "    \"user-profiles\": [\n" +
@@ -67,27 +63,27 @@ public record UserProfileResponseDTO(
             "        \"updatedAt\": \"2026-11-07T10:30:00\",\n" +
             "        \"_links\": {\n" +
             "          \"user-profiles\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/userprofile\",\n" +
+            "            \"href\": \"http://localhost:8080/api/userprofile/v1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"self\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/userprofile/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/userprofile/v1/1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"create\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/userprofile\",\n" +
+            "            \"href\": \"http://localhost:8080/api/userprofile/v1\",\n" +
             "            \"type\": \"POST\"\n" +
             "          },\n" +
             "          \"update\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/userprofile/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/userprofile/v1/1\",\n" +
             "            \"type\": \"PUT\"\n" +
             "          },\n" +
             "          \"delete\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/userprofile/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/userprofile/v1/1\",\n" +
             "            \"type\": \"DELETE\"\n" +
             "          },\n" +
             "          \"user\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/user/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/user/v1/1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          }\n" +
             "        }\n" +
@@ -96,13 +92,13 @@ public record UserProfileResponseDTO(
             "  },\n" +
             "  \"_links\": {\n" +
             "    \"first\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/userprofile?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/userprofile/v1?page=0&size=10\"\n" +
             "    },\n" +
             "    \"self\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/userprofile?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/userprofile/v1?page=0&size=10\"\n" +
             "    },\n" +
             "    \"last\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/userprofile?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/userprofile/v1?page=0&size=10\"\n" +
             "    }\n" +
             "  },\n" +
             "  \"page\": {\n" +
@@ -113,7 +109,6 @@ public record UserProfileResponseDTO(
             "  }\n" +
             "}";
 
-    // Converte a entidade no DTO
     public UserProfileResponseDTO(UserProfile userProfile) {
         this(
                 userProfile.getId(),

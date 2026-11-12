@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 public class CategoryService {
 
     private final CategoryRepository repository;
-    // NOVO (v2): usado para contar quantos games cada categoria tem
     private final GameRepository gameRepository;
 
     public CategoryService(CategoryRepository repository, GameRepository gameRepository){
@@ -56,11 +55,9 @@ public class CategoryService {
     public void delete(Long id){
         Category category = findById(id);
         repository.delete(category);
-        // força o DELETE agora; se estiver em uso por um game, o erro vira 409 no ExceptionHandlerModel
         repository.flush();
     }
 
-    // NOVO (v2): quantidade de games da categoria
     public long countGames(Long categoryId){
         return gameRepository.countByCategoryId(categoryId);
     }

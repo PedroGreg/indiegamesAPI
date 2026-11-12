@@ -15,31 +15,26 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.HateoasPageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-// NOVO (versionamento por URL): versão 2 das consultas de categoria.
-//   /api/category  (ou /api/category/v1) -> CategoryController (formato original)
-//   /api/category/v2                     -> este controller (com gamesCount)
-// O Spring não confunde "/api/category/v2" com "/api/category/{id}": um caminho fixo sempre ganha de um com variável.
-// A v2 só tem consultas; criar, alterar e deletar continua na v1.
-@Tag(name = "Categorias v2", description = "Versão 2: cada categoria vem com a quantidade de games (gamesCount).")
+@Tag(name = "v2 - Categorias")
 @RestController
 @RequestMapping("/api/category/v2")
 public class CategoryV2Controller {
 
-    // Reaproveita o service e o assembler da v1: muda só o formato da resposta, não a regra de negócio
     private final CategoryService service;
     private final CategoryModelAssembler assembler;
-    private final PagedResourcesAssembler<Category> pagedAssembler;
+    private final PagedResourcesAssembler<Category> pagedAssembler =
+            new PagedResourcesAssembler<>(new HateoasPageableHandlerMethodArgumentResolver(), null);
 
-    public CategoryV2Controller(CategoryService service, CategoryModelAssembler assembler, PagedResourcesAssembler<Category> pagedAssembler) {
+    public CategoryV2Controller(CategoryService service, CategoryModelAssembler assembler) {
         this.service = service;
         this.assembler = assembler;
-        this.pagedAssembler = pagedAssembler;
     }
 
     @Operation(summary = "Buscar todas as categorias (v2)", description = "Paginação: page, size e sort.")
@@ -47,7 +42,6 @@ public class CategoryV2Controller {
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<CategoryV2ResponseDTO>>> findAll(@ParameterObject @PageableDefault(size = 10) Pageable pageable) {
         Page<Category> page = service.findAll(pageable);
-        // Para cada categoria, conta os games e monta a representação v2
         return ResponseEntity.ok(pagedAssembler.toModel(page,
                 category -> assembler.toV2Model(category, service.countGames(category.getId()))));
     }

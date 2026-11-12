@@ -1,21 +1,217 @@
-/* Modifica a cor do cabeçalho superior */
-.swagger-ui .topbar {
-    background-color: #1b1b2f;
-    border-bottom: 3px solid #e94560;
+:root {
+    --ig-bg: #0a0a12;
+    --ig-card: #121225;
+    --ig-border: #1f1f3a;
+    --ig-purple: #8a2be2;
+    --ig-magenta: #ff007f;
+    --ig-cyan: #00f3ff;
+    --ig-green: #00ff88;
+    --ig-amber: #ffb700;
+    --ig-pixel: 'Press Start 2P', monospace;
 }
 
-/* Esconde o logo padrão do Swagger e aplica estilo ao texto */
-.swagger-ui .topbar-wrapper img {
-    content: url('https://img.icons8.com/color/48/game-controller.png');
-}
-
-/* Altera a cor de fundo da página */
 body {
-    background-color: #f8f9fa;
+    margin: 0;
+    background-color: var(--ig-bg);
+    background-image:
+        radial-gradient(circle at 15% 10%, rgba(138, 43, 226, 0.18) 0%, transparent 40%),
+        radial-gradient(circle at 85% 90%, rgba(0, 243, 255, 0.10) 0%, transparent 40%);
+    background-attachment: fixed;
+    font-family: 'Inter', sans-serif;
 }
 
-/* Destaca os títulos principais */
+.ig-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 18px 32px;
+    border-bottom: 3px solid var(--ig-purple);
+    box-shadow: 0 4px 24px rgba(138, 43, 226, 0.25);
+    background: rgba(18, 18, 37, 0.92);
+}
+
+.ig-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+}
+
+.ig-brand img {
+    width: 56px;
+    height: auto;
+    image-rendering: pixelated;
+}
+
+.ig-brand-title {
+    font-family: var(--ig-pixel);
+    font-size: 18px;
+    line-height: 1.5;
+    color: #fff;
+    text-shadow: 3px 3px 0 var(--ig-magenta);
+    letter-spacing: 1px;
+}
+
+.ig-brand-sub {
+    font-family: var(--ig-pixel);
+    font-size: 9px;
+    color: var(--ig-cyan);
+    margin-top: 6px;
+}
+
+.ig-nav {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.ig-nav a {
+    font-family: var(--ig-pixel);
+    font-size: 9px;
+    color: #e2e8f0;
+    text-decoration: none;
+    padding: 10px 12px;
+    border: 2px solid var(--ig-border);
+    background: var(--ig-card);
+    box-shadow: 3px 3px 0 var(--ig-purple);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.ig-nav a:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--ig-cyan);
+    color: #fff;
+}
+
+.ig-content {
+    max-width: 1400px;
+    margin: 28px auto 48px;
+    padding: 0 20px;
+}
+
+#swagger-ui {
+    background: #f7f7fb;
+    border: 3px solid var(--ig-border);
+    box-shadow: 6px 6px 0 var(--ig-purple);
+    padding: 8px 0 24px;
+}
+
 .swagger-ui .info .title {
-    color: #1b1b2f;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--ig-pixel);
+    font-size: 22px;
+    color: var(--ig-bg);
+    line-height: 1.6;
+}
+
+.swagger-ui .info .title small {
+    background: var(--ig-purple);
+    font-family: 'Inter', sans-serif;
+}
+
+.swagger-ui .info .description h2 {
+    font-family: var(--ig-pixel);
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--ig-purple);
+    margin-top: 28px;
+}
+
+.swagger-ui .info .description table {
+    border-collapse: collapse;
+    margin: 8px 0 12px;
+    width: 100%;
+}
+
+.swagger-ui .info .description th,
+.swagger-ui .info .description td {
+    border: 1px solid #d8d8e8;
+    padding: 6px 10px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.swagger-ui .info .description th {
+    background: #ececf6;
+}
+
+.swagger-ui .info .description blockquote {
+    border-left: 4px solid var(--ig-cyan);
+    margin: 10px 0;
+    padding: 4px 12px;
+    background: #eefcfd;
+}
+
+.swagger-ui .opblock-tag {
+    font-family: var(--ig-pixel);
+    font-size: 13px;
+    color: var(--ig-bg);
+    border-bottom: 2px solid #e2e2ef;
+}
+
+.swagger-ui .opblock-tag small {
+    font-family: 'Inter', sans-serif;
+}
+
+.swagger-ui .opblock .opblock-summary-method {
+    font-family: var(--ig-pixel);
+    font-size: 10px;
+    border-radius: 0;
+    min-width: 92px;
+    padding: 8px 0;
+}
+
+.swagger-ui .opblock {
+    border-radius: 0;
+    border-width: 2px;
+}
+
+.swagger-ui .opblock.opblock-get { border-color: var(--ig-cyan); background: rgba(0, 243, 255, 0.06); }
+.swagger-ui .opblock.opblock-get .opblock-summary-method { background: #00a6b0; }
+.swagger-ui .opblock.opblock-post { border-color: var(--ig-green); background: rgba(0, 255, 136, 0.06); }
+.swagger-ui .opblock.opblock-post .opblock-summary-method { background: #00b862; }
+.swagger-ui .opblock.opblock-put { border-color: var(--ig-amber); background: rgba(255, 183, 0, 0.07); }
+.swagger-ui .opblock.opblock-put .opblock-summary-method { background: #d99a00; }
+.swagger-ui .opblock.opblock-delete { border-color: var(--ig-magenta); background: rgba(255, 0, 127, 0.05); }
+.swagger-ui .opblock.opblock-delete .opblock-summary-method { background: #e0006f; }
+
+.swagger-ui .btn {
+    border-radius: 0;
+}
+
+.swagger-ui .btn.execute {
+    background: var(--ig-purple);
+    border-color: var(--ig-purple);
+    font-family: var(--ig-pixel);
+    font-size: 10px;
+    box-shadow: 3px 3px 0 var(--ig-bg);
+}
+
+.swagger-ui .btn.try-out__btn {
+    border-color: var(--ig-purple);
+    color: var(--ig-purple);
+}
+
+.swagger-ui .scheme-container {
+    background: transparent;
+    box-shadow: none;
+}
+
+.swagger-ui .filter-container .operation-filter-input {
+    border: 2px solid var(--ig-purple);
+    border-radius: 0;
+}
+
+.ig-footer {
+    text-align: center;
+    font-family: var(--ig-pixel);
+    font-size: 8px;
+    line-height: 2;
+    color: #8888aa;
+    padding-bottom: 32px;
+}
+
+.ig-footer a {
+    color: var(--ig-cyan);
 }

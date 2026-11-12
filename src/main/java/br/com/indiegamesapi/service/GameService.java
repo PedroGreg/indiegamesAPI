@@ -1,6 +1,7 @@
 package br.com.indiegamesapi.service;
 
 import br.com.indiegamesapi.dto.request.GameRequestDTO;
+import br.com.indiegamesapi.dto.request.GameV2RequestDTO;
 import br.com.indiegamesapi.exception.NotFoundException;
 import br.com.indiegamesapi.model.*;
 import br.com.indiegamesapi.repository.CategoryRepository;
@@ -42,7 +43,7 @@ public class GameService {
     @Transactional
     public Game create(GameRequestDTO dto){
         Game game = new Game();
-        applyRequest(game, dto);
+        applyData(game, dto.name(), dto.status(), dto.developerId(), dto.categoryId(), dto.platformIds());
         game.setCreatedAt(LocalDateTime.now());
         return repository.save(game);
     }
@@ -50,7 +51,25 @@ public class GameService {
     @Transactional
     public Game update(Long id, GameRequestDTO dto){
         Game updateGame = findById(id);
-        applyRequest(updateGame, dto);
+        applyData(updateGame, dto.name(), dto.status(), dto.developerId(), dto.categoryId(), dto.platformIds());
+        updateGame.setUpdatedAt(LocalDateTime.now());
+        return updateGame;
+    }
+
+    @Transactional
+    public Game createV2(GameV2RequestDTO dto){
+        Game game = new Game();
+        applyData(game, dto.name(), dto.status(), dto.developerId(), dto.categoryId(), dto.platformIds());
+        game.setTotalAchievements(dto.totalAchievements());
+        game.setCreatedAt(LocalDateTime.now());
+        return repository.save(game);
+    }
+
+    @Transactional
+    public Game updateV2(Long id, GameV2RequestDTO dto){
+        Game updateGame = findById(id);
+        applyData(updateGame, dto.name(), dto.status(), dto.developerId(), dto.categoryId(), dto.platformIds());
+        updateGame.setTotalAchievements(dto.totalAchievements());
         updateGame.setUpdatedAt(LocalDateTime.now());
         return updateGame;
     }
@@ -59,8 +78,6 @@ public class GameService {
         return repository.findByNameContainingIgnoreCase(name, pageable);
     }
 
-    // NOVO: consultas personalizadas (JPQL no GameRepository).
-    // Antes de buscar, confere se o desenvolvedor/categoria/plataforma existe: ID inexistente vira 404.
     public Page<Game> findByStatus(GameStatus status, Pageable pageable){
         return repository.findByStatus(status, pageable);
     }
@@ -92,22 +109,20 @@ public class GameService {
         repository.delete(game);
     }
 
-    // Código comum do create e do update: busca category, developer e platforms pelos IDs e copia os dados
-    private void applyRequest(Game game, GameRequestDTO dto){
-        Category category = categoryRepository.findById(dto.categoryId())
-                .orElseThrow(() -> new NotFoundException("Categoria não encontrada, ID: " + dto.categoryId()));
-        Developer developer = developerRepository.findById(dto.developerId())
-                .orElseThrow(() -> new NotFoundException("Desenvolvedor não encontrado, ID: " + dto.developerId()));
+    private void applyData(Game game, String name, GameStatus status, Long developerId, Long categoryId, List<Long> requestedPlatformIds){
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException("Categoria não encontrada, ID: " + categoryId));
+        Developer developer = developerRepository.findById(developerId)
+                .orElseThrow(() -> new NotFoundException("Desenvolvedor não encontrado, ID: " + developerId));
 
-        List<Long> platformIds = dto.platformIds().stream().distinct().toList();
+        List<Long> platformIds = requestedPlatformIds.stream().distinct().toList();
         List<Platform> platforms = platformRepository.findAllById(platformIds);
-        // findAllById ignora IDs que não existem; aqui eles viram 404
         if (platforms.size() != platformIds.size()) {
             throw new NotFoundException("Uma ou mais plataformas não foram encontradas, IDs enviados: " + platformIds);
         }
 
-        game.setName(dto.name());
-        game.setStatus(dto.status());
+        game.setName(name);
+        game.setStatus(status);
         game.setCategory(category);
         game.setDeveloper(developer);
         game.setPlatforms(new ArrayList<>(platforms));

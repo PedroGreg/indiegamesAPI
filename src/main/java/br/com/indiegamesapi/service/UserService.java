@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 public class UserService {
 
     private final UserRepository repository;
-    // NOVO: transforma a senha num hash BCrypt antes de salvar (bean criado no SecurityConfig)
     private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository repository, PasswordEncoder passwordEncoder){
@@ -37,14 +36,12 @@ public class UserService {
     @Transactional
     public User create(UserRequestDTO dto){
         validateEmail(dto.email(), null);
-        // NOVO: no cadastro a senha é obrigatória, senão o usuário nunca conseguiria fazer login
         if (dto.password() == null || dto.password().isBlank()) {
             throw new BadRequestException("password: A password é obrigatória no cadastro");
         }
         User user = new User();
         user.setName(dto.name());
         user.setEmail(dto.email());
-        // NOVO: salva o HASH da senha, nunca a senha pura
         user.setPassword(passwordEncoder.encode(dto.password()));
         user.setCreatedAt(LocalDateTime.now());
 
@@ -62,7 +59,6 @@ public class UserService {
         validateEmail(dto.email(), id);
         updateUser.setName(dto.name());
         updateUser.setEmail(dto.email());
-        // NOVO: se veio senha nova, guarda o hash dela; se não veio, mantém a atual
         if (dto.password() != null && !dto.password().isBlank()){
             updateUser.setPassword(passwordEncoder.encode(dto.password()));
         }
@@ -91,7 +87,6 @@ public class UserService {
         repository.delete(user);
     }
 
-    // Impede e-mail duplicado (o login busca o usuário pelo e-mail)
     private void validateEmail(String email, Long currentUserId){
         repository.findByEmailIgnoreCase(email)
                 .filter(existing -> !existing.getId().equals(currentUserId))

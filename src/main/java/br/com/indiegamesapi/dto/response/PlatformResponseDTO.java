@@ -6,8 +6,6 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.time.LocalDateTime;
 
-// DTO de resposta de Platform. Os _links do HATEOAS são adicionados pelo PlatformModelAssembler.
-// @Relation: nome da lista dentro de "_embedded" nas respostas paginadas ("platforms").
 @Relation(itemRelation = "platform", collectionRelation = "platforms")
 @Schema(name = "PlatformResponseDTO", example = PlatformResponseDTO.EXAMPLE)
 public record PlatformResponseDTO(
@@ -16,7 +14,6 @@ public record PlatformResponseDTO(
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
-    // [Swagger] exemplo de um item com os links HATEOAS
     public static final String EXAMPLE = "{\n" +
             "  \"id\": 1,\n" +
             "  \"name\": \"PC (Steam)\",\n" +
@@ -24,37 +21,36 @@ public record PlatformResponseDTO(
             "  \"updatedAt\": \"2026-11-07T10:30:00\",\n" +
             "  \"_links\": {\n" +
             "    \"platforms\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/platform\",\n" +
+            "      \"href\": \"http://localhost:8080/api/platform/v1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"self\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/platform/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/platform/v1/1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"find-by-name\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/platform/search?name=PC\",\n" +
+            "      \"href\": \"http://localhost:8080/api/platform/v1/search?name=PC\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"create\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/platform\",\n" +
+            "      \"href\": \"http://localhost:8080/api/platform/v1\",\n" +
             "      \"type\": \"POST\"\n" +
             "    },\n" +
             "    \"update\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/platform/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/platform/v1/1\",\n" +
             "      \"type\": \"PUT\"\n" +
             "    },\n" +
             "    \"delete\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/platform/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/platform/v1/1\",\n" +
             "      \"type\": \"DELETE\"\n" +
             "    },\n" +
             "    \"games\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/game/platform/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/game/v1/platform/1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    }\n" +
             "  }\n" +
             "}";
 
-    // [Swagger] exemplo da resposta paginada, com os links de paginação (first/self/next/last)
     public static final String PAGE_EXAMPLE = "{\n" +
             "  \"_embedded\": {\n" +
             "    \"platforms\": [\n" +
@@ -65,31 +61,31 @@ public record PlatformResponseDTO(
             "        \"updatedAt\": \"2026-11-07T10:30:00\",\n" +
             "        \"_links\": {\n" +
             "          \"platforms\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/platform\",\n" +
+            "            \"href\": \"http://localhost:8080/api/platform/v1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"self\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/platform/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/platform/v1/1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"find-by-name\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/platform/search?name=PC\",\n" +
+            "            \"href\": \"http://localhost:8080/api/platform/v1/search?name=PC\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"create\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/platform\",\n" +
+            "            \"href\": \"http://localhost:8080/api/platform/v1\",\n" +
             "            \"type\": \"POST\"\n" +
             "          },\n" +
             "          \"update\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/platform/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/platform/v1/1\",\n" +
             "            \"type\": \"PUT\"\n" +
             "          },\n" +
             "          \"delete\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/platform/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/platform/v1/1\",\n" +
             "            \"type\": \"DELETE\"\n" +
             "          },\n" +
             "          \"games\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/game/platform/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/game/v1/platform/1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          }\n" +
             "        }\n" +
@@ -98,13 +94,13 @@ public record PlatformResponseDTO(
             "  },\n" +
             "  \"_links\": {\n" +
             "    \"first\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/platform?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/platform/v1?page=0&size=10\"\n" +
             "    },\n" +
             "    \"self\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/platform?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/platform/v1?page=0&size=10\"\n" +
             "    },\n" +
             "    \"last\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/platform?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/platform/v1?page=0&size=10\"\n" +
             "    }\n" +
             "  },\n" +
             "  \"page\": {\n" +
@@ -115,7 +111,6 @@ public record PlatformResponseDTO(
             "  }\n" +
             "}";
 
-    // Converte a entidade no DTO
     public PlatformResponseDTO(Platform platform) {
         this(platform.getId(), platform.getName(), platform.getCreatedAt(), platform.getUpdatedAt());
     }

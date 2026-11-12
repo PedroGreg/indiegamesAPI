@@ -6,8 +6,6 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.time.LocalDateTime;
 
-// DTO de resposta de Developer. Os _links do HATEOAS são adicionados pelo DeveloperModelAssembler.
-// @Relation: nome da lista dentro de "_embedded" nas respostas paginadas ("developers").
 @Relation(itemRelation = "developer", collectionRelation = "developers")
 @Schema(name = "DeveloperResponseDTO", example = DeveloperResponseDTO.EXAMPLE)
 public record DeveloperResponseDTO(
@@ -16,7 +14,6 @@ public record DeveloperResponseDTO(
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
-    // [Swagger] exemplo de um item com os links HATEOAS
     public static final String EXAMPLE = "{\n" +
             "  \"id\": 1,\n" +
             "  \"name\": \"Toby Fox\",\n" +
@@ -24,37 +21,36 @@ public record DeveloperResponseDTO(
             "  \"updatedAt\": \"2026-11-07T10:30:00\",\n" +
             "  \"_links\": {\n" +
             "    \"developers\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/developer\",\n" +
+            "      \"href\": \"http://localhost:8080/api/developer/v1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"self\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/developer/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/developer/v1/1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"find-by-name\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/developer/search?name=Toby%20Fox\",\n" +
+            "      \"href\": \"http://localhost:8080/api/developer/v1/search?name=Toby%20Fox\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"create\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/developer\",\n" +
+            "      \"href\": \"http://localhost:8080/api/developer/v1\",\n" +
             "      \"type\": \"POST\"\n" +
             "    },\n" +
             "    \"update\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/developer/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/developer/v1/1\",\n" +
             "      \"type\": \"PUT\"\n" +
             "    },\n" +
             "    \"delete\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/developer/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/developer/v1/1\",\n" +
             "      \"type\": \"DELETE\"\n" +
             "    },\n" +
             "    \"games\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/game/developer/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/game/v1/developer/1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    }\n" +
             "  }\n" +
             "}";
 
-    // [Swagger] exemplo da resposta paginada, com os links de paginação (first/self/next/last)
     public static final String PAGE_EXAMPLE = "{\n" +
             "  \"_embedded\": {\n" +
             "    \"developers\": [\n" +
@@ -65,31 +61,31 @@ public record DeveloperResponseDTO(
             "        \"updatedAt\": \"2026-11-07T10:30:00\",\n" +
             "        \"_links\": {\n" +
             "          \"developers\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/developer\",\n" +
+            "            \"href\": \"http://localhost:8080/api/developer/v1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"self\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/developer/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/developer/v1/1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"find-by-name\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/developer/search?name=Toby%20Fox\",\n" +
+            "            \"href\": \"http://localhost:8080/api/developer/v1/search?name=Toby%20Fox\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"create\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/developer\",\n" +
+            "            \"href\": \"http://localhost:8080/api/developer/v1\",\n" +
             "            \"type\": \"POST\"\n" +
             "          },\n" +
             "          \"update\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/developer/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/developer/v1/1\",\n" +
             "            \"type\": \"PUT\"\n" +
             "          },\n" +
             "          \"delete\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/developer/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/developer/v1/1\",\n" +
             "            \"type\": \"DELETE\"\n" +
             "          },\n" +
             "          \"games\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/game/developer/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/game/v1/developer/1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          }\n" +
             "        }\n" +
@@ -98,13 +94,13 @@ public record DeveloperResponseDTO(
             "  },\n" +
             "  \"_links\": {\n" +
             "    \"first\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/developer?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/developer/v1?page=0&size=10\"\n" +
             "    },\n" +
             "    \"self\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/developer?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/developer/v1?page=0&size=10\"\n" +
             "    },\n" +
             "    \"last\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/developer?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/developer/v1?page=0&size=10\"\n" +
             "    }\n" +
             "  },\n" +
             "  \"page\": {\n" +
@@ -115,7 +111,6 @@ public record DeveloperResponseDTO(
             "  }\n" +
             "}";
 
-    // Converte a entidade no DTO
     public DeveloperResponseDTO(Developer developer) {
         this(developer.getId(), developer.getName(), developer.getCreatedAt(), developer.getUpdatedAt());
     }

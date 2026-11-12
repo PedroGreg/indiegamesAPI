@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indie Games API Hub</title>
+    <title>Indie Games API · Painel</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -108,22 +108,22 @@
             <!-- Navigation Links -->
             <nav class="p-3 space-y-1">
                 <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 text-cyber-cyan bg-cyber-cyan/10 border border-cyber-cyan/30">
-                    <i class="fa-solid fa-chart-pie w-5 text-center"></i> Dashboard
+                    <i class="fa-solid fa-chart-pie w-5 text-center"></i> Painel
                 </button>
                 <button onclick="switchTab('games')" id="nav-games" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-all duration-200">
-                    <i class="fa-solid fa-gamepad w-5 text-center"></i> Games Catalog
+                    <i class="fa-solid fa-gamepad w-5 text-center"></i> Catálogo de Games
                 </button>
                 <button onclick="switchTab('developers')" id="nav-developers" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-all duration-200">
-                    <i class="fa-solid fa-code w-5 text-center"></i> Developers
+                    <i class="fa-solid fa-code w-5 text-center"></i> Desenvolvedores
                 </button>
                 <button onclick="switchTab('categories')" id="nav-categories" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-all duration-200">
-                    <i class="fa-solid fa-tags w-5 text-center"></i> Categories & Platforms
+                    <i class="fa-solid fa-tags w-5 text-center"></i> Categorias e Plataformas
                 </button>
                 <button onclick="switchTab('users')" id="nav-users" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-all duration-200">
-                    <i class="fa-solid fa-users w-5 text-center"></i> Users & Profiles
+                    <i class="fa-solid fa-users w-5 text-center"></i> Usuários e Perfis
                 </button>
                 <button onclick="switchTab('tester')" id="nav-tester" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-all duration-200">
-                    <i class="fa-solid fa-terminal w-5 text-center text-cyber-green"></i> Live API Console
+                    <i class="fa-solid fa-terminal w-5 text-center text-cyber-green"></i> Console da API
                 </button>
             </nav>
         </div>
@@ -131,7 +131,7 @@
         <!-- API Connection Box -->
         <div class="p-4 m-3 rounded-2xl bg-cyber-bg/80 border border-cyber-border space-y-3">
             <div class="flex items-center justify-between text-xs">
-                <span class="text-gray-400">Target Endpoint</span>
+                <span class="text-gray-400">Endpoint</span>
                 <span id="api-status-badge" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyber-amber/10 text-cyber-amber border border-cyber-amber/30">
                     <span id="api-status-dot" class="w-1.5 h-1.5 rounded-full bg-cyber-amber animate-pulse"></span>
                     <span id="api-status-text">CONECTANDO</span>
@@ -139,7 +139,7 @@
             </div>
             <div id="api-endpoint" class="text-xs font-code text-gray-300 truncate bg-black/40 p-2 rounded-lg border border-white/5"></div>
             <button onclick="reloadAll(true)" class="w-full text-xs py-2 px-3 rounded-xl bg-cyber-purple/20 hover:bg-cyber-purple/30 text-cyber-purple border border-cyber-purple/40 font-semibold transition-all">
-                <i class="fa-solid fa-rotate mr-1"></i> Reload from H2
+                <i class="fa-solid fa-rotate mr-1"></i> Recarregar do H2
             </button>
         </div>
     </aside>
@@ -152,16 +152,22 @@
             <!-- Search bar -->
             <div class="relative flex-1 max-w-md">
                 <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                <input type="search" id="global-search" oninput="handleSearch(this.value)" placeholder="Search games, devs, categories..." class="w-full bg-cyber-bg/90 border border-cyber-border rounded-xl pl-10 pr-4 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-cyber-cyan focus:ring-1 focus:ring-cyber-cyan transition-all">
+                <input type="search" id="global-search" oninput="handleSearch(this.value)" placeholder="Buscar games, desenvolvedores, categorias..." class="w-full bg-cyber-bg/90 border border-cyber-border rounded-xl pl-10 pr-4 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-cyber-cyan focus:ring-1 focus:ring-cyber-cyan transition-all">
             </div>
 
             <!-- Quick Action Links -->
             <div class="flex items-center gap-3">
-                <a href="/swagger-ui/index.html" id="swagger-link" target="_blank" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300 hover:text-white hover:bg-cyber-purple/20 border border-transparent hover:border-cyber-purple/40 transition-all">
-                    <i class="fa-solid fa-book text-cyber-cyan"></i> Swagger Docs
+                <a href="/guia.html" target="_blank" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300 hover:text-white hover:bg-cyber-purple/20 border border-transparent hover:border-cyber-purple/40 transition-all">
+                    <i class="fa-solid fa-circle-info text-cyber-green"></i> Guia de uso
+                </a>
+                <a href="/termos.html" target="_blank" class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300 hover:text-white hover:bg-cyber-purple/20 border border-transparent hover:border-cyber-purple/40 transition-all">
+                    <i class="fa-solid fa-file-contract text-cyber-amber"></i> Termos
+                </a>
+                <a href="/swagger.html" id="swagger-link" target="_blank" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300 hover:text-white hover:bg-cyber-purple/20 border border-transparent hover:border-cyber-purple/40 transition-all">
+                    <i class="fa-solid fa-book text-cyber-cyan"></i> Documentação Swagger
                 </a>
                 <button onclick="openGameModal()" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-black bg-gradient-to-r from-cyber-cyan to-cyber-green hover:opacity-90 transition-all shadow-lg shadow-cyber-cyan/20">
-                    <i class="fa-solid fa-plus"></i> <span class="hidden sm:inline">Add Game</span>
+                    <i class="fa-solid fa-plus"></i> <span class="hidden sm:inline">Novo Game</span>
                 </button>
             </div>
         </header>
@@ -175,7 +181,7 @@
                 <div class="relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-cyber-purple/30 via-cyber-card to-cyber-bg border border-cyber-purple/30 neon-border-purple">
                     <div class="relative z-10 space-y-2 max-w-2xl">
                         <span class="px-3 py-1 rounded-full text-xs font-orbitron tracking-wider bg-cyber-purple/20 text-cyber-purple border border-cyber-purple/40">SPRING BOOT + HATEOAS + H2</span>
-                        <h2 class="text-2xl sm:text-3xl font-orbitron font-extrabold text-white">Indie Games API Control Panel</h2>
+                        <h2 class="text-2xl sm:text-3xl font-orbitron font-extrabold text-white">Painel de Controle da Indie Games API</h2>
                         <p class="text-sm text-gray-300">Manage developers, game releases, lifecycle statuses, and player profiles through clean RESTful interfaces.</p>
                     </div>
                     <i class="fa-solid fa-gamepad absolute -right-6 -bottom-6 text-9xl text-white/5 transform -rotate-12 pointer-events-none"></i>
@@ -185,7 +191,7 @@
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="glass-card rounded-2xl p-5 border border-cyber-border flex items-center justify-between">
                         <div>
-                            <p class="text-xs text-gray-400 font-medium">Total Games</p>
+                            <p class="text-xs text-gray-400 font-medium">Total de Games</p>
                             <h3 class="text-2xl font-orbitron font-bold text-white mt-1" id="stat-games">--</h3>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-cyber-cyan/10 border border-cyber-cyan/30 flex items-center justify-center text-cyber-cyan text-xl">
@@ -195,7 +201,7 @@
 
                     <div class="glass-card rounded-2xl p-5 border border-cyber-border flex items-center justify-between">
                         <div>
-                            <p class="text-xs text-gray-400 font-medium">Developers</p>
+                            <p class="text-xs text-gray-400 font-medium">Desenvolvedores</p>
                             <h3 class="text-2xl font-orbitron font-bold text-white mt-1" id="stat-devs">--</h3>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-cyber-purple/10 border border-cyber-purple/30 flex items-center justify-center text-cyber-purple text-xl">
@@ -205,7 +211,7 @@
 
                     <div class="glass-card rounded-2xl p-5 border border-cyber-border flex items-center justify-between">
                         <div>
-                            <p class="text-xs text-gray-400 font-medium">Categories</p>
+                            <p class="text-xs text-gray-400 font-medium">Categorias</p>
                             <h3 class="text-2xl font-orbitron font-bold text-white mt-1" id="stat-categories">--</h3>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-cyber-magenta/10 border border-cyber-magenta/30 flex items-center justify-center text-cyber-magenta text-xl">
@@ -215,7 +221,7 @@
 
                     <div class="glass-card rounded-2xl p-5 border border-cyber-border flex items-center justify-between">
                         <div>
-                            <p class="text-xs text-gray-400 font-medium">Active Users</p>
+                            <p class="text-xs text-gray-400 font-medium">Usuários Ativos</p>
                             <h3 class="text-2xl font-orbitron font-bold text-white mt-1" id="stat-users">--</h3>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-cyber-green/10 border border-cyber-green/30 flex items-center justify-center text-cyber-green text-xl">
@@ -231,7 +237,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <i class="fa-solid fa-star text-cyber-amber"></i>
-                                <h3 class="font-orbitron font-bold text-white text-base">Spotlight Title</h3>
+                                <h3 class="font-orbitron font-bold text-white text-base">Título em Destaque</h3>
                             </div>
                             <span id="spotlight-status"></span>
                         </div>
@@ -244,7 +250,7 @@
                     <div class="glass-card rounded-2xl p-6 border border-cyber-border flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-4">
-                                <h3 class="font-orbitron font-bold text-white text-sm">System Events</h3>
+                                <h3 class="font-orbitron font-bold text-white text-sm">Eventos do Sistema</h3>
                                 <span class="text-[10px] text-gray-500 font-code">HATEOAS LIVE</span>
                             </div>
                             <div class="space-y-3 font-code text-xs max-h-64 overflow-y-auto" id="activity-log">
@@ -252,7 +258,7 @@
                             </div>
                         </div>
                         <button onclick="switchTab('tester')" class="w-full mt-4 py-2 rounded-xl text-xs font-semibold bg-cyber-border hover:bg-cyber-purple/20 text-gray-300 hover:text-white transition-all text-center">
-                            Open API Console
+                            Abrir Console da API
                         </button>
                     </div>
                 </div>
@@ -262,20 +268,20 @@
             <section id="panel-games" class="space-y-6 hidden">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-orbitron font-bold text-white">Indie Games Catalog</h2>
-                        <p class="text-xs text-gray-400">View and manage all registered titles and their lifecycle statuses</p>
+                        <h2 class="text-xl font-orbitron font-bold text-white">Catálogo de Games Indie</h2>
+                        <p class="text-xs text-gray-400">Veja e gerencie todos os títulos cadastrados e seus status</p>
                     </div>
                     <div class="flex items-center gap-3">
                         <div class="inline-flex rounded-xl bg-cyber-card border border-cyber-border p-1">
                             <button onclick="setGameView('grid')" id="btn-view-grid" class="px-3 py-1 rounded-lg text-xs font-medium text-cyber-cyan bg-cyber-cyan/10">
-                                <i class="fa-solid fa-border-all"></i> Cards
+                                <i class="fa-solid fa-border-all"></i> Cartões
                             </button>
                             <button onclick="setGameView('table')" id="btn-view-table" class="px-3 py-1 rounded-lg text-xs font-medium text-gray-400 hover:text-white">
-                                <i class="fa-solid fa-list"></i> Table
+                                <i class="fa-solid fa-list"></i> Tabela
                             </button>
                         </div>
                         <button onclick="openGameModal()" class="px-3.5 py-2 rounded-xl text-xs font-bold text-black bg-cyber-cyan hover:opacity-90 transition-all">
-                            + Add Game
+                            + Novo Game
                         </button>
                     </div>
                 </div>
@@ -290,12 +296,12 @@
                             <thead class="bg-cyber-card border-b border-cyber-border text-gray-400 font-orbitron">
                                 <tr>
                                     <th class="p-4">ID</th>
-                                    <th class="p-4">Title</th>
+                                    <th class="p-4">Título</th>
                                     <th class="p-4">Status</th>
-                                    <th class="p-4">Developer</th>
-                                    <th class="p-4">Category</th>
-                                    <th class="p-4">Platforms</th>
-                                    <th class="p-4 text-right">Actions</th>
+                                    <th class="p-4">Desenvolvedor</th>
+                                    <th class="p-4">Categoria</th>
+                                    <th class="p-4">Plataformas</th>
+                                    <th class="p-4 text-right">Ações</th>
                                 </tr>
                             </thead>
                             <tbody id="games-table-body" class="divide-y divide-cyber-border text-gray-300"></tbody>
@@ -308,11 +314,11 @@
             <section id="panel-developers" class="space-y-6 hidden">
                 <div class="flex items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-orbitron font-bold text-white">Indie Developers</h2>
-                        <p class="text-xs text-gray-400">Creators behind the featured indie game experiences</p>
+                        <h2 class="text-xl font-orbitron font-bold text-white">Desenvolvedores Indie</h2>
+                        <p class="text-xs text-gray-400">Os criadores por trás dos games indie do catálogo</p>
                     </div>
                     <button onclick="openNameModal('developer')" class="shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold bg-cyber-purple hover:opacity-90 text-white transition-all">
-                        + Add Developer
+                        + Novo Desenvolvedor
                     </button>
                 </div>
 
@@ -325,8 +331,8 @@
                     <!-- Categories Box -->
                     <div class="glass-card rounded-2xl p-6 border border-cyber-border space-y-4">
                         <div class="flex items-center justify-between">
-                            <h3 class="font-orbitron font-bold text-white text-base"><i class="fa-solid fa-tags text-cyber-magenta mr-2"></i> Categories</h3>
-                            <button onclick="openNameModal('category')" class="text-xs text-cyber-magenta hover:underline">+ New Category</button>
+                            <h3 class="font-orbitron font-bold text-white text-base"><i class="fa-solid fa-tags text-cyber-magenta mr-2"></i> Categorias</h3>
+                            <button onclick="openNameModal('category')" class="text-xs text-cyber-magenta hover:underline">+ Nova Categoria</button>
                         </div>
                         <div id="categories-list" class="space-y-2"></div>
                     </div>
@@ -334,8 +340,8 @@
                     <!-- Platforms Box -->
                     <div class="glass-card rounded-2xl p-6 border border-cyber-border space-y-4">
                         <div class="flex items-center justify-between">
-                            <h3 class="font-orbitron font-bold text-white text-base"><i class="fa-solid fa-desktop text-cyber-cyan mr-2"></i> Platforms</h3>
-                            <button onclick="openNameModal('platform')" class="text-xs text-cyber-cyan hover:underline">+ New Platform</button>
+                            <h3 class="font-orbitron font-bold text-white text-base"><i class="fa-solid fa-desktop text-cyber-cyan mr-2"></i> Plataformas</h3>
+                            <button onclick="openNameModal('platform')" class="text-xs text-cyber-cyan hover:underline">+ Nova Plataforma</button>
                         </div>
                         <div id="platforms-list" class="space-y-2"></div>
                     </div>
@@ -346,11 +352,11 @@
             <section id="panel-users" class="space-y-6 hidden">
                 <div class="flex items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-xl font-orbitron font-bold text-white">Users & Biographies</h2>
-                        <p class="text-xs text-gray-400">One-To-One Bidirectional UserProfile entities</p>
+                        <h2 class="text-xl font-orbitron font-bold text-white">Usuários e Biografias</h2>
+                        <p class="text-xs text-gray-400">Relacionamento One-to-One bidirecional com o Perfil do Usuário</p>
                     </div>
                     <button onclick="openModal('user-modal')" class="shrink-0 px-3.5 py-2 rounded-xl text-xs font-bold text-black bg-cyber-green hover:opacity-90 transition-all">
-                        + Add User
+                        + Novo Usuário
                     </button>
                 </div>
 
@@ -361,19 +367,19 @@
             <section id="panel-tester" class="space-y-6 hidden">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h2 class="text-xl font-orbitron font-bold text-white">Live REST API Tester</h2>
-                        <p class="text-xs text-gray-400">Execute endpoints and view formatted JSON responses</p>
+                        <h2 class="text-xl font-orbitron font-bold text-white">Testador da API REST</h2>
+                        <p class="text-xs text-gray-400">Execute endpoints e veja as respostas JSON formatadas</p>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <!-- Request Builder -->
                     <div class="lg:col-span-5 glass-card rounded-2xl p-5 border border-cyber-border space-y-4">
-                        <h3 class="font-orbitron text-sm font-bold text-white border-b border-cyber-border pb-3">Endpoint Builder</h3>
+                        <h3 class="font-orbitron text-sm font-bold text-white border-b border-cyber-border pb-3">Montador de Requisição</h3>
 
                         <div class="space-y-3">
                             <div>
-                                <label class="text-xs text-gray-400 block mb-1">HTTP Method & Path</label>
+                                <label class="text-xs text-gray-400 block mb-1">Método HTTP e Caminho</label>
                                 <div class="flex gap-2">
                                     <select id="tester-method" class="bg-cyber-bg border border-cyber-border text-cyber-cyan rounded-xl text-xs font-bold px-3 py-2 focus:outline-none">
                                         <option value="GET">GET</option>
@@ -386,24 +392,24 @@
                             </div>
 
                             <div>
-                                <label class="text-xs text-gray-400 block mb-1">Presets</label>
+                                <label class="text-xs text-gray-400 block mb-1">Atalhos</label>
                                 <div class="flex flex-wrap gap-1.5">
-                                    <button onclick="setTesterPreset('GET', '/api/game')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">GET /game</button>
-                                    <button onclick="setTesterPreset('GET', '/api/game/search?name=under')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">GET /game/search</button>
-                                    <button onclick="setTesterPreset('GET', '/api/developer')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">GET /developer</button>
-                                    <button onclick="setTesterPreset('POST', '/api/category')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">POST /category</button>
-                                    <button onclick="setTesterPreset('POST', '/api/user')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">POST /user</button>
-                                    <button onclick="setTesterPreset('GET', '/api/user')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">GET /user</button>
+                                    <button onclick="setTesterPreset('GET', '/api/game/v1')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">GET /game/v1</button>
+                                    <button onclick="setTesterPreset('GET', '/api/game/v1/search?name=under')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">GET /game/v1/search</button>
+                                    <button onclick="setTesterPreset('GET', '/api/developer/v1')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">GET /developer/v1</button>
+                                    <button onclick="setTesterPreset('POST', '/api/category/v1')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">POST /category/v1</button>
+                                    <button onclick="setTesterPreset('POST', '/api/user/v1')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">POST /user/v1</button>
+                                    <button onclick="setTesterPreset('GET', '/api/user/v1')" class="px-2 py-1 rounded bg-cyber-bg border border-cyber-border hover:border-cyber-cyan text-[11px] text-gray-300">GET /user/v1</button>
                                 </div>
                             </div>
 
                             <div>
-                                <label class="text-xs text-gray-400 block mb-1">JSON Request Body (For POST/PUT)</label>
+                                <label class="text-xs text-gray-400 block mb-1">Corpo JSON da Requisição (para POST/PUT)</label>
                                 <textarea id="tester-body" rows="8" class="w-full bg-cyber-bg border border-cyber-border rounded-xl p-3 text-xs font-code text-cyber-green focus:outline-none focus:border-cyber-cyan" placeholder="{}"></textarea>
                             </div>
 
                             <button onclick="executeApiTest()" id="tester-send" class="w-full py-2.5 rounded-xl text-xs font-bold text-black bg-gradient-to-r from-cyber-green to-cyber-cyan hover:opacity-90 shadow-lg shadow-cyber-green/20 transition-all flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-paper-plane"></i> Send Request
+                                <i class="fa-solid fa-paper-plane"></i> Enviar Requisição
                             </button>
                         </div>
                     </div>
@@ -411,7 +417,7 @@
                     <!-- Response Console -->
                     <div class="lg:col-span-7 glass-card rounded-2xl p-5 border border-cyber-border space-y-3 flex flex-col">
                         <div class="flex items-center justify-between border-b border-cyber-border pb-3">
-                            <h3 class="font-orbitron text-sm font-bold text-white">Response Payload</h3>
+                            <h3 class="font-orbitron text-sm font-bold text-white">Resposta</h3>
                             <div class="flex items-center gap-2">
                                 <span id="tester-status" class="px-2 py-0.5 rounded text-[11px] font-code bg-cyber-border text-gray-400 border border-cyber-border">--</span>
                                 <span id="tester-time" class="text-[11px] text-gray-400 font-code"></span>
@@ -432,14 +438,14 @@
     <div id="game-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="bg-cyber-card border border-cyber-border rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl relative max-h-[95vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b border-cyber-border pb-3">
-                <h3 class="font-orbitron font-bold text-lg text-white" id="game-modal-title">Register New Game</h3>
+                <h3 class="font-orbitron font-bold text-lg text-white" id="game-modal-title">Cadastrar Novo Game</h3>
                 <button onclick="closeModal('game-modal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
             <form id="game-form" onsubmit="handleSaveGame(event)" class="space-y-3">
                 <input type="hidden" id="game-id">
                 <div>
-                    <label class="text-xs text-gray-400 block mb-1">Game Title</label>
+                    <label class="text-xs text-gray-400 block mb-1">Título do Game</label>
                     <input type="text" id="game-title" required minlength="3" maxlength="255" class="w-full bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyber-cyan">
                 </div>
 
@@ -453,26 +459,26 @@
                         </select>
                     </div>
                     <div>
-                        <label class="text-xs text-gray-400 block mb-1">Developer</label>
+                        <label class="text-xs text-gray-400 block mb-1">Desenvolvedor</label>
                         <select id="game-dev" required class="w-full bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyber-cyan"></select>
                     </div>
                 </div>
 
                 <div>
-                    <label class="text-xs text-gray-400 block mb-1">Category</label>
+                    <label class="text-xs text-gray-400 block mb-1">Categoria</label>
                     <select id="game-category" required class="w-full bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyber-cyan"></select>
                 </div>
 
                 <div>
-                    <label class="text-xs text-gray-400 block mb-1">Platforms</label>
+                    <label class="text-xs text-gray-400 block mb-1">Plataformas</label>
                     <div id="game-platforms" class="flex flex-wrap gap-2"></div>
                 </div>
 
                 <p id="game-form-error" class="text-xs text-cyber-magenta font-code min-h-[1em]"></p>
 
                 <div class="flex justify-end gap-3 pt-3 border-t border-cyber-border">
-                    <button type="button" onclick="closeModal('game-modal')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300">Cancel</button>
-                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold text-black bg-cyber-cyan hover:opacity-90">Save Game</button>
+                    <button type="button" onclick="closeModal('game-modal')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold text-black bg-cyber-cyan hover:opacity-90">Salvar Game</button>
                 </div>
             </form>
         </div>
@@ -482,20 +488,20 @@
     <div id="name-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="bg-cyber-card border border-cyber-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <div class="flex items-center justify-between border-b border-cyber-border pb-3">
-                <h3 class="font-orbitron font-bold text-lg text-white" id="name-modal-title">Add Developer</h3>
+                <h3 class="font-orbitron font-bold text-lg text-white" id="name-modal-title">Novo Desenvolvedor</h3>
                 <button onclick="closeModal('name-modal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
             <form onsubmit="handleSaveName(event)" class="space-y-3">
                 <input type="hidden" id="name-entity">
                 <div>
-                    <label class="text-xs text-gray-400 block mb-1" id="name-label">Name</label>
+                    <label class="text-xs text-gray-400 block mb-1" id="name-label">Nome</label>
                     <input type="text" id="name-value" required minlength="3" maxlength="255" class="w-full bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyber-purple">
                 </div>
                 <p id="name-form-error" class="text-xs text-cyber-magenta font-code min-h-[1em]"></p>
                 <div class="flex justify-end gap-3 pt-3 border-t border-cyber-border">
-                    <button type="button" onclick="closeModal('name-modal')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300">Cancel</button>
-                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-cyber-purple hover:opacity-90">Save</button>
+                    <button type="button" onclick="closeModal('name-modal')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-cyber-purple hover:opacity-90">Salvar</button>
                 </div>
             </form>
         </div>
@@ -505,27 +511,32 @@
     <div id="user-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="bg-cyber-card border border-cyber-border rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <div class="flex items-center justify-between border-b border-cyber-border pb-3">
-                <h3 class="font-orbitron font-bold text-lg text-white">Add User</h3>
+                <h3 class="font-orbitron font-bold text-lg text-white">Novo Usuário</h3>
                 <button onclick="closeModal('user-modal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
             <form id="user-form" onsubmit="handleSaveUser(event)" class="space-y-3">
                 <div>
-                    <label class="text-xs text-gray-400 block mb-1">Name</label>
+                    <label class="text-xs text-gray-400 block mb-1">Nome</label>
                     <input type="text" id="user-name" required minlength="3" maxlength="255" class="w-full bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyber-green">
                 </div>
                 <div>
                     <label class="text-xs text-gray-400 block mb-1">Email</label>
-                    <input type="email" id="user-email" required class="w-full bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyber-green">
+                    <input type="email" id="user-email" required placeholder="ex.: jogador.pixel@exemplo.com" class="w-full bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyber-green">
                 </div>
                 <div>
-                    <label class="text-xs text-gray-400 block mb-1">Bio (UserProfile)</label>
+                    <label class="text-xs text-gray-400 block mb-1">Senha (mín. 6 caracteres)</label>
+                    <input type="password" id="user-password" required minlength="6" class="w-full bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyber-green">
+                </div>
+                <p class="text-[11px] text-cyber-amber">Use um nome e um e-mail fictícios. Não cadastre dados reais.</p>
+                <div>
+                    <label class="text-xs text-gray-400 block mb-1">Bio (Perfil do Usuário)</label>
                     <textarea id="user-bio" required rows="3" class="w-full bg-cyber-bg border border-cyber-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyber-green"></textarea>
                 </div>
                 <p id="user-form-error" class="text-xs text-cyber-magenta font-code min-h-[1em]"></p>
                 <div class="flex justify-end gap-3 pt-3 border-t border-cyber-border">
-                    <button type="button" onclick="closeModal('user-modal')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300">Cancel</button>
-                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold text-black bg-cyber-green hover:opacity-90">Save User</button>
+                    <button type="button" onclick="closeModal('user-modal')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-cyber-border text-gray-300">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold text-black bg-cyber-green hover:opacity-90">Salvar Usuário</button>
                 </div>
             </form>
         </div>
@@ -535,7 +546,7 @@
     <div id="json-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="bg-cyber-card border border-cyber-border rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
             <div class="flex items-center justify-between border-b border-cyber-border pb-3">
-                <h3 class="font-orbitron font-bold text-sm text-white" id="json-modal-title">Raw JSON Payload</h3>
+                <h3 class="font-orbitron font-bold text-sm text-white" id="json-modal-title">JSON Bruto</h3>
                 <button onclick="closeModal('json-modal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <pre id="json-modal-content" class="bg-cyber-bg border border-cyber-border rounded-xl p-4 text-xs font-code text-cyber-cyan max-h-96 overflow-auto leading-relaxed"></pre>
@@ -567,7 +578,7 @@
         let searchQuery = '';
 
         const ENTITY_LABEL = {
-            game: 'Game', developer: 'Developer', category: 'Category', platform: 'Platform', user: 'User'
+            game: 'Game', developer: 'Desenvolvedor', category: 'Categoria', platform: 'Plataforma', user: 'Usuário'
         };
 
         // =====================================================================
@@ -624,7 +635,37 @@
         }
 
         // fetch + parse + log. Lança Error com a mensagem que a API devolveu.
-        async function api(path, { method = 'GET', body } = {}) {
+        function withVersion(path) {
+            if (path.startsWith('/auth')) return path;
+            return path.replace(/^\/([a-z]+)/, '/$1/v1');
+        }
+
+        async function getApiKey(forceLogin = false) {
+            const saved = sessionStorage.getItem('apiKey');
+            if (saved && !forceLogin) return saved;
+            const email = prompt('Alterar e excluir exigem login.\nEmail:', 'admin@indiegames.com');
+            if (!email) throw new Error('Login cancelado');
+            const password = prompt('Senha:');
+            if (!password) throw new Error('Login cancelado');
+            const res = await fetch(`${API_BASE_URL}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/hal+json, application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.message || `Falha no login (HTTP ${res.status})`);
+            sessionStorage.setItem('apiKey', data.apiKey);
+            return data.apiKey;
+        }
+
+        async function extraHeaders(method, forceLogin = false) {
+            if (method === 'POST') return { 'X-Idempotency-Key': crypto.randomUUID() };
+            if (method === 'PUT' || method === 'DELETE') return { 'X-API-Key': await getApiKey(forceLogin) };
+            return {};
+        }
+
+        async function api(rawPath, { method = 'GET', body } = {}, retried = false) {
+            const path = withVersion(rawPath);
             const started = performance.now();
             let res;
             try {
@@ -632,7 +673,8 @@
                     method,
                     headers: {
                         'Accept': 'application/hal+json, application/json',
-                        ...(body !== undefined ? { 'Content-Type': 'application/json' } : {})
+                        ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+                        ...(await extraHeaders(method, retried))
                     },
                     body: body !== undefined ? JSON.stringify(body) : undefined
                 });
@@ -650,8 +692,12 @@
             logActivity(method, `/api${path}`, res.status, Math.round(performance.now() - started));
             setApiStatus(true);
 
+            if (res.status === 401 && (method === 'PUT' || method === 'DELETE') && !retried) {
+                sessionStorage.removeItem('apiKey');
+                return api(rawPath, { method, body }, true);
+            }
+
             if (!res.ok) {
-                // NotFound/BadRequest -> { message }; validação do Spring -> ProblemDetail { detail }
                 const msg = (data && (data.message || data.detail || data.title)) || `HTTP ${res.status}`;
                 const err = new Error(msg);
                 err.status = res.status;
@@ -713,7 +759,7 @@
         // =====================================================================
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('api-endpoint').innerText = `${API_ORIGIN || window.location.origin}/api`;
-            document.getElementById('swagger-link').href = `${API_ORIGIN}/swagger-ui/index.html`;
+            document.getElementById('swagger-link').href = `${API_ORIGIN}/swagger.html`;
             reloadAll();
         });
 
@@ -779,7 +825,7 @@
             }
             if (!games.length) {
                 statusEl.innerHTML = '';
-                body.innerHTML = '<p class="text-xs text-gray-400">Nenhum jogo cadastrado ainda. Clique em <b>Add Game</b> para começar.</p>';
+                body.innerHTML = '<p class="text-xs text-gray-400">Nenhum jogo cadastrado ainda. Clique em <b>Novo Game</b> para começar.</p>';
                 return;
             }
 
@@ -871,8 +917,8 @@
                     <td class="p-4 text-gray-400">${esc((game.platforms || []).map(p => p.name).join(', '))}</td>
                     <td class="p-4 text-right space-x-2 whitespace-nowrap">
                         <button data-action="json" data-entity="game" data-id="${Number(game.id)}" class="text-cyber-cyan hover:underline">JSON</button>
-                        <button data-action="edit" data-id="${Number(game.id)}" class="text-gray-300 hover:underline">Edit</button>
-                        <button data-action="delete" data-entity="game" data-id="${Number(game.id)}" class="text-red-400 hover:underline">Delete</button>
+                        <button data-action="edit" data-id="${Number(game.id)}" class="text-gray-300 hover:underline">Editar</button>
+                        <button data-action="delete" data-entity="game" data-id="${Number(game.id)}" class="text-red-400 hover:underline">Excluir</button>
                     </td>
                 </tr>`).join('');
         }
@@ -908,7 +954,7 @@
                         </div>
                     </div>
                     <div>
-                        <p class="text-xs text-gray-400 mb-2">Associated Titles:</p>
+                        <p class="text-xs text-gray-400 mb-2">Títulos associados:</p>
                         <div class="flex flex-wrap gap-2">
                             ${devGames.length
                                 ? devGames.map(g => `<span class="px-2.5 py-1 rounded-lg text-xs bg-cyber-bg border border-cyber-border text-cyber-cyan font-medium">${esc(g.name)}</span>`).join('')
@@ -978,7 +1024,7 @@
                         </div>
                     </div>
                     <div class="p-3 rounded-xl bg-cyber-bg border border-cyber-border text-xs text-gray-300 italic">
-                        ${u.userProfile && u.userProfile.bio ? `"${esc(u.userProfile.bio)}"` : '<span class="text-gray-500">Sem bio</span>'}
+                        ${u.bio ? `"${esc(u.bio)}"` : '<span class="text-gray-500">Sem bio</span>'}
                     </div>
                 </div>`).join('');
         }
@@ -1052,7 +1098,7 @@
             if (!checkGameDependencies()) return;
             document.getElementById('game-form').reset();
             document.getElementById('game-id').value = '';
-            document.getElementById('game-modal-title').innerText = 'Register New Game';
+            document.getElementById('game-modal-title').innerText = 'Cadastrar Novo Game';
             populateGameForm();
             openModal('game-modal');
         }
@@ -1072,15 +1118,15 @@
                 cb.checked = platIds.includes(Number(cb.value));
             });
 
-            document.getElementById('game-modal-title').innerText = `Edit Game #${game.id}`;
+            document.getElementById('game-modal-title').innerText = `Editar Game #${game.id}`;
             openModal('game-modal');
         }
 
         function openNameModal(entity) {
             document.getElementById('name-entity').value = entity;
             document.getElementById('name-value').value = '';
-            document.getElementById('name-modal-title').innerText = `Add ${ENTITY_LABEL[entity]}`;
-            document.getElementById('name-label').innerText = `${ENTITY_LABEL[entity]} Name`;
+            document.getElementById('name-modal-title').innerText = `Cadastrar ${ENTITY_LABEL[entity]}`;
+            document.getElementById('name-label').innerText = `Nome (${ENTITY_LABEL[entity]})`;
             openModal('name-modal');
         }
 
@@ -1102,9 +1148,9 @@
             const payload = {
                 name: document.getElementById('game-title').value.trim(),
                 status: document.getElementById('game-status').value,
-                developer: { id: Number(document.getElementById('game-dev').value) },
-                category: { id: Number(document.getElementById('game-category').value) },
-                platforms: platformIds.map(pid => ({ id: pid }))
+                developerId: Number(document.getElementById('game-dev').value),
+                categoryId: Number(document.getElementById('game-category').value),
+                platformIds: platformIds
             };
 
             try {
@@ -1145,7 +1191,8 @@
             const payload = {
                 name: document.getElementById('user-name').value.trim(),
                 email: document.getElementById('user-email').value.trim(),
-                userProfile: { bio: document.getElementById('user-bio').value.trim() }
+                password: document.getElementById('user-password').value,
+                bio: document.getElementById('user-bio').value.trim()
             };
             try {
                 await api('/user', { method: 'POST', body: payload });
@@ -1195,8 +1242,8 @@
             document.getElementById('tester-url').value = url;
 
             const bodies = {
-                '/api/user': { name: 'Novo Usuario', email: 'novo@email.com', userProfile: { bio: 'Gamer e entusiasta de jogos indies' } },
-                '/api/category': { name: 'Metroidvania' }
+                '/api/user/v1': { name: 'Jogador Pixel', email: 'jogador.pixel@exemplo.com', password: 'senha123', bio: 'Fã de jogos indie' },
+                '/api/category/v1': { name: 'Puzzle' }
             };
             document.getElementById('tester-body').value =
                 method === 'POST' && bodies[url] ? JSON.stringify(bodies[url], null, 2) : '';
@@ -1212,6 +1259,17 @@
 
             if (!url.startsWith('/')) url = '/' + url;
             const options = { method, headers: { 'Accept': 'application/hal+json, application/json' } };
+            try {
+                if (method === 'POST' && !url.startsWith('/api/auth')) {
+                    options.headers['X-Idempotency-Key'] = crypto.randomUUID();
+                }
+                if (method === 'PUT' || method === 'DELETE' || url === '/api/auth/logout') {
+                    options.headers['X-API-Key'] = await getApiKey();
+                }
+            } catch (loginError) {
+                out.innerText = loginError.message;
+                return;
+            }
             if ((method === 'POST' || method === 'PUT') && bodyText) {
                 try { JSON.parse(bodyText); } catch {
                     statusEl.className = 'px-2 py-0.5 rounded text-[11px] font-code bg-cyber-magenta/20 text-cyber-magenta border border-cyber-magenta/40';
@@ -1246,7 +1304,7 @@
                 if (ok && method !== 'GET') reloadAll();
             } catch (err) {
                 statusEl.className = 'px-2 py-0.5 rounded text-[11px] font-code bg-cyber-magenta/20 text-cyber-magenta border border-cyber-magenta/40';
-                statusEl.innerText = 'ERROR';
+                statusEl.innerText = 'ERRO';
                 timeEl.innerText = '';
                 out.innerText = `Falha ao conectar em ${API_ORIGIN || window.location.origin}\nVerifique se o Spring Boot está rodando.\n\nDetalhes: ${err.message}`;
                 setApiStatus(false);

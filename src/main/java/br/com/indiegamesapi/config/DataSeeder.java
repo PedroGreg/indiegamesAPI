@@ -18,9 +18,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-// NOVO: cria dados de exemplo toda vez que a API sobe (o H2 em memória começa vazio).
-// CommandLineRunner: o Spring chama o run() uma vez, logo depois que a aplicação subiu.
-// @ConditionalOnProperty: só roda se app.seed.enabled=true no application.properties.
 @Component
 @ConditionalOnProperty(name = "app.seed.enabled", havingValue = "true")
 public class DataSeeder implements CommandLineRunner {
@@ -62,13 +59,11 @@ public class DataSeeder implements CommandLineRunner {
         Platform sw = platform("Nintendo Switch", now);
         Platform ps = platform("PlayStation 5", now);
 
-        // new ArrayList<>(...): o Hibernate precisa de uma lista que possa ser alterada depois (List.of é imutável)
-        gameRepository.save(new Game("Undertale", GameStatus.RELEASED, tobyFox, rpg, new ArrayList<>(List.of(pc, sw)), now, null));
-        gameRepository.save(new Game("Deltarune", GameStatus.EARLY_ACCESS, tobyFox, rpg, new ArrayList<>(List.of(pc, sw, ps)), now, null));
-        gameRepository.save(new Game("Hollow Knight", GameStatus.RELEASED, teamCherry, metroidvania, new ArrayList<>(List.of(pc, sw, ps)), now, null));
-        gameRepository.save(new Game("Hades", GameStatus.RELEASED, supergiant, roguelike, new ArrayList<>(List.of(pc, sw, ps)), now, null));
+        saveGame(new Game("Undertale", GameStatus.RELEASED, tobyFox, rpg, new ArrayList<>(List.of(pc, sw)), now, null), 0);
+        saveGame(new Game("Deltarune", GameStatus.EARLY_ACCESS, tobyFox, rpg, new ArrayList<>(List.of(pc, sw, ps)), now, null), 0);
+        saveGame(new Game("Hollow Knight", GameStatus.RELEASED, teamCherry, metroidvania, new ArrayList<>(List.of(pc, sw, ps)), now, null), 63);
+        saveGame(new Game("Hades", GameStatus.RELEASED, supergiant, roguelike, new ArrayList<>(List.of(pc, sw, ps)), now, null), 49);
 
-        // Usuário para testar o login (senha salva como hash BCrypt, igual ao cadastro normal)
         User admin = new User();
         admin.setName("Administrador");
         admin.setEmail("admin@indiegames.com");
@@ -82,6 +77,11 @@ public class DataSeeder implements CommandLineRunner {
         userRepository.save(admin);
 
         log.info("DataSeeder: dados de exemplo criados. Login de teste -> admin@indiegames.com / admin123");
+    }
+
+    private void saveGame(Game game, int totalAchievements) {
+        game.setTotalAchievements(totalAchievements);
+        gameRepository.save(game);
     }
 
     private Developer developer(String name, LocalDateTime now) {

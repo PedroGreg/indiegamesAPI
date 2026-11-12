@@ -2,8 +2,6 @@ package br.com.indiegamesapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-// NOVO: anotações do Bean Validation. Na entidade elas são checadas pelo Hibernate antes de
-// INSERT/UPDATE (última barreira); os RequestDTOs validam antes, na entrada da requisição.
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
@@ -15,7 +13,6 @@ public class UserProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = true)
-    // NOVO: a bio é opcional, mas limitada ao tamanho da coluna (VARCHAR 255)
     @Size(max = 255, message = "A bio deve ter no máximo 255 caracteres")
     private String bio;
     @OneToOne(mappedBy = "userProfile")

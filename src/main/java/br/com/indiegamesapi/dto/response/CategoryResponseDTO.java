@@ -6,8 +6,6 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.time.LocalDateTime;
 
-// DTO de resposta de Category. Os _links do HATEOAS são adicionados pelo CategoryModelAssembler.
-// @Relation: nome da lista dentro de "_embedded" nas respostas paginadas ("categories").
 @Relation(itemRelation = "category", collectionRelation = "categories")
 @Schema(name = "CategoryResponseDTO", example = CategoryResponseDTO.EXAMPLE)
 public record CategoryResponseDTO(
@@ -16,7 +14,6 @@ public record CategoryResponseDTO(
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
-    // [Swagger] exemplo de um item com os links HATEOAS
     public static final String EXAMPLE = "{\n" +
             "  \"id\": 1,\n" +
             "  \"name\": \"RPG\",\n" +
@@ -24,31 +21,31 @@ public record CategoryResponseDTO(
             "  \"updatedAt\": \"2026-11-07T10:30:00\",\n" +
             "  \"_links\": {\n" +
             "    \"categories\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/category\",\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"self\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/category/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1/1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"find-by-name\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/category/search?name=RPG\",\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1/search?name=RPG\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"create\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/category\",\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1\",\n" +
             "      \"type\": \"POST\"\n" +
             "    },\n" +
             "    \"update\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/category/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1/1\",\n" +
             "      \"type\": \"PUT\"\n" +
             "    },\n" +
             "    \"delete\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/category/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1/1\",\n" +
             "      \"type\": \"DELETE\"\n" +
             "    },\n" +
             "    \"games\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/game/category/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/game/v1/category/1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
             "    \"v2\": {\n" +
@@ -58,7 +55,6 @@ public record CategoryResponseDTO(
             "  }\n" +
             "}";
 
-    // [Swagger] exemplo da resposta paginada, com os links de paginação (first/self/next/last)
     public static final String PAGE_EXAMPLE = "{\n" +
             "  \"_embedded\": {\n" +
             "    \"categories\": [\n" +
@@ -69,31 +65,31 @@ public record CategoryResponseDTO(
             "        \"updatedAt\": \"2026-11-07T10:30:00\",\n" +
             "        \"_links\": {\n" +
             "          \"categories\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/category\",\n" +
+            "            \"href\": \"http://localhost:8080/api/category/v1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"self\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/category/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/category/v1/1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"find-by-name\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/category/search?name=RPG\",\n" +
+            "            \"href\": \"http://localhost:8080/api/category/v1/search?name=RPG\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"create\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/category\",\n" +
+            "            \"href\": \"http://localhost:8080/api/category/v1\",\n" +
             "            \"type\": \"POST\"\n" +
             "          },\n" +
             "          \"update\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/category/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/category/v1/1\",\n" +
             "            \"type\": \"PUT\"\n" +
             "          },\n" +
             "          \"delete\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/category/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/category/v1/1\",\n" +
             "            \"type\": \"DELETE\"\n" +
             "          },\n" +
             "          \"games\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/game/category/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/game/v1/category/1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
             "          \"v2\": {\n" +
@@ -106,13 +102,13 @@ public record CategoryResponseDTO(
             "  },\n" +
             "  \"_links\": {\n" +
             "    \"first\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/category?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1?page=0&size=10\"\n" +
             "    },\n" +
             "    \"self\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/category?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1?page=0&size=10\"\n" +
             "    },\n" +
             "    \"last\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/category?page=0&size=10\"\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1?page=0&size=10\"\n" +
             "    }\n" +
             "  },\n" +
             "  \"page\": {\n" +
@@ -123,7 +119,6 @@ public record CategoryResponseDTO(
             "  }\n" +
             "}";
 
-    // Converte a entidade no DTO
     public CategoryResponseDTO(Category category) {
         this(category.getId(), category.getName(), category.getCreatedAt(), category.getUpdatedAt());
     }

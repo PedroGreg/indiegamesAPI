@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-// NOVO: DTO de entrada do Game; recebe só os IDs de developer, category e platforms (antes eram objetos aninhados)
 @Schema(name = "GameRequestDTO", example = "{\"name\": \"Undertale\", \"status\": \"RELEASED\", \"developerId\": 1, \"categoryId\": 1, \"platformIds\": [1, 2]}")
 public record GameRequestDTO(
         @NotBlank(message = "O name do game deve ser preenchido")

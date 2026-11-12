@@ -5,8 +5,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-// NOVO: DTO de entrada do User; a bio do perfil vem direto aqui (antes era "userProfile": { "bio": ... })
-// password é opcional: no PUT, se não for enviada, a senha atual é mantida
 @Schema(name = "UserRequestDTO", example = "{\"name\": \"Pedro Gregorio\", \"email\": \"pedro@email.com\", \"password\": \"senha123\", \"bio\": \"Desenvolvedor Backend e Entusiasta de Jogos\"}")
 public record UserRequestDTO(
         @NotBlank(message = "O name do usuário deve ser preenchido")

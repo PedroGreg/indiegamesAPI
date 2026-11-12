@@ -6,8 +6,6 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.time.LocalDateTime;
 
-// NOVO (versionamento): categoria na v2. A diferença para a v1 é o campo gamesCount (quantos games ela tem).
-// A v1 continua igual, então quem já usa a API não é afetado: esse é o objetivo de versionar.
 @Relation(itemRelation = "category", collectionRelation = "categories")
 @Schema(name = "CategoryV2ResponseDTO", example = CategoryV2ResponseDTO.EXAMPLE)
 public record CategoryV2ResponseDTO(
@@ -17,7 +15,6 @@ public record CategoryV2ResponseDTO(
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
-    // [Swagger] exemplo de um item
     public static final String EXAMPLE = "{\n" +
             "  \"id\": 1,\n" +
             "  \"name\": \"RPG\",\n" +
@@ -25,22 +22,45 @@ public record CategoryV2ResponseDTO(
             "  \"createdAt\": \"2026-11-06T15:45:00\",\n" +
             "  \"updatedAt\": \"2026-11-07T10:30:00\",\n" +
             "  \"_links\": {\n" +
-            "    \"self\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/category/v2/1\",\n" +
-            "      \"type\": \"GET\"\n" +
-            "    },\n" +
             "    \"categories\": {\n" +
             "      \"href\": \"http://localhost:8080/api/category/v2\",\n" +
             "      \"type\": \"GET\"\n" +
             "    },\n" +
+            "    \"self\": {\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v2/1\",\n" +
+            "      \"type\": \"GET\"\n" +
+            "    },\n" +
+            "    \"find-by-name\": {\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1/search?name=RPG\",\n" +
+            "      \"type\": \"GET\"\n" +
+            "    },\n" +
+            "    \"create\": {\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1\",\n" +
+            "      \"type\": \"POST\"\n" +
+            "    },\n" +
+            "    \"update\": {\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1/1\",\n" +
+            "      \"type\": \"PUT\"\n" +
+            "    },\n" +
+            "    \"delete\": {\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1/1\",\n" +
+            "      \"type\": \"DELETE\"\n" +
+            "    },\n" +
+            "    \"games\": {\n" +
+            "      \"href\": \"http://localhost:8080/api/game/v1/category/1\",\n" +
+            "      \"type\": \"GET\"\n" +
+            "    },\n" +
+            "    \"games-v2\": {\n" +
+            "      \"href\": \"http://localhost:8080/api/game/v2\",\n" +
+            "      \"type\": \"GET\"\n" +
+            "    },\n" +
             "    \"v1\": {\n" +
-            "      \"href\": \"http://localhost:8080/api/category/1\",\n" +
+            "      \"href\": \"http://localhost:8080/api/category/v1/1\",\n" +
             "      \"type\": \"GET\"\n" +
             "    }\n" +
             "  }\n" +
             "}";
 
-    // [Swagger] exemplo da resposta paginada
     public static final String PAGE_EXAMPLE = "{\n" +
             "  \"_embedded\": {\n" +
             "    \"categories\": [\n" +
@@ -51,16 +71,40 @@ public record CategoryV2ResponseDTO(
             "        \"createdAt\": \"2026-11-06T15:45:00\",\n" +
             "        \"updatedAt\": \"2026-11-07T10:30:00\",\n" +
             "        \"_links\": {\n" +
-            "          \"self\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/category/v2/1\",\n" +
-            "            \"type\": \"GET\"\n" +
-            "          },\n" +
             "          \"categories\": {\n" +
             "            \"href\": \"http://localhost:8080/api/category/v2\",\n" +
             "            \"type\": \"GET\"\n" +
             "          },\n" +
+            "          \"self\": {\n" +
+            "            \"href\": \"http://localhost:8080/api/category/v2/1\",\n" +
+            "            \"type\": \"GET\"\n" +
+            "          },\n" +
+            "          \"find-by-name\": {\n" +
+            "            \"href\": \"http://localhost:8080/api/category/v1/search?name=RPG\",\n" +
+            "            \"type\": \"GET\"\n" +
+            "          },\n" +
+            "          \"create\": {\n" +
+            "            \"href\": \"http://localhost:8080/api/category/v1\",\n" +
+            "            \"type\": \"POST\"\n" +
+            "          },\n" +
+            "          \"update\": {\n" +
+            "            \"href\": \"http://localhost:8080/api/category/v1/1\",\n" +
+            "            \"type\": \"PUT\"\n" +
+            "          },\n" +
+            "          \"delete\": {\n" +
+            "            \"href\": \"http://localhost:8080/api/category/v1/1\",\n" +
+            "            \"type\": \"DELETE\"\n" +
+            "          },\n" +
+            "          \"games\": {\n" +
+            "            \"href\": \"http://localhost:8080/api/game/v1/category/1\",\n" +
+            "            \"type\": \"GET\"\n" +
+            "          },\n" +
+            "          \"games-v2\": {\n" +
+            "            \"href\": \"http://localhost:8080/api/game/v2\",\n" +
+            "            \"type\": \"GET\"\n" +
+            "          },\n" +
             "          \"v1\": {\n" +
-            "            \"href\": \"http://localhost:8080/api/category/1\",\n" +
+            "            \"href\": \"http://localhost:8080/api/category/v1/1\",\n" +
             "            \"type\": \"GET\"\n" +
             "          }\n" +
             "        }\n" +
